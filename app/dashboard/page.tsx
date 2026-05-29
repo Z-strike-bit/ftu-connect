@@ -8,7 +8,6 @@ import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { doc, getDoc, collection, addDoc, onSnapshot, query, orderBy, updateDoc, arrayUnion, arrayRemove, where } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import ProfileModal from '@/components/ProfileModal';
 import ConnectModal from '@/components/ConnectModal';
 import Navbar from '@/components/Navbar';
 
@@ -63,7 +62,6 @@ export default function Dashboard() {
   const [postTag, setPostTag] = useState('Thảo luận');
   const [expandedComments, setExpandedComments] = useState<{[key: string]: boolean}>({});
   const [commentInputs, setCommentInputs] = useState<{[key: string]: string}>({});
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   
   const [posts, setPosts] = useState<Post[]>([]);
   
@@ -219,7 +217,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen w-full bg-[#f0f2f5] font-sans selection:bg-red-200">
-      <Navbar profileName={profile?.name} onSignOut={handleSignOut} />
+      <Navbar profileName={profile?.name} profileId={user?.uid} onSignOut={handleSignOut} />
 
       <div className="w-full mx-auto px-4 sm:px-0 lg:max-w-[1600px] mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-8">
@@ -227,13 +225,13 @@ export default function Dashboard() {
           {/* Cột Trái: Lối tắt (Shortcuts) */}
           <div className="hidden lg:block lg:col-span-3 xl:col-span-3 pl-2 xl:pl-4">
             <div className="sticky top-20 flex flex-col gap-1 pr-4">
-              <div 
-                onClick={() => setIsProfileModalOpen(true)}
+              <Link 
+                href={user ? `/profile/${user.uid}` : "#"}
                 className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer"
               >
                 <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-9 h-9 rounded-full bg-slate-300"/>
                 <span className="font-semibold text-[15px] text-slate-800">{profile?.name}</span>
-              </div>
+              </Link>
               <Link href="/connect" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
                 <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
                   <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
@@ -277,7 +275,9 @@ export default function Dashboard() {
             {/* Ô Tạo bài viết */}
             <div className="bg-white sm:rounded-xl shadow-sm border-x-0 sm:border border-slate-200 p-3 sm:p-4 mb-4">
               <div className="flex gap-2 sm:gap-3 border-b border-slate-100 pb-3">
-                <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-200 shrink-0 cursor-pointer"/>
+                <Link href={user ? `/profile/${user.uid}` : "#"}>
+                  <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-200 shrink-0 cursor-pointer"/>
+                </Link>
                 <div className="flex-1 bg-[#f0f2f5] hover:bg-[#e4e6eb] transition-colors rounded-full px-4 flex items-center cursor-text">
                   <textarea 
                     rows={1}
@@ -336,7 +336,7 @@ export default function Dashboard() {
                       {/* Post Header */}
                       <div className="p-4 flex items-start justify-between">
                         <div className="flex space-x-3 items-center">
-                          <div className="flex-shrink-0 cursor-pointer">
+                          <Link href={post.isAnonymous ? "#" : `/profile/${post.uid}`} className="flex-shrink-0 cursor-pointer">
                             {post.isAnonymous ? (
                               <div className="h-10 w-10 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center text-xl">
                                 🕵️
@@ -344,12 +344,12 @@ export default function Dashboard() {
                             ) : (
                               <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + post.authorName} alt="Avatar" className="h-10 w-10 rounded-full bg-slate-200 border border-slate-300"/>
                             )}
-                          </div>
+                          </Link>
                           <div>
                             <div className="flex items-center flex-wrap">
-                              <p className="text-[15px] font-semibold text-slate-900 cursor-pointer hover:underline">
+                              <Link href={post.isAnonymous ? "#" : `/profile/${post.uid}`} className="text-[15px] font-semibold text-slate-900 cursor-pointer hover:underline">
                                 {post.isAnonymous ? 'Sinh viên ẩn danh' : post.authorName}
-                              </p>
+                              </Link>
                             </div>
                             <div className="flex items-center text-[13px] text-slate-500 gap-1">
                               <span className="hover:underline cursor-pointer">{new Date(post.createdAt).toLocaleString('vi-VN')}</span>
@@ -419,10 +419,12 @@ export default function Dashboard() {
                             <div className="p-4 space-y-4">
                               {(post.comments || []).map((cmt, idx) => (
                                 <div key={idx} className="flex gap-2">
-                                  <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + cmt.authorName} alt="Avatar" className="w-8 h-8 rounded-full bg-slate-200 shrink-0 cursor-pointer"/>
+                                  <Link href={`/profile/${cmt.uid}`}>
+                                    <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + cmt.authorName} alt="Avatar" className="w-8 h-8 rounded-full bg-slate-200 shrink-0 cursor-pointer"/>
+                                  </Link>
                                   <div>
                                     <div className="bg-[#f0f2f5] rounded-2xl px-3 py-2 text-[15px]">
-                                      <p className="font-semibold text-slate-900 cursor-pointer hover:underline">{cmt.authorName}</p>
+                                      <Link href={`/profile/${cmt.uid}`} className="font-semibold text-slate-900 cursor-pointer hover:underline">{cmt.authorName}</Link>
                                       <p className="text-slate-900 leading-[1.3333]">{cmt.content}</p>
                                     </div>
                                     <div className="flex gap-3 px-3 mt-1 text-[12px] font-bold text-slate-500">
@@ -524,12 +526,9 @@ export default function Dashboard() {
                 
                 <div className="space-y-1">
                   {suggestions.map(suggestion => (
-                    <div 
+                    <Link 
+                      href={`/profile/${suggestion.id}`}
                       key={suggestion.id}
-                      onClick={() => {
-                        setSelectedUserToConnect(suggestion);
-                        setIsConnectModalOpen(true);
-                      }}
                       className="flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer group"
                     >
                       <div className="relative shrink-0">
@@ -537,7 +536,7 @@ export default function Dashboard() {
                         <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#f0f2f5] rounded-full group-hover:border-slate-200 transition-colors"></span>
                       </div>
                       <span className="text-[15px] font-medium text-slate-800 truncate flex-1">{suggestion.name}</span>
-                    </div>
+                    </Link>
                   ))}
                   {suggestions.length === 0 && (
                     <p className="text-[13px] text-slate-500 text-center py-4">Đang tìm kiếm...</p>
@@ -550,16 +549,6 @@ export default function Dashboard() {
 
         </div>
       </div>
-
-      {user && profile && (
-        <ProfileModal 
-          isOpen={isProfileModalOpen} 
-          onClose={() => setIsProfileModalOpen(false)} 
-          user={user} 
-          currentProfile={profile} 
-          onSuccess={(newProfile) => setProfile(newProfile)} 
-        />
-      )}
 
       <ConnectModal
         isOpen={isConnectModalOpen}

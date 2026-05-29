@@ -8,6 +8,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, collection, onSnapshot, query, where } from 'firebase/firestore';
 import ConnectModal from '@/components/ConnectModal';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function ConnectPage() {
   const router = useRouter();
@@ -79,7 +80,7 @@ export default function ConnectPage() {
 
   return (
     <div className="min-h-screen bg-[#f0f2f5] flex flex-col h-screen overflow-hidden">
-      <Navbar profileName={profile?.name} onSignOut={() => signOut(auth).then(() => router.push('/'))} />
+      <Navbar profileName={profile?.name} profileId={user?.uid} onSignOut={() => signOut(auth).then(() => router.push('/'))} />
 
       <div className="flex flex-1 overflow-hidden w-full max-w-[1920px] mx-auto">
         
@@ -142,16 +143,12 @@ export default function ConnectPage() {
                     </p>
                     
                     <div className="mt-auto flex flex-col gap-2">
-                      <motion.button 
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          setSelectedUserToConnect(suggestion);
-                          setIsConnectModalOpen(true);
-                        }}
-                        className="w-full py-1.5 bg-red-100 text-red-600 font-semibold rounded-md text-[15px] hover:bg-red-200 transition-colors"
+                      <Link 
+                        href={`/profile/${suggestion.id}`}
+                        className="w-full py-1.5 bg-red-100 text-red-600 font-semibold rounded-md text-[15px] hover:bg-red-200 transition-colors text-center inline-block"
                       >
-                        Thêm bạn bè
-                      </motion.button>
+                        Xem trang cá nhân
+                      </Link>
                       <button className="w-full py-1.5 bg-slate-100 text-black font-semibold rounded-md text-[15px] hover:bg-slate-200 transition-colors">
                         Xóa
                       </button>
