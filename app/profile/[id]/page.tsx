@@ -23,11 +23,29 @@ export default function ProfilePage() {
 
   // Edit states
   const [isEditing, setIsEditing] = useState(false);
-  const [editBio, setEditBio] = useState('');
-  const [editMajor, setEditMajor] = useState('');
-  const [editCoverUrl, setEditCoverUrl] = useState('');
-  const [editAvatarUrl, setEditAvatarUrl] = useState('');
   const [saving, setSaving] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    bio: '',
+    major: '',
+    coverPhotoUrl: '',
+    photoURL: '',
+    contactLink: '',
+    gpa: '',
+    clubs: '',
+    achievements: '',
+    skills: '',
+    goals: [] as string[],
+    interests: ''
+  });
+
+  const GOALS = [
+    'Cải thiện điểm GPA',
+    'Tham gia Câu lạc bộ',
+    'Mở rộng Networking',
+    'Tìm kiếm Học bổng',
+    'Định hướng nghề nghiệp',
+    'Tìm việc Part-time / Intern'
+  ];
 
   const isOwnProfile = currentUser && currentUser.uid === profileId;
 
@@ -55,10 +73,19 @@ export default function ProfilePage() {
       if (pDoc.exists()) {
         const data = pDoc.data();
         setTargetProfile(data);
-        setEditBio(data.bio || '');
-        setEditMajor(data.major || '');
-        setEditCoverUrl(data.coverPhotoUrl || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-        setEditAvatarUrl(data.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.name}`);
+        setEditFormData({
+          bio: data.bio || '',
+          major: data.major || '',
+          coverPhotoUrl: data.coverPhotoUrl || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+          photoURL: data.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.name}`,
+          contactLink: data.contactLink || '',
+          gpa: data.gpa || '',
+          clubs: data.clubs || '',
+          achievements: data.achievements || '',
+          skills: data.skills || '',
+          goals: data.goals || [],
+          interests: data.interests || ''
+        });
       } else {
         // User not found
       }
@@ -87,17 +114,11 @@ export default function ProfilePage() {
     setSaving(true);
     try {
       await updateDoc(doc(db, 'users', currentUser.uid), {
-        bio: editBio,
-        major: editMajor,
-        coverPhotoUrl: editCoverUrl,
-        photoURL: editAvatarUrl
+        ...editFormData
       });
       setTargetProfile(prev => ({
         ...prev,
-        bio: editBio,
-        major: editMajor,
-        coverPhotoUrl: editCoverUrl,
-        photoURL: editAvatarUrl
+        ...editFormData
       }));
       setIsEditing(false);
     } catch (err) {
@@ -241,6 +262,61 @@ export default function ProfilePage() {
                   <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
                   <span>Chuyên ngành <span className="font-semibold">{targetProfile.major || 'Chưa cập nhật'}</span></span>
                 </div>
+
+                {targetProfile.contactLink && (
+                  <div className="flex items-center gap-3">
+                    <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                    <span>Liên hệ: <a href={targetProfile.contactLink} target="_blank" rel="noreferrer" className="text-red-600 font-semibold hover:underline">Xem Link</a></span>
+                  </div>
+                )}
+
+                {targetProfile.role === 'mentor' && (
+                  <>
+                    {targetProfile.gpa && (
+                      <div className="flex items-center gap-3">
+                        <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        <span>GPA/Thành tích: <span className="font-semibold">{targetProfile.gpa}</span></span>
+                      </div>
+                    )}
+                    {targetProfile.clubs && (
+                      <div className="flex items-center gap-3">
+                        <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <span>Câu lạc bộ: <span className="font-semibold">{targetProfile.clubs}</span></span>
+                      </div>
+                    )}
+                    {targetProfile.skills && (
+                      <div className="flex items-center gap-3">
+                        <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                        <span>Kỹ năng: <span className="font-semibold">{targetProfile.skills}</span></span>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {targetProfile.role === 'mentee' && (
+                  <>
+                    {targetProfile.goals && targetProfile.goals.length > 0 && (
+                      <div className="flex items-start gap-3">
+                        <svg className="w-6 h-6 text-slate-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        <div className="flex flex-col">
+                          <span>Mục tiêu:</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {targetProfile.goals.map((goal: string) => (
+                              <span key={goal} className="bg-red-50 text-red-600 px-2 py-0.5 rounded text-sm font-semibold">{goal}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {targetProfile.interests && (
+                      <div className="flex items-center gap-3">
+                        <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span>Sở thích: <span className="font-semibold">{targetProfile.interests}</span></span>
+                      </div>
+                    )}
+                  </>
+                )}
+
                 <div className="flex items-center gap-3">
                   <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
                   <span>Điểm tín nhiệm: <span className="font-semibold">{targetProfile.points || 0}</span></span>
@@ -387,9 +463,9 @@ export default function ProfilePage() {
                   <div className="flex justify-between items-center mb-2">
                     <label className="block text-[17px] font-bold text-black">Ảnh đại diện (Avatar URL)</label>
                   </div>
-                  <input type="text" value={editAvatarUrl} onChange={(e) => setEditAvatarUrl(e.target.value)} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Nhập Link Ảnh URL..." />
+                  <input type="text" value={editFormData.photoURL} onChange={(e) => setEditFormData({...editFormData, photoURL: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Nhập Link Ảnh URL..." />
                   <div className="mt-3 flex justify-center">
-                    <img src={editAvatarUrl || avatarPhoto} className="w-24 h-24 rounded-full border border-slate-200 object-cover" />
+                    <img src={editFormData.photoURL || avatarPhoto} className="w-24 h-24 rounded-full border border-slate-200 object-cover" />
                   </div>
                 </div>
 
@@ -397,21 +473,79 @@ export default function ProfilePage() {
                   <div className="flex justify-between items-center mb-2">
                     <label className="block text-[17px] font-bold text-black">Ảnh bìa (Cover URL)</label>
                   </div>
-                  <input type="text" value={editCoverUrl} onChange={(e) => setEditCoverUrl(e.target.value)} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Nhập Link Ảnh URL..." />
+                  <input type="text" value={editFormData.coverPhotoUrl} onChange={(e) => setEditFormData({...editFormData, coverPhotoUrl: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Nhập Link Ảnh URL..." />
                   <div className="mt-3">
-                    <img src={editCoverUrl || coverPhoto} className="w-full h-32 rounded-lg border border-slate-200 object-cover" />
+                    <img src={editFormData.coverPhotoUrl || coverPhoto} className="w-full h-32 rounded-lg border border-slate-200 object-cover" />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-[17px] font-bold text-black mb-2">Tiểu sử</label>
-                  <textarea rows={3} value={editBio} onChange={(e) => setEditBio(e.target.value)} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition resize-none" placeholder="Mô tả bản thân..." />
+                  <textarea rows={3} value={editFormData.bio} onChange={(e) => setEditFormData({...editFormData, bio: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition resize-none" placeholder="Mô tả bản thân..." />
+                </div>
+
+                <div>
+                  <label className="block text-[17px] font-bold text-black mb-2">Link liên hệ (Mess/Zalo)</label>
+                  <input type="text" value={editFormData.contactLink} onChange={(e) => setEditFormData({...editFormData, contactLink: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Ví dụ: https://m.me/your.username" />
                 </div>
 
                 <div>
                   <label className="block text-[17px] font-bold text-black mb-2">Chuyên ngành</label>
-                  <input type="text" value={editMajor} onChange={(e) => setEditMajor(e.target.value)} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Ví dụ: Kinh tế quốc tế K64" />
+                  <input type="text" value={editFormData.major} onChange={(e) => setEditFormData({...editFormData, major: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Ví dụ: Kinh tế quốc tế K64" />
                 </div>
+
+                {targetProfile.role === 'mentor' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[17px] font-bold text-black mb-2">GPA / Thành tích</label>
+                        <input type="text" value={editFormData.gpa} onChange={(e) => setEditFormData({...editFormData, gpa: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Ví dụ: 3.8/4.0" />
+                      </div>
+                      <div>
+                        <label className="block text-[17px] font-bold text-black mb-2">Câu lạc bộ</label>
+                        <input type="text" value={editFormData.clubs} onChange={(e) => setEditFormData({...editFormData, clubs: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Ví dụ: TEC, YRC" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[17px] font-bold text-black mb-2">Kỹ năng mạnh nhất</label>
+                      <input type="text" value={editFormData.skills} onChange={(e) => setEditFormData({...editFormData, skills: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Ví dụ: IELTS 8.0, Thuyết trình" />
+                    </div>
+                    <div>
+                      <label className="block text-[17px] font-bold text-black mb-2">Trải nghiệm nổi bật</label>
+                      <textarea rows={2} value={editFormData.achievements} onChange={(e) => setEditFormData({...editFormData, achievements: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition resize-none" placeholder="Điểm tự hào nhất..." />
+                    </div>
+                  </>
+                )}
+
+                {targetProfile.role === 'mentee' && (
+                  <>
+                    <div>
+                      <label className="block text-[17px] font-bold text-black mb-2">Mục tiêu học tập</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {GOALS.map(goal => (
+                          <label key={goal} className={`flex items-center space-x-2 p-2 border rounded-lg cursor-pointer transition-all ${editFormData.goals.includes(goal) ? 'border-red-500 bg-red-50 text-red-600' : 'border-slate-200 bg-slate-50 hover:bg-slate-100'}`}>
+                            <input
+                              type="checkbox"
+                              checked={editFormData.goals.includes(goal)}
+                              onChange={() => {
+                                const newGoals = editFormData.goals.includes(goal)
+                                  ? editFormData.goals.filter(g => g !== goal)
+                                  : [...editFormData.goals, goal];
+                                setEditFormData({...editFormData, goals: newGoals});
+                              }}
+                              className="w-4 h-4 text-red-600 rounded border-slate-300 focus:ring-red-500"
+                            />
+                            <span className="text-[13px] font-semibold">{goal}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[17px] font-bold text-black mb-2">Sở thích cá nhân</label>
+                      <input type="text" value={editFormData.interests} onChange={(e) => setEditFormData({...editFormData, interests: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="VD: Đọc sách, Nghe Podcast..." />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="p-4 border-t border-slate-100 flex justify-end gap-3 shrink-0">
