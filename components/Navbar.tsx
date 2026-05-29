@@ -4,7 +4,6 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
 
 interface NavbarProps {
   profileName?: string;
@@ -15,12 +14,7 @@ export default function Navbar({ profileName, onSignOut }: NavbarProps) {
   const pathname = usePathname();
 
   return (
-    <motion.nav 
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="bg-white/80 backdrop-blur-xl border-b border-slate-100 sticky top-0 z-50 shadow-sm"
-    >
+    <nav className="bg-white/80 backdrop-blur-xl border-b border-slate-100 sticky top-0 z-50 shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           
@@ -74,6 +68,6 @@ export default function Navbar({ profileName, onSignOut }: NavbarProps) {
 
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 }
