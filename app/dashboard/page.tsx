@@ -235,15 +235,21 @@ export default function Dashboard() {
                 <span className="font-semibold text-[15px] text-slate-800">{profile?.name}</span>
               </div>
               <Link href="/connect" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
-                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y8/r/S0U5ECzYUSu.png" alt="Friends" className="w-9 h-9"/>
+                <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                </div>
                 <span className="font-medium text-[15px] text-slate-800">Bạn bè / Kết nối</span>
               </Link>
               <Link href="/events" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
-                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/vTDQBvw710u.png" alt="Events" className="w-9 h-9"/>
+                <div className="w-9 h-9 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
+                </div>
                 <span className="font-medium text-[15px] text-slate-800">Sự kiện</span>
               </Link>
               <Link href="/guide" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
-                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yU/r/D2y-jJ2C_hO.png" alt="Guide" className="w-9 h-9"/>
+                <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+                </div>
                 <span className="font-medium text-[15px] text-slate-800">Cẩm nang</span>
               </Link>
               
