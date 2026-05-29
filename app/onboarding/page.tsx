@@ -61,7 +61,7 @@ export default function Onboarding() {
           setLoading(false);
         }
       } else {
-        router.push('/');
+        router.push('/login');
       }
     });
     return () => unsubscribe();

@@ -83,7 +83,7 @@ export default function GuidePage() {
           router.push('/onboarding');
         }
       } else {
-        router.push('/onboarding');
+        router.push('/login');
       }
     });
     return () => unsubscribe();

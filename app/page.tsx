@@ -11,7 +11,7 @@ export default function HomePage() {
         Nền tảng kết nối Mentor-Mentee cao cấp, cung cấp kiến thức thực chiến và hành trang sắc bén nhất để chinh phục 4 năm đại học.
       </p>
       <div className="flex flex-row flex-wrap justify-center gap-4 mt-4">
-        <Link href="/onboarding" className="px-8 py-4 bg-red-600 text-white text-lg font-bold rounded-xl whitespace-nowrap hover:bg-red-700 transition">
+        <Link href="/login" className="px-8 py-4 bg-red-600 text-white text-lg font-bold rounded-xl whitespace-nowrap hover:bg-red-700 transition">
           Bắt đầu hành trình
         </Link>
         <Link href="/guide" className="px-8 py-4 bg-slate-100 text-slate-800 text-lg font-bold rounded-xl whitespace-nowrap hover:bg-slate-200 transition">

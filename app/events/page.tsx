@@ -92,7 +92,7 @@ export default function EventsPage() {
           router.push('/onboarding');
         }
       } else {
-        router.push('/onboarding');
+        router.push('/login');
       }
     });
     return () => unsubscribe();
