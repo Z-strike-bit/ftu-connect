@@ -83,7 +83,7 @@ export default function GuidePage() {
           router.push('/onboarding');
         }
       } else {
-        router.push('/');
+        // router.push('/'); // Bypass auth for testing
       }
     });
     return () => unsubscribe();

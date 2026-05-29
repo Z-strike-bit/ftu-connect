@@ -11,10 +11,10 @@ export default function HomePage() {
         Nền tảng kết nối Mentor-Mentee cao cấp, cung cấp kiến thức thực chiến và hành trang sắc bén nhất để chinh phục 4 năm đại học.
       </p>
       <div className="flex flex-row gap-4 mt-4">
-        <Link href="/dashboard" className="px-8 py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all text-center block">
+        <Link href="/dashboard" className="w-fit mx-auto px-8 py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all text-center">
           Bắt đầu hành trình
         </Link>
-        <Link href="/guide" className="px-8 py-4 bg-slate-100 text-slate-800 font-bold rounded-xl hover:bg-slate-200 transition-all text-center block">
+        <Link href="/guide" className="w-fit mx-auto px-8 py-4 bg-slate-100 text-slate-800 font-bold rounded-xl hover:bg-slate-200 transition-all text-center">
           Tìm hiểu thêm
         </Link>
       </div>
