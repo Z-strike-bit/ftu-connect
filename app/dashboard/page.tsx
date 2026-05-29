@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
@@ -49,22 +50,6 @@ const getBadge = (points: number) => {
 
 const TAGS = ['Thảo luận', 'Hỏi đáp môn học', 'Tìm đồng đội', 'Góc tâm sự', 'Review'];
 
-const listVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12
-    }
-  }
-};
-
-const postVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
-  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
-};
-
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
@@ -76,7 +61,6 @@ export default function Dashboard() {
   const [isPosting, setIsPosting] = useState(false);
   
   const [postTag, setPostTag] = useState('Thảo luận');
-  const [activeFilter, setActiveFilter] = useState('Tất cả');
   const [expandedComments, setExpandedComments] = useState<{[key: string]: boolean}>({});
   const [commentInputs, setCommentInputs] = useState<{[key: string]: string}>({});
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -117,13 +101,13 @@ export default function Dashboard() {
         let matchReason = '';
         if (c.major && profile.major && c.major === profile.major) {
           score += 5;
-          matchReason = 'Match: Cùng chuyên ngành';
+          matchReason = 'Cùng chuyên ngành';
         }
         if (c.goals && profile.goals) {
           const commonGoals = c.goals.filter((g: string) => profile.goals?.includes(g));
           if (commonGoals.length > 0) {
             score += commonGoals.length * 2;
-            if (!matchReason) matchReason = `Match: Cùng mục tiêu`;
+            if (!matchReason) matchReason = `Cùng mục tiêu`;
           }
         }
         if (!matchReason) matchReason = 'Gợi ý phù hợp';
@@ -226,336 +210,242 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-red-200">
+      <div className="min-h-screen bg-[#f0f2f5] font-sans selection:bg-red-200">
         <Navbar profileName="" onSignOut={() => {}} />
-        <div className="w-full px-4 sm:px-6 lg:px-12 py-10 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 animate-pulse">
-            {/* Left Skeleton */}
-            <div className="md:col-span-3">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-96">
-                <div className="bg-slate-200 h-24 w-full"></div>
-                <div className="px-6 flex flex-col items-center -mt-14 space-y-4">
-                  <div className="w-28 h-28 bg-slate-300 rounded-full border-4 border-white"></div>
-                  <div className="w-3/4 h-6 bg-slate-200 rounded-full mt-4"></div>
-                  <div className="flex gap-2 w-full justify-center">
-                    <div className="w-16 h-6 bg-slate-200 rounded-full"></div>
-                    <div className="w-24 h-6 bg-slate-200 rounded-full"></div>
-                  </div>
-                  <div className="w-1/2 h-4 bg-slate-200 rounded-full mt-2"></div>
-                  <div className="w-full pt-5 border-t border-slate-100">
-                    <div className="w-full h-10 bg-slate-200 rounded-xl mt-4"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Center Skeleton */}
-            <div className="md:col-span-6 space-y-6">
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 h-40">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-slate-200 rounded-full shrink-0"></div>
-                  <div className="flex-1 bg-slate-100 rounded-2xl h-20"></div>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map(i => <div key={i} className="w-20 h-8 bg-slate-200 rounded-full"></div>)}
-              </div>
-              {[1, 2, 3].map(i => (
-                <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 h-60">
-                  <div className="flex gap-4 mb-4">
-                    <div className="w-12 h-12 bg-slate-200 rounded-full shrink-0"></div>
-                    <div className="space-y-2 flex-1">
-                      <div className="w-1/3 h-4 bg-slate-200 rounded-full"></div>
-                      <div className="w-1/4 h-3 bg-slate-100 rounded-full"></div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="w-full h-4 bg-slate-200 rounded-full"></div>
-                    <div className="w-5/6 h-4 bg-slate-200 rounded-full"></div>
-                    <div className="w-4/6 h-4 bg-slate-200 rounded-full"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {/* Right Skeleton */}
-            <div className="md:col-span-3 hidden md:block">
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 h-96 space-y-6">
-                <div className="w-1/2 h-4 bg-slate-200 rounded-full mb-6"></div>
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="flex gap-3">
-                    <div className="w-11 h-11 bg-slate-200 rounded-full shrink-0"></div>
-                    <div className="space-y-2 flex-1">
-                      <div className="w-3/4 h-4 bg-slate-200 rounded-full"></div>
-                      <div className="w-1/2 h-3 bg-slate-100 rounded-full"></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="text-center py-20 animate-pulse text-slate-500 font-bold">Đang tải...</div>
       </div>
     );
   }
 
-  const filteredPosts = activeFilter === 'Tất cả' ? posts : posts.filter(p => p.tag === activeFilter);
-
   return (
-    <div className="min-h-screen w-full bg-slate-50 text-slate-800 font-sans selection:bg-red-200">
+    <div className="min-h-screen w-full bg-[#f0f2f5] font-sans selection:bg-red-200">
       <Navbar profileName={profile?.name} onSignOut={handleSignOut} />
 
-      <div className="w-full px-4 sm:px-6 lg:px-12 py-10 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="w-full mx-auto px-4 sm:px-0 lg:max-w-[1600px] mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-8">
           
-          {/* Cột Trái: Profile */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="md:col-span-3"
-          >
-            <motion.div 
-              whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)" }}
-              className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden sticky top-28 transition-all"
-            >
-              <div className="bg-slate-50 border-b border-slate-100 h-24 relative overflow-hidden"></div>
-              <div className="px-6 py-4 flex flex-col items-center -mt-14">
-                <div className="h-28 w-28 rounded-full bg-white flex items-center justify-center text-3xl overflow-hidden ring-4 ring-white shadow-lg relative z-10 shrink-0">
-                  <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-full h-full object-cover"/>
-                </div>
-                <h2 className="mt-5 text-lg font-bold text-black text-center break-words w-full">{profile?.name}</h2>
-                
-                {/* Badges */}
-                <div className="flex gap-2 justify-center mt-3 flex-wrap">
-                  <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider shrink-0">
-                    {profile?.role === 'mentor' ? 'Mentor' : 'Mentee'}
-                  </span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1 uppercase tracking-wider shrink-0 ${getBadge(profile?.points || 0).color}`}>
-                    {getBadge(profile?.points || 0).icon} {getBadge(profile?.points || 0).label}
-                  </span>
-                </div>
-                <p className="text-sm font-bold text-slate-600 mt-3 text-center">{profile?.points || 0} Điểm tín nhiệm</p>
-
-                <div className="mt-6 w-full pt-5 border-t border-slate-100">
-                  <div className="flex flex-col gap-3 text-sm text-slate-500">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Chuyên ngành</span> 
-                      <span className="font-bold text-black break-words">{profile?.major}</span>
-                    </div>
+          {/* Cột Trái: Lối tắt (Shortcuts) */}
+          <div className="hidden lg:block lg:col-span-3 xl:col-span-3 pl-2 xl:pl-4">
+            <div className="sticky top-20 flex flex-col gap-1 pr-4">
+              <div 
+                onClick={() => setIsProfileModalOpen(true)}
+                className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer"
+              >
+                <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-9 h-9 rounded-full bg-slate-300"/>
+                <span className="font-semibold text-[15px] text-slate-800">{profile?.name}</span>
+              </div>
+              <Link href="/connect" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y8/r/S0U5ECzYUSu.png" alt="Friends" className="w-9 h-9"/>
+                <span className="font-medium text-[15px] text-slate-800">Bạn bè / Kết nối</span>
+              </Link>
+              <Link href="/events" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/vTDQBvw710u.png" alt="Events" className="w-9 h-9"/>
+                <span className="font-medium text-[15px] text-slate-800">Sự kiện</span>
+              </Link>
+              <Link href="/guide" className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yU/r/D2y-jJ2C_hO.png" alt="Guide" className="w-9 h-9"/>
+                <span className="font-medium text-[15px] text-slate-800">Cẩm nang</span>
+              </Link>
+              
+              <div className="border-b border-slate-300 my-3 mx-2"></div>
+              
+              <div className="p-2">
+                <h3 className="text-[17px] font-semibold text-slate-500 mb-2">Lối tắt của bạn</h3>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                    <span className="w-9 h-9 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm">KT</span>
+                    <span className="font-medium text-[15px] text-slate-800">Kinh tế quốc tế K64</span>
+                  </div>
+                  <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                    <span className="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">CLB</span>
+                    <span className="font-medium text-[15px] text-slate-800">TEC FTU</span>
                   </div>
                 </div>
-
-                <div className="mt-8 w-full">
-                  <motion.button 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setIsProfileModalOpen(true)}
-                    className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-colors"
-                  >
-                    Cập nhật hồ sơ
-                  </motion.button>
-                </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* Cột Giữa: Feed */}
-          <div className="md:col-span-6 space-y-8">
+          {/* Cột Giữa: Feed (Bài đăng) */}
+          <div className="col-span-1 lg:col-span-6 xl:col-span-6 space-y-4 max-w-[680px] mx-auto w-full px-0 sm:px-4 lg:px-8">
             
-            {/* Hộp đăng bài */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6"
-            >
-              <div className="flex space-x-4 mb-4">
-                <div className="flex-shrink-0">
-                  <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="h-12 w-12 rounded-full bg-slate-100 border border-slate-200"/>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <textarea
-                    rows={3}
-                    className="block w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 sm:text-[15px] resize-none transition-all font-medium"
-                    placeholder="Chia sẻ kiến thức, kinh nghiệm hoặc đặt câu hỏi..."
+            {/* Ô Tạo bài viết */}
+            <div className="bg-white sm:rounded-xl shadow-sm border-x-0 sm:border border-slate-200 p-3 sm:p-4 mb-4">
+              <div className="flex gap-2 sm:gap-3 border-b border-slate-100 pb-3">
+                <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-200 shrink-0 cursor-pointer"/>
+                <div className="flex-1 bg-[#f0f2f5] hover:bg-[#e4e6eb] transition-colors rounded-full px-4 flex items-center cursor-text">
+                  <textarea 
+                    rows={1}
+                    className="w-full bg-transparent border-none outline-none resize-none text-[17px] placeholder-slate-500 font-normal py-2"
+                    placeholder={`Bạn đang nghĩ gì thế, ${profile?.name?.split(' ').pop()}?`}
                     value={postContent}
-                    onChange={(e) => setPostContent(e.target.value)}
+                    onChange={(e) => {
+                      setPostContent(e.target.value);
+                      e.target.style.height = 'auto';
+                      e.target.style.height = (e.target.scrollHeight) + 'px';
+                    }}
                   />
                 </div>
               </div>
-              <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-2 flex-wrap gap-4">
-                <div className="flex items-center gap-4 flex-wrap">
+              
+              <div className="flex justify-between items-center pt-3 gap-2 flex-wrap px-2">
+                <div className="flex gap-1 flex-1 items-center">
                   <select 
                     value={postTag} 
                     onChange={(e) => setPostTag(e.target.value)}
-                    className="rounded-xl border-slate-200 bg-white text-sm font-bold text-slate-700 py-2 px-4 focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 border shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"
+                    className="bg-transparent text-[15px] font-semibold text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-lg cursor-pointer outline-none transition-colors"
                   >
                     {TAGS.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
 
-                  <label className="flex items-center space-x-2 cursor-pointer group">
-                    <div className="relative flex items-center">
-                      <input type="checkbox" className="sr-only" checked={isAnonymous} onChange={() => setIsAnonymous(!isAnonymous)} />
-                      <div className={`block w-10 h-6 rounded-full transition-colors duration-200 ease-in-out ${isAnonymous ? 'bg-black' : 'bg-slate-200'}`}></div>
-                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 ease-in-out shadow-sm ${isAnonymous ? 'transform translate-x-4' : ''}`}></div>
-                    </div>
-                    <span className="text-xs font-bold text-slate-500 group-hover:text-black transition-colors hidden sm:block">Ẩn danh</span>
+                  <label className="flex items-center space-x-2 cursor-pointer hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors">
+                    <input type="checkbox" className="w-4 h-4 rounded text-red-600 focus:ring-red-600 cursor-pointer border-slate-300" checked={isAnonymous} onChange={() => setIsAnonymous(!isAnonymous)} />
+                    <span className="text-[15px] font-semibold text-slate-600 whitespace-nowrap">Ẩn danh</span>
                   </label>
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handlePost}
                   disabled={!postContent.trim() || isPosting}
-                  className="inline-flex shrink-0 items-center bg-red-600 hover:bg-red-700 text-white rounded-xl px-6 py-2.5 text-sm font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                  className="bg-red-600 hover:bg-red-700 text-white rounded-lg px-6 py-2 text-[15px] font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isPosting ? 'Đang...' : 'Đăng bài'}
+                  {isPosting ? 'Đang...' : 'Đăng'}
                 </motion.button>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Filter Pills */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="flex overflow-x-auto gap-2 pb-2 custom-scrollbar items-center"
-            >
-              {['Tất cả', ...TAGS].map(tag => (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  key={tag}
-                  onClick={() => setActiveFilter(tag)}
-                  className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-colors border ${activeFilter === tag ? 'bg-red-50 text-red-600 border-red-100 shadow-sm' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:text-slate-800 hover:bg-slate-50'}`}
-                >
-                  {tag}
-                </motion.button>
-              ))}
-            </motion.div>
-
-            {/* Danh sách bài đăng */}
-            <motion.div 
-              variants={listVariants}
-              initial="hidden"
-              animate="show"
-              className="space-y-6"
-            >
+            {/* Danh sách Bài viết */}
+            <div className="space-y-4">
               <AnimatePresence mode="popLayout">
-                {filteredPosts.map((post) => {
+                {posts.map((post) => {
                   const hasLiked = post.likedBy && post.likedBy.includes(user?.uid || '');
                   const isExpanded = !!expandedComments[post.id];
                   
                   return (
                     <motion.div 
                       key={post.id} 
-                      variants={postVariants}
                       layout
-                      className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 transition-all group"
+                      className="bg-white sm:rounded-xl shadow-sm border-x-0 sm:border border-slate-200 overflow-hidden"
                     >
-                      <div className="flex space-x-4 items-start">
-                        <div className="flex-shrink-0">
-                          {post.isAnonymous ? (
-                            <div className="h-12 w-12 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xl shadow-sm">
-                              <span className="text-slate-500 text-2xl">🕵️</span>
-                            </div>
-                          ) : (
-                            <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + post.authorName} alt="Avatar" className="h-12 w-12 rounded-full bg-slate-100 border border-slate-200"/>
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className={`text-base font-extrabold ${post.isAnonymous ? 'text-slate-500' : 'text-black'}`}>
-                              {post.isAnonymous ? 'Sinh viên ẩn danh' : post.authorName}
-                            </p>
-                            {!post.isAnonymous && post.authorBadge && (
-                              <span className={`px-2 py-1 text-xs font-bold rounded flex items-center gap-1 border shrink-0 ${post.authorBadge.color}`}>
-                                {post.authorBadge.icon} {post.authorBadge.label}
-                              </span>
-                            )}
-                            {post.tag && (
-                              <span className="px-3 py-1 rounded border border-slate-200 bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-widest shrink-0">
-                                {post.tag}
-                              </span>
+                      {/* Post Header */}
+                      <div className="p-4 flex items-start justify-between">
+                        <div className="flex space-x-3 items-center">
+                          <div className="flex-shrink-0 cursor-pointer">
+                            {post.isAnonymous ? (
+                              <div className="h-10 w-10 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center text-xl">
+                                🕵️
+                              </div>
+                            ) : (
+                              <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + post.authorName} alt="Avatar" className="h-10 w-10 rounded-full bg-slate-200 border border-slate-300"/>
                             )}
                           </div>
-                          <p className="text-xs font-semibold text-slate-400 mt-1">
-                            {new Date(post.createdAt).toLocaleString('vi-VN')}
-                          </p>
+                          <div>
+                            <div className="flex items-center flex-wrap">
+                              <p className="text-[15px] font-semibold text-slate-900 cursor-pointer hover:underline">
+                                {post.isAnonymous ? 'Sinh viên ẩn danh' : post.authorName}
+                              </p>
+                            </div>
+                            <div className="flex items-center text-[13px] text-slate-500 gap-1">
+                              <span className="hover:underline cursor-pointer">{new Date(post.createdAt).toLocaleString('vi-VN')}</span>
+                              <span>·</span>
+                              <span>{post.tag}</span>
+                              <svg className="w-3.5 h-3.5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            </div>
+                          </div>
                         </div>
+                        <button className="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors">
+                          <svg className="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
                       </div>
                       
-                      <div className="mt-5 text-black font-medium text-base whitespace-pre-wrap leading-relaxed">
+                      {/* Post Content */}
+                      <div className="px-4 pb-2 text-[15px] text-slate-900 whitespace-pre-wrap leading-[1.3333]">
                         {post.content}
                       </div>
                       
-                      <div className="mt-5 flex gap-3 border-t border-slate-100 pt-4">
-                        <motion.button 
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => handleLike(post.id, post.likedBy || [], post.likes || 0)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors border ${hasLiked ? 'text-red-600 bg-red-50 border-red-100' : 'text-slate-500 border-transparent hover:bg-slate-50 hover:text-black'}`}
-                        >
-                          <svg className={`w-5 h-5 transition-transform ${hasLiked ? 'fill-current scale-110' : 'fill-none stroke-current'}`} viewBox="0 0 24 24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                          </svg>
+                      {/* Engagement Stats */}
+                      <div className="px-4 py-2 flex items-center justify-between text-[13px] text-slate-500 border-b border-slate-200">
+                        <div className="flex items-center gap-1.5 cursor-pointer hover:underline">
+                          <div className="w-4 h-4 rounded-full bg-red-600 flex items-center justify-center">
+                            <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                          </div>
                           <span>{post.likes || 0}</span>
-                        </motion.button>
-                        
-                        <motion.button 
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => setExpandedComments(prev => ({ ...prev, [post.id]: !isExpanded }))}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors border ${isExpanded ? 'text-black bg-slate-100 border-slate-200' : 'text-slate-500 border-transparent hover:bg-slate-50 hover:text-black'}`}
-                        >
-                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                          </svg>
-                          <span>{post.comments?.length || 0}</span>
-                        </motion.button>
+                        </div>
+                        <div className="flex gap-3">
+                          <span className="cursor-pointer hover:underline" onClick={() => setExpandedComments(prev => ({ ...prev, [post.id]: true }))}>
+                            {post.comments?.length || 0} bình luận
+                          </span>
+                          <span className="cursor-pointer hover:underline">0 chia sẻ</span>
+                        </div>
                       </div>
 
+                      {/* Action Buttons */}
+                      <div className="px-4 py-1 flex items-center justify-between gap-1">
+                        <button 
+                          onClick={() => handleLike(post.id, post.likedBy || [], post.likes || 0)}
+                          className={`flex-1 flex items-center justify-center gap-2 py-1.5 rounded-md hover:bg-slate-100 transition-colors font-semibold text-[15px] ${hasLiked ? 'text-red-600' : 'text-slate-600'}`}
+                        >
+                          <svg className={`w-5 h-5 ${hasLiked ? 'fill-current' : 'fill-none stroke-current'}`} strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                          Thích
+                        </button>
+                        <button 
+                          onClick={() => setExpandedComments(prev => ({ ...prev, [post.id]: !isExpanded }))}
+                          className="flex-1 flex items-center justify-center gap-2 py-1.5 rounded-md hover:bg-slate-100 transition-colors font-semibold text-[15px] text-slate-600"
+                        >
+                          <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                          Bình luận
+                        </button>
+                        <button className="flex-1 flex items-center justify-center gap-2 py-1.5 rounded-md hover:bg-slate-100 transition-colors font-semibold text-[15px] text-slate-600">
+                          <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                          Chia sẻ
+                        </button>
+                      </div>
+
+                      {/* Comments Section */}
                       <AnimatePresence>
                         {isExpanded && (
                           <motion.div 
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
+                            className="overflow-hidden border-t border-slate-100"
                           >
-                            <div className="mt-5 pt-5 border-t border-slate-100 space-y-5">
-                              <div className="space-y-4">
-                                {(post.comments || []).map((cmt, idx) => (
-                                  <div key={idx} className="flex gap-3">
-                                    <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + cmt.authorName} alt="Avatar" className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 shrink-0"/>
-                                    <div className="bg-slate-50 rounded-2xl rounded-tl-none px-5 py-3 border border-slate-100">
-                                      <p className="text-xs font-extrabold text-black">{cmt.authorName}</p>
-                                      <p className="text-sm text-slate-700 mt-1 font-medium">{cmt.content}</p>
+                            <div className="p-4 space-y-4">
+                              {(post.comments || []).map((cmt, idx) => (
+                                <div key={idx} className="flex gap-2">
+                                  <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + cmt.authorName} alt="Avatar" className="w-8 h-8 rounded-full bg-slate-200 shrink-0 cursor-pointer"/>
+                                  <div>
+                                    <div className="bg-[#f0f2f5] rounded-2xl px-3 py-2 text-[15px]">
+                                      <p className="font-semibold text-slate-900 cursor-pointer hover:underline">{cmt.authorName}</p>
+                                      <p className="text-slate-900 leading-[1.3333]">{cmt.content}</p>
+                                    </div>
+                                    <div className="flex gap-3 px-3 mt-1 text-[12px] font-bold text-slate-500">
+                                      <span className="hover:underline cursor-pointer">Thích</span>
+                                      <span className="hover:underline cursor-pointer">Phản hồi</span>
+                                      <span className="font-normal">{new Date(cmt.createdAt).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}</span>
                                     </div>
                                   </div>
-                                ))}
-                              </div>
+                                </div>
+                              ))}
                               
-                              <div className="flex gap-3 items-start">
-                                <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 shrink-0 mt-1"/>
-                                <div className="flex-1 flex gap-2">
+                              <div className="flex gap-2 items-start mt-2">
+                                <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-8 h-8 rounded-full bg-slate-200 shrink-0 mt-0.5 cursor-pointer"/>
+                                <div className="flex-1 bg-[#f0f2f5] rounded-2xl flex items-center px-3 py-1.5 border border-transparent focus-within:border-slate-300 transition-colors">
                                   <input
                                     type="text"
-                                    placeholder="Viết bình luận..."
+                                    placeholder="Viết bình luận công khai..."
                                     value={commentInputs[post.id] || ''}
                                     onChange={(e) => setCommentInputs(prev => ({ ...prev, [post.id]: e.target.value }))}
                                     onKeyDown={(e) => e.key === 'Enter' && handleComment(post.id)}
-                                    className="flex-1 bg-white border-2 border-slate-200 rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 font-medium transition-all"
+                                    className="flex-1 bg-transparent border-none outline-none text-[15px] placeholder-slate-500 py-1"
                                   />
-                                  <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                                  <button
                                     onClick={() => handleComment(post.id)}
                                     disabled={!commentInputs[post.id]?.trim()}
-                                    className="text-white p-2 disabled:opacity-50 transition-colors bg-black hover:bg-red-600 rounded-full w-11 h-11 flex items-center justify-center shrink-0 shadow-sm"
+                                    className="p-1.5 disabled:opacity-50 text-red-600 hover:bg-slate-200 rounded-full transition-colors flex items-center justify-center shrink-0"
                                   >
-                                    <svg className="w-5 h-5 transform rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
-                                  </motion.button>
+                                    <svg className="w-4 h-4 transform rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -567,67 +457,90 @@ export default function Dashboard() {
                 })}
               </AnimatePresence>
               
-              {filteredPosts.length === 0 && (
-                <motion.div 
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  className="text-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm"
-                >
-                  <div className="text-5xl mb-4">✨</div>
-                  <p className="text-slate-500 font-bold text-lg">Chưa có bài viết nào trong chủ đề này.</p>
-                </motion.div>
+              {posts.length === 0 && (
+                <div className="text-center py-20 bg-white sm:rounded-xl border border-slate-200 shadow-sm">
+                  <div className="text-5xl mb-4">📝</div>
+                  <p className="text-slate-500 font-semibold text-[17px]">Chưa có bài viết nào.</p>
+                </div>
               )}
-            </motion.div>
+            </div>
           </div>
 
-          {/* Cột Phải: Suggestions */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="md:col-span-3 hidden md:block"
-          >
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-28">
-              <h3 className="font-extrabold text-black mb-6 text-[13px] tracking-widest uppercase flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-600"></span>
-                Gợi ý kết nối
-              </h3>
-              <div className="space-y-5">
-                {suggestions.map(suggestion => (
-                  <motion.div 
-                    whileHover={{ y: -2 }}
-                    key={suggestion.id} 
-                    className="flex flex-col gap-3 group border-b border-slate-100 pb-5 last:border-0 last:pb-0"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} className="h-11 w-11 rounded-full bg-slate-100 border border-slate-200" alt="Avatar"/>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-black truncate">{suggestion.name}</p>
-                        <p className="text-xs font-bold text-slate-400 uppercase mt-0.5 truncate">{suggestion.role === 'mentor' ? 'Mentor' : 'Mentee'} - {suggestion.major}</p>
-                        <p className="text-xs font-extrabold text-red-600 mt-1">{suggestion.matchReason}</p>
-                      </div>
+          {/* Cột Phải: Suggestions & Events (Right Sidebar) */}
+          <div className="hidden lg:block lg:col-span-3 xl:col-span-3 pr-2 xl:pr-4">
+            <div className="sticky top-20 flex flex-col gap-6 pl-4">
+              
+              {/* Sự kiện nổi bật */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold text-[17px] text-slate-500">Sự kiện nổi bật</h3>
+                  <Link href="/events" className="text-red-600 text-[15px] hover:bg-red-50 px-2 py-1 rounded-md transition-colors">Tất cả</Link>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex gap-3 items-start cursor-pointer hover:bg-slate-200 p-2 -mx-2 rounded-xl transition-colors group">
+                    <div className="flex flex-col items-center bg-white rounded-xl shadow-sm border border-slate-200 w-12 h-14 overflow-hidden shrink-0 mt-1">
+                      <span className="bg-red-600 text-white text-[11px] font-bold w-full text-center py-0.5">Th 10</span>
+                      <span className="text-black font-bold text-[19px] leading-none mt-1">24</span>
                     </div>
-                    <motion.button 
-                      whileHover={{ scale: 1.02, backgroundColor: "#000", color: "#fff" }}
-                      whileTap={{ scale: 0.95 }}
+                    <div>
+                      <h4 className="text-[15px] font-semibold text-black leading-tight group-hover:underline">Ngày hội Định hướng Tân sinh viên FTU</h4>
+                      <p className="text-[13px] text-slate-500 mt-1">1,2K người quan tâm</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 items-start cursor-pointer hover:bg-slate-200 p-2 -mx-2 rounded-xl transition-colors group">
+                    <div className="flex flex-col items-center bg-white rounded-xl shadow-sm border border-slate-200 w-12 h-14 overflow-hidden shrink-0 mt-1">
+                      <span className="bg-blue-600 text-white text-[11px] font-bold w-full text-center py-0.5">Th 11</span>
+                      <span className="text-black font-bold text-[19px] leading-none mt-1">05</span>
+                    </div>
+                    <div>
+                      <h4 className="text-[15px] font-semibold text-black leading-tight group-hover:underline">Workshop: Lộ trình trở thành Global Citizen</h4>
+                      <p className="text-[13px] text-slate-500 mt-1">Trực tuyến</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-b border-slate-300 mx-2"></div>
+
+              {/* Gợi ý kết nối / Người liên hệ */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold text-[17px] text-slate-500">Người liên hệ / Gợi ý</h3>
+                  <div className="flex gap-1">
+                    <button className="w-8 h-8 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors">
+                      <svg className="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </button>
+                    <button className="w-8 h-8 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors">
+                      <svg className="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="space-y-1">
+                  {suggestions.map(suggestion => (
+                    <div 
+                      key={suggestion.id}
                       onClick={() => {
                         setSelectedUserToConnect(suggestion);
                         setIsConnectModalOpen(true);
                       }}
-                      className="w-full text-black border-2 border-black rounded-xl py-2 text-xs font-bold transition-colors"
+                      className="flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer group"
                     >
-                      Kết nối
-                    </motion.button>
-                  </motion.div>
-                ))}
-                
-                {suggestions.length === 0 && (
-                  <div className="text-center py-6">
-                    <p className="text-sm font-bold text-slate-400">Đang tìm kiếm ghép cặp...</p>
-                  </div>
-                )}
+                      <div className="relative shrink-0">
+                        <img src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} className="h-9 w-9 rounded-full bg-slate-300" alt="Avatar"/>
+                        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#f0f2f5] rounded-full group-hover:border-slate-200 transition-colors"></span>
+                      </div>
+                      <span className="text-[15px] font-medium text-slate-800 truncate flex-1">{suggestion.name}</span>
+                    </div>
+                  ))}
+                  {suggestions.length === 0 && (
+                    <p className="text-[13px] text-slate-500 text-center py-4">Đang tìm kiếm...</p>
+                  )}
+                </div>
               </div>
+
             </div>
-          </motion.div>
+          </div>
 
         </div>
       </div>
