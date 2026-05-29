@@ -99,7 +99,7 @@ export default function Dashboard() {
           router.push('/onboarding');
         }
       } else {
-        // router.push('/'); // Bypass auth for testing
+        router.push('/onboarding');
       }
     });
     return () => unsubscribe();
