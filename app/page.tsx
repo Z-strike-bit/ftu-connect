@@ -40,20 +40,20 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-6"
         >
-          <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-black leading-[1.1] mb-6">
+          <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-black leading-[1.1] text-center">
             Định hình <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400">Tương lai</span><br/>Sinh viên Ngoại Thương
           </h1>
-          <p className="text-lg sm:text-xl text-slate-500 mb-10 max-w-2xl mx-auto font-medium">
+          <p className="text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto font-medium text-center">
             Nền tảng kết nối Mentor-Mentee cao cấp, cung cấp kiến thức thực chiến và hành trang sắc bén nhất để chinh phục 4 năm đại học.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/onboarding" className="w-full sm:w-auto px-8 py-4 rounded-full bg-red-600 text-white font-bold text-lg hover:bg-red-700 hover:scale-105 transition-all shadow-xl shadow-red-600/30">
+          <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center mt-4">
+            <Link href="/onboarding" className="w-full sm:w-auto px-8 py-4 rounded-full bg-red-600 text-white font-bold text-lg hover:bg-red-700 hover:scale-105 transition-all shadow-xl shadow-red-600/30 text-center flex-shrink-0 whitespace-nowrap">
               Bắt đầu hành trình
             </Link>
-            <Link href="#features" className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-100 text-black font-bold text-lg hover:bg-slate-200 transition-all">
+            <Link href="#features" className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-100 text-black font-bold text-lg hover:bg-slate-200 transition-all text-center flex-shrink-0 whitespace-nowrap">
               Tìm hiểu thêm
             </Link>
           </div>
