@@ -30,7 +30,7 @@ export default function Login() {
       }
     } catch (err: any) {
       console.error(err);
-      setError('Đăng nhập thất bại. Vui lòng thử lại.');
+      setError(`Lỗi: ${err.message || 'Đăng nhập thất bại.'}`);
       setLoading(false);
     }
   };
