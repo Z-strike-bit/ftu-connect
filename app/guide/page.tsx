@@ -10,17 +10,11 @@ import Navbar from '@/components/Navbar';
 
 interface UserProfile {
   name: string;
-  completedChecklist?: string[];
+  currentCredits?: number;
+  currentGPA?: number;
 }
 
-const CHECKLIST_ITEMS = [
-  { id: 'c1', title: 'Làm thẻ sinh viên và thẻ thư viện' },
-  { id: 'c2', title: 'Kích hoạt email trường (@ftu.edu.vn)' },
-  { id: 'c3', title: 'Đăng ký tín chỉ trên trang Tín chỉ FTU' },
-  { id: 'c4', title: 'Nộp giấy khám sức khỏe đầu năm' },
-  { id: 'c5', title: 'Tìm hiểu và apply Câu lạc bộ' },
-  { id: 'c6', title: 'Tìm phòng trọ / Đăng ký Ký túc xá' }
-];
+// Xóa CHECKLIST_ITEMS
 
 const COURSES = [
   { 
@@ -77,7 +71,8 @@ export default function GuidePage() {
           setUser(currentUser);
           const data = userDoc.data() as UserProfile;
           setProfile(data);
-          setCompletedItems(data.completedChecklist || []);
+          setCurrentCredits(data.currentCredits ?? '');
+          setCurrentGPA(data.currentGPA ?? '');
           setLoading(false);
         } else {
           router.push('/onboarding');
@@ -94,26 +89,60 @@ export default function GuidePage() {
     router.push('/');
   };
 
-  const toggleChecklist = async (id: string) => {
-    if (!user) return;
-    const isCompleted = completedItems.includes(id);
-    
-    setCompletedItems(prev => 
-      isCompleted ? prev.filter(i => i !== id) : [...prev, id]
-    );
+  const [currentCredits, setCurrentCredits] = useState<number | ''>('');
+  const [currentGPA, setCurrentGPA] = useState<number | ''>('');
+  const [targetGPA, setTargetGPA] = useState<number>(3.2);
 
+  const [creditsError, setCreditsError] = useState('');
+  const [gpaError, setGpaError] = useState('');
+
+  // Handle Input Changes & Validation
+  const handleCreditsChange = (val: string) => {
+    if (val === '') {
+      setCurrentCredits('');
+      setCreditsError('');
+      saveToFirebase('', currentGPA);
+      return;
+    }
+    const num = Number(val);
+    if (num < 0) {
+      setCreditsError('Số tín chỉ không được âm');
+      setCurrentCredits(num);
+    } else {
+      setCreditsError('');
+      setCurrentCredits(num);
+      saveToFirebase(num, currentGPA);
+    }
+  };
+
+  const handleGpaChange = (val: string) => {
+    if (val === '') {
+      setCurrentGPA('');
+      setGpaError('');
+      saveToFirebase(currentCredits, '');
+      return;
+    }
+    const num = Number(val);
+    if (num < 0 || num > 4.0) {
+      setGpaError('GPA phải nằm trong khoảng 0 - 4.0');
+      setCurrentGPA(num);
+    } else {
+      setGpaError('');
+      setCurrentGPA(num);
+      saveToFirebase(currentCredits, num);
+    }
+  };
+
+  // Debounced/Direct Save
+  const saveToFirebase = async (credits: number | '', gpa: number | '') => {
+    if (!user) return;
     try {
-      const userRef = doc(db, 'users', user.uid);
-      if (isCompleted) {
-        await updateDoc(userRef, { completedChecklist: arrayRemove(id) });
-      } else {
-        await updateDoc(userRef, { completedChecklist: arrayUnion(id) });
-      }
+      await updateDoc(doc(db, 'users', user.uid), {
+        currentCredits: credits === '' ? null : credits,
+        currentGPA: gpa === '' ? null : gpa
+      });
     } catch (err) {
-      console.error("Lỗi cập nhật checklist:", err);
-      setCompletedItems(prev => 
-        isCompleted ? [...prev, id] : prev.filter(i => i !== id)
-      );
+      console.error("Lỗi lưu dữ liệu GPA:", err);
     }
   };
 
@@ -121,7 +150,22 @@ export default function GuidePage() {
     return <div className="min-h-screen bg-white flex items-center justify-center"><p className="text-slate-500 font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
   }
 
-  const progressPercentage = Math.round((completedItems.length / CHECKLIST_ITEMS.length) * 100);
+  // Calculate Required Credits
+  let neededCredits: number | null = null;
+  let difficulty = ''; // 'easy' | 'challenging' | 'impossible'
+  
+  if (currentCredits !== '' && currentGPA !== '' && !creditsError && !gpaError) {
+    if (currentGPA >= targetGPA) {
+      neededCredits = 0;
+    } else {
+      const needed = (currentCredits * (targetGPA - currentGPA)) / (4.0 - targetGPA);
+      neededCredits = Math.ceil(needed);
+      
+      if (neededCredits <= 15) difficulty = 'easy'; // Xanh
+      else if (neededCredits <= 35) difficulty = 'challenging'; // Cam
+      else difficulty = 'impossible'; // Đỏ
+    }
+  }
 
   return (
     <div className="min-h-screen w-full bg-slate-50 text-black font-sans pb-16 selection:bg-red-200">
@@ -141,62 +185,108 @@ export default function GuidePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
-          {/* Cột Trái: Checklist (30%) */}
+          {/* Cột Trái: GPA Calculator (30%) */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-4"
           >
-            <div className="bg-white rounded-[2rem] shadow-sm border border-slate-200 overflow-hidden sticky top-28">
-              <div className="p-8 border-b border-slate-100 bg-black text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-red-600 rounded-full blur-[40px] opacity-40 -mr-10 -mt-10"></div>
-                <h2 className="text-xl font-bold flex items-center gap-2 relative z-10">
-                  <svg className="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
-                  Checklist Nhập học
+            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden sticky top-28">
+              
+              {/* Header Widget */}
+              <div className="p-6 border-b border-slate-100 bg-white">
+                <h2 className="text-xl font-extrabold text-black flex items-center gap-2">
+                  <div className="bg-red-50 p-2 rounded-xl text-red-600">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                  </div>
+                  Mục tiêu GPA
                 </h2>
-                
-                {/* Progress Bar */}
-                <div className="mt-6 relative z-10">
-                  <div className="flex justify-between text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">
-                    <span>Tiến độ</span>
-                    <span className="text-red-400">{progressPercentage}%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-1.5">
-                    <motion.div 
-                      className="bg-red-500 h-1.5 rounded-full" 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${progressPercentage}%` }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
-                    />
-                  </div>
+                <p className="text-[13px] text-slate-500 font-medium mt-2 leading-relaxed">
+                  Tính toán lộ trình tín chỉ để chinh phục danh hiệu mong muốn.
+                </p>
+              </div>
+
+              {/* Form Input */}
+              <div className="p-6 space-y-5 bg-slate-50/50">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Tín chỉ đã tích lũy</label>
+                  <input 
+                    type="number" 
+                    placeholder="VD: 50"
+                    value={currentCredits}
+                    onChange={(e) => handleCreditsChange(e.target.value)}
+                    className={`w-full px-4 py-3 rounded-xl border ${creditsError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-medium text-black`}
+                  />
+                  {creditsError && <p className="text-red-500 text-xs font-bold mt-1.5">{creditsError}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">GPA hiện tại (Hệ 4.0)</label>
+                  <input 
+                    type="number" 
+                    step="0.01"
+                    placeholder="VD: 3.15"
+                    value={currentGPA}
+                    onChange={(e) => handleGpaChange(e.target.value)}
+                    className={`w-full px-4 py-3 rounded-xl border ${gpaError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-medium text-black`}
+                  />
+                  {gpaError && <p className="text-red-500 text-xs font-bold mt-1.5">{gpaError}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Mục tiêu mong muốn</label>
+                  <select 
+                    value={targetGPA}
+                    onChange={(e) => setTargetGPA(Number(e.target.value))}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all text-[15px] font-medium bg-white appearance-none cursor-pointer text-black"
+                  >
+                    <option value={2.5}>Bằng Khá (2.5)</option>
+                    <option value={3.2}>Bằng Giỏi (3.2)</option>
+                    <option value={3.6}>Bằng Xuất sắc (3.6)</option>
+                  </select>
                 </div>
               </div>
 
-              <div className="p-6 space-y-3">
-                {CHECKLIST_ITEMS.map(item => {
-                  const isDone = completedItems.includes(item.id);
-                  return (
-                    <motion.div 
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      key={item.id}
-                      onClick={() => toggleChecklist(item.id)}
-                      className={`flex items-start gap-4 p-4 rounded-2xl cursor-pointer transition-all border ${isDone ? 'bg-slate-50 border-transparent opacity-60' : 'bg-white border-slate-200 hover:border-black hover:shadow-sm'}`}
-                    >
-                      <div className="mt-0.5 shrink-0">
-                        {isDone ? (
-                          <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
-                        ) : (
-                          <div className="w-6 h-6 rounded-full border-2 border-slate-300"></div>
-                        )}
+              {/* Result Area */}
+              <div className="p-6 bg-white border-t border-slate-100">
+                {neededCredits === null ? (
+                  <div className="text-center py-6 text-slate-400 font-medium text-sm">
+                    Nhập dữ liệu để xem kết quả
+                  </div>
+                ) : neededCredits === 0 ? (
+                  <div className="text-center py-4 bg-green-50 rounded-xl border border-green-100">
+                    <p className="text-green-700 font-extrabold text-lg">🎉 Chúc mừng!</p>
+                    <p className="text-green-600 text-sm font-medium mt-1">Bạn đã đạt mục tiêu này rồi!</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center text-center">
+                    <p className="text-slate-500 text-sm font-medium mb-2">Bạn cần thêm tối thiểu</p>
+                    <div className="flex items-baseline gap-2 mb-2">
+                      <span className="text-4xl font-black text-black tracking-tight">{neededCredits}</span>
+                      <span className="text-lg font-bold text-slate-400">tín chỉ A</span>
+                    </div>
+                    <p className="text-slate-500 text-sm font-medium mb-4">
+                      (Đạt điểm 4.0 tuyệt đối) để vươn tới mức {targetGPA}
+                    </p>
+
+                    {/* Progress Bar & Tags */}
+                    <div className="w-full">
+                      <div className="flex justify-between text-[11px] font-extrabold uppercase tracking-widest mb-1.5">
+                        <span className="text-slate-400">Độ khó</span>
+                        {difficulty === 'easy' && <span className="text-green-600">Dễ thở</span>}
+                        {difficulty === 'challenging' && <span className="text-amber-500">Thử thách</span>}
+                        {difficulty === 'impossible' && <span className="text-red-600">Bất khả thi</span>}
                       </div>
-                      <span className={`text-[15px] font-bold transition-all ${isDone ? 'line-through text-slate-400' : 'text-black'}`}>
-                        {item.title}
-                      </span>
-                    </motion.div>
-                  );
-                })}
+                      
+                      <div className="flex w-full h-2 rounded-full overflow-hidden bg-slate-100 gap-0.5">
+                        <div className={`h-full flex-1 ${['easy', 'challenging', 'impossible'].includes(difficulty) ? 'bg-green-500' : 'bg-slate-200'}`}></div>
+                        <div className={`h-full flex-1 ${['challenging', 'impossible'].includes(difficulty) ? 'bg-amber-400' : 'bg-slate-200'}`}></div>
+                        <div className={`h-full flex-1 ${difficulty === 'impossible' ? 'bg-red-500' : 'bg-slate-200'}`}></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
