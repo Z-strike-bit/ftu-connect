@@ -26,6 +26,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editFormData, setEditFormData] = useState({
+    name: '',
     bio: '',
     major: '',
     specialization: '',
@@ -76,6 +77,7 @@ export default function ProfilePage() {
         const data = pDoc.data();
         setTargetProfile(data);
         setEditFormData({
+          name: data.name || '',
           bio: data.bio || '',
           major: data.major || '',
           specialization: data.specialization || '',
@@ -187,7 +189,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Name and Basic Stats */}
-              <div className="flex-1 text-center sm:text-left mb-2 sm:mb-4">
+              <div className="flex-1 text-center sm:text-left mb-2 sm:mb-4 mt-6 sm:mt-10">
                 <h1 className="text-[32px] font-bold text-black leading-tight flex items-center justify-center sm:justify-start gap-2">
                   {targetProfile.name}
                   {targetProfile.points >= 200 && <span className="text-xl" title="Top Mentor">👑</span>}
@@ -206,7 +208,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-2 sm:mb-4 w-full sm:w-auto px-4 sm:px-0">
+              <div className="flex gap-2 sm:mb-4 w-full sm:w-auto px-4 sm:px-0 mt-4 sm:mt-10">
                 {isOwnProfile ? (
                   <>
                     <button onClick={() => setIsEditing(true)} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-black font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px]">
@@ -462,6 +464,11 @@ export default function ProfilePage() {
               </div>
 
               <div className="p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar">
+                <div>
+                  <label className="block text-[17px] font-bold text-black mb-2">Tên hiển thị</label>
+                  <input type="text" value={editFormData.name} onChange={(e) => setEditFormData({...editFormData, name: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Nhập tên của bạn..." />
+                </div>
+
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="block text-[17px] font-bold text-black">Ảnh đại diện (Avatar URL)</label>
