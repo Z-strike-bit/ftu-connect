@@ -8,11 +8,12 @@ import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firest
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 
-interface UserProfile {
-  name: string;
-  currentCredits?: number;
-  currentGPA?: number;
   totalCredits?: number;
+  creditsA?: number;
+  creditsB?: number;
+  creditsC?: number;
+  creditsD?: number;
+  creditsF?: number;
 }
 
 // Xóa CHECKLIST_ITEMS
@@ -71,10 +72,15 @@ export default function GuidePage() {
         if (userDoc.exists()) {
           setUser(currentUser);
           const data = userDoc.data() as UserProfile;
+          setUser(currentUser);
+          const data = userDoc.data() as UserProfile;
           setProfile(data);
-          setCurrentCredits(data.currentCredits ?? '');
-          setCurrentGPA(data.currentGPA ?? '');
           setTotalCredits(data.totalCredits ?? 130);
+          setCreditsA(data.creditsA ?? 0);
+          setCreditsB(data.creditsB ?? 0);
+          setCreditsC(data.creditsC ?? 0);
+          setCreditsD(data.creditsD ?? 0);
+          setCreditsF(data.creditsF ?? 0);
           setLoading(false);
         } else {
           router.push('/onboarding');
@@ -91,39 +97,40 @@ export default function GuidePage() {
     router.push('/');
   };
 
-  const [currentCredits, setCurrentCredits] = useState<number | ''>('');
-  const [currentGPA, setCurrentGPA] = useState<number | ''>('');
   const [totalCredits, setTotalCredits] = useState<number | ''>(130);
+  const [creditsA, setCreditsA] = useState<number | ''>(0);
+  const [creditsB, setCreditsB] = useState<number | ''>(0);
+  const [creditsC, setCreditsC] = useState<number | ''>(0);
+  const [creditsD, setCreditsD] = useState<number | ''>(0);
+  const [creditsF, setCreditsF] = useState<number | ''>(0);
   const [targetGPA, setTargetGPA] = useState<number>(3.2);
 
-  const [creditsError, setCreditsError] = useState('');
-  const [gpaError, setGpaError] = useState('');
   const [totalError, setTotalError] = useState('');
 
-  // Handle Input Changes & Validation
-  const handleCreditsChange = (val: string) => {
-    if (val === '') {
-      setCurrentCredits('');
-      setCreditsError('');
-      saveToFirebase('', currentGPA, totalCredits);
-      return;
-    }
-    const num = Number(val);
-    if (num < 0) {
-      setCreditsError('Số tín chỉ không được âm');
-      setCurrentCredits(num);
-    } else {
-      setCreditsError('');
-      setCurrentCredits(num);
-      saveToFirebase(num, currentGPA, totalCredits);
-    }
-  };
+  // Auto Save to Firebase
+  useEffect(() => {
+    if (!user || loading) return;
+    const timeout = setTimeout(async () => {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), {
+          totalCredits: totalCredits === '' ? null : totalCredits,
+          creditsA: creditsA === '' ? null : creditsA,
+          creditsB: creditsB === '' ? null : creditsB,
+          creditsC: creditsC === '' ? null : creditsC,
+          creditsD: creditsD === '' ? null : creditsD,
+          creditsF: creditsF === '' ? null : creditsF,
+        });
+      } catch (err) {
+        console.error("Lỗi lưu dữ liệu GPA:", err);
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [totalCredits, creditsA, creditsB, creditsC, creditsD, creditsF, user, loading]);
 
   const handleTotalChange = (val: string) => {
     if (val === '') {
       setTotalCredits('');
       setTotalError('');
-      saveToFirebase(currentCredits, currentGPA, '');
       return;
     }
     const num = Number(val);
@@ -133,39 +140,6 @@ export default function GuidePage() {
     } else {
       setTotalError('');
       setTotalCredits(num);
-      saveToFirebase(currentCredits, currentGPA, num);
-    }
-  };
-
-  const handleGpaChange = (val: string) => {
-    if (val === '') {
-      setCurrentGPA('');
-      setGpaError('');
-      saveToFirebase(currentCredits, '', totalCredits);
-      return;
-    }
-    const num = Number(val);
-    if (num < 0 || num > 4.0) {
-      setGpaError('GPA phải nằm trong khoảng 0 - 4.0');
-      setCurrentGPA(num);
-    } else {
-      setGpaError('');
-      setCurrentGPA(num);
-      saveToFirebase(currentCredits, num, totalCredits);
-    }
-  };
-
-  // Debounced/Direct Save
-  const saveToFirebase = async (credits: number | '', gpa: number | '', total: number | '') => {
-    if (!user) return;
-    try {
-      await updateDoc(doc(db, 'users', user.uid), {
-        currentCredits: credits === '' ? null : credits,
-        currentGPA: gpa === '' ? null : gpa,
-        totalCredits: total === '' ? null : total
-      });
-    } catch (err) {
-      console.error("Lỗi lưu dữ liệu GPA:", err);
     }
   };
 
@@ -173,18 +147,33 @@ export default function GuidePage() {
     return <div className="min-h-screen bg-white flex items-center justify-center"><p className="text-slate-500 font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
   }
 
-  // Calculate Required GPA
-  let reqGPA: number | null = null;
-  let remCredits = 0;
+  // Cấu trúc thuật toán Core
+  const a = Number(creditsA) || 0;
+  const b = Number(creditsB) || 0;
+  const c = Number(creditsC) || 0;
+  const d = Number(creditsD) || 0;
+  const f = Number(creditsF) || 0;
+  const total = Number(totalCredits) || 130;
+
+  const sumCredits = a + b + c + d + f;
+  const curPoints = (a * 4) + (b * 3) + (c * 2) + (d * 1) + (f * 0);
+  const currentGPA = sumCredits > 0 ? (curPoints / sumCredits) : 0;
   
-  if (currentCredits !== '' && currentGPA !== '' && totalCredits !== '' && !creditsError && !gpaError && !totalError) {
-    remCredits = totalCredits - currentCredits;
-    if (remCredits > 0) {
-      const reqPoints = (targetGPA * totalCredits) - (currentGPA * currentCredits);
-      reqGPA = reqPoints / remCredits;
-    } else {
-      reqGPA = targetGPA <= currentGPA ? 0 : 5.0; // dummy for already finished
-    }
+  let rank = 'Chưa có';
+  if (sumCredits > 0) {
+    if (currentGPA >= 3.6) rank = 'Xuất sắc';
+    else if (currentGPA >= 3.2) rank = 'Giỏi';
+    else if (currentGPA >= 2.5) rank = 'Khá';
+    else if (currentGPA >= 2.0) rank = 'Trung bình';
+    else rank = 'Yếu';
+  }
+
+  const remCredits = total - sumCredits;
+  let neededA = 0;
+  
+  if (remCredits > 0) {
+    const reqPoints = (targetGPA * total) - curPoints;
+    neededA = Math.ceil(reqPoints - (3 * remCredits));
   }
 
   return (
@@ -205,7 +194,7 @@ export default function GuidePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
-          {/* Cột Trái: GPA Calculator (30%) */}
+          {/* Cột Trái: GPA Tracker (30%) */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -220,50 +209,70 @@ export default function GuidePage() {
                   <div className="bg-red-50 p-2 rounded-xl text-red-600">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                   </div>
-                  Mục tiêu GPA
+                  GPA Tracker
                 </h2>
                 <p className="text-[13px] text-slate-500 font-medium mt-2 leading-relaxed">
-                  Tính toán lộ trình tín chỉ để chinh phục danh hiệu mong muốn.
+                  Công cụ phân tích điểm rơi chiến thuật dành riêng cho FTU-er.
                 </p>
               </div>
 
               {/* Form Input */}
-              <div className="p-6 space-y-5 bg-slate-50/50">
+              <div className="p-6 space-y-6 bg-slate-50/50">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Tổng số tín chỉ toàn khóa</label>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Tổng tín chỉ tối thiểu để ra trường</label>
                   <input 
                     type="number" 
                     placeholder="VD: 130"
                     value={totalCredits}
                     onChange={(e) => handleTotalChange(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-medium text-black`}
+                    className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-bold text-black`}
                   />
                   {totalError && <p className="text-red-500 text-xs font-bold mt-1.5">{totalError}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Tín chỉ đã tích lũy</label>
-                  <input 
-                    type="number" 
-                    placeholder="VD: 50"
-                    value={currentCredits}
-                    onChange={(e) => handleCreditsChange(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-xl border ${creditsError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-medium text-black`}
-                  />
-                  {creditsError && <p className="text-red-500 text-xs font-bold mt-1.5">{creditsError}</p>}
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Nhập điểm thành phần (Tín chỉ)</label>
+                  <div className="grid grid-cols-5 gap-2">
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm A</span>
+                      <input type="number" value={creditsA} onChange={(e) => setCreditsA(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm B</span>
+                      <input type="number" value={creditsB} onChange={(e) => setCreditsB(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm C</span>
+                      <input type="number" value={creditsC} onChange={(e) => setCreditsC(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm D</span>
+                      <input type="number" value={creditsD} onChange={(e) => setCreditsD(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm F</span>
+                      <input type="number" value={creditsF} onChange={(e) => setCreditsF(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">GPA hiện tại (Hệ 4.0)</label>
-                  <input 
-                    type="number" 
-                    step="0.01"
-                    placeholder="VD: 3.15"
-                    value={currentGPA}
-                    onChange={(e) => handleGpaChange(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-xl border ${gpaError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-medium text-black`}
-                  />
-                  {gpaError && <p className="text-red-500 text-xs font-bold mt-1.5">{gpaError}</p>}
+                {/* Read Only Current Stats */}
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Thống kê hiện tại</h3>
+                  <div className="space-y-2 text-[14px]">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-slate-600">Tổng tín đã tích lũy:</span>
+                      <span className="font-extrabold text-black">{sumCredits}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-slate-600">GPA Hiện tại:</span>
+                      <span className="font-extrabold text-red-600 text-base">{currentGPA.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-slate-600">Xếp loại:</span>
+                      <span className="font-extrabold text-black bg-slate-100 px-2 py-0.5 rounded">{rank}</span>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -271,7 +280,7 @@ export default function GuidePage() {
                   <select 
                     value={targetGPA}
                     onChange={(e) => setTargetGPA(Number(e.target.value))}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all text-[15px] font-medium bg-white appearance-none cursor-pointer text-black"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all text-[15px] font-bold bg-white appearance-none cursor-pointer text-black"
                   >
                     <option value={2.5}>Bằng Khá (2.5)</option>
                     <option value={3.2}>Bằng Giỏi (3.2)</option>
@@ -282,34 +291,39 @@ export default function GuidePage() {
 
               {/* Result Area */}
               <div className="p-6 bg-white border-t border-slate-100">
-                {reqGPA === null ? (
-                  <div className="text-center py-6 text-slate-400 font-medium text-sm">
-                    Nhập dữ liệu để xem kết quả
+                {sumCredits > total ? (
+                  <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
+                    <p className="text-red-700 font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
+                    <p className="text-red-600 text-sm font-medium leading-relaxed">
+                      Tổng số tín chỉ bạn đã nhập ({sumCredits}) lớn hơn cả tổng tín chỉ toàn khóa ({total}). Vui lòng kiểm tra lại!
+                    </p>
                   </div>
-                ) : remCredits <= 0 && reqGPA > 4.0 ? (
-                  <div className="text-center py-4 bg-red-50 rounded-xl border border-red-100">
-                    <p className="text-red-700 font-extrabold text-lg">❌ Bất khả thi!</p>
-                    <p className="text-red-600 text-sm font-medium mt-1">Bạn đã học hết số tín chỉ toàn khóa và không đạt mục tiêu.</p>
+                ) : remCredits <= 0 ? (
+                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm">
+                    <p className="text-green-700 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
+                    <p className="text-green-600 text-sm font-medium leading-relaxed">
+                      Bạn đã hoàn thành đủ số tín chỉ ra trường. GPA chung cuộc của bạn là <span className="font-extrabold">{currentGPA.toFixed(2)}</span> ({rank}).
+                    </p>
                   </div>
-                ) : reqGPA > 4.0 ? (
+                ) : neededA > remCredits ? (
                   <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
                     <p className="text-red-700 font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
                     <p className="text-red-600 text-sm font-medium leading-relaxed">
-                      Dù bạn đạt toàn điểm A (4.0) cho <span className="font-extrabold">{remCredits}</span> tín chỉ còn lại cũng không thể kéo lên mức này. Hãy đổi mục tiêu!
+                      Đời còn dài, FTU-er còn nhiều việc phải làm! Quỹ tín chỉ của bạn đã hết room để kéo điểm lên mức này, dù có full A. Hãy cân nhắc hạ mục tiêu xuống một chút và tận hưởng thời sinh viên nhé!
                     </p>
                   </div>
-                ) : reqGPA <= 0 ? (
-                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm">
-                    <p className="text-green-700 font-extrabold text-lg mb-2">🎉 Chúc mừng!</p>
-                    <p className="text-green-600 text-sm font-medium leading-relaxed">
-                      Bạn đã tích lũy dư quỹ điểm! Chỉ cần đảm bảo qua các môn còn lại là chắc chắn đạt mục tiêu.
+                ) : neededA > 0 ? (
+                  <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-200 shadow-sm">
+                    <p className="text-blue-700 font-extrabold text-lg mb-2">🔥 Kịch bản tối ưu nhất</p>
+                    <p className="text-blue-600 text-sm font-medium leading-relaxed">
+                      Chặng đường còn lại bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-white px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A (4.0), phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ vững điểm B (3.0) là chắc chắn hạ cánh ở mốc {targetGPA.toFixed(2)}!
                     </p>
                   </div>
                 ) : (
-                  <div className={`text-center p-5 rounded-xl border shadow-sm ${reqGPA > 3.2 ? 'bg-amber-50 border-amber-200' : 'bg-blue-50 border-blue-200'}`}>
-                    <p className={`font-extrabold text-lg mb-2 ${reqGPA > 3.2 ? 'text-amber-700' : 'text-blue-700'}`}>Chặng đường còn dài!</p>
-                    <p className={`text-sm font-medium leading-relaxed ${reqGPA > 3.2 ? 'text-amber-600' : 'text-blue-600'}`}>
-                      Bạn còn <span className="font-extrabold">{remCredits}</span> tín chỉ chưa học. Để đạt mục tiêu, bạn bắt buộc phải duy trì GPA trung bình ở mức tối thiểu là <span className="font-extrabold text-lg bg-white px-2 py-0.5 rounded-md shadow-sm border border-current ml-1">{reqGPA.toFixed(2)}</span> cho toàn bộ số tín chỉ còn lại.
+                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm">
+                    <p className="text-green-700 font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
+                    <p className="text-green-600 text-sm font-medium leading-relaxed">
+                      Quỹ điểm của bạn đang rất dư dả. Chặng đường còn lại thậm chí không cần điểm A, chỉ cần đều đều điểm B (hoặc C) là vẫn thừa sức đạt mục tiêu!
                     </p>
                   </div>
                 )}
