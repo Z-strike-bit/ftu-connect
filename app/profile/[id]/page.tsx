@@ -175,9 +175,9 @@ export default function ProfilePage() {
 
           {/* User Info Bar */}
           <div className="px-4 sm:px-8 pb-4 relative">
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-end -mt-10 sm:-mt-16 mb-4 relative z-10">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-end mb-4 relative z-10">
               {/* Avatar */}
-              <div className="relative group shrink-0">
+              <div className="relative group shrink-0 -mt-16 sm:-mt-20">
                 <div className="w-[168px] h-[168px] rounded-full ring-4 ring-white bg-white overflow-hidden shadow-sm">
                   <img src={avatarPhoto} alt="Avatar" className="w-full h-full object-cover" />
                 </div>
@@ -189,7 +189,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Name and Basic Stats */}
-              <div className="flex-1 text-center sm:text-left mb-2 sm:mb-4 mt-6 sm:mt-10">
+              <div className="flex-1 text-center sm:text-left mb-2 sm:mb-4 pb-2 sm:pb-0">
                 <h1 className="text-[32px] font-bold text-black leading-tight flex items-center justify-center sm:justify-start gap-2">
                   {targetProfile.name}
                   {targetProfile.points >= 200 && <span className="text-xl" title="Top Mentor">👑</span>}
@@ -208,7 +208,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-2 sm:mb-4 w-full sm:w-auto px-4 sm:px-0 mt-4 sm:mt-10">
+              <div className="flex gap-2 sm:mb-4 w-full sm:w-auto px-4 sm:px-0">
                 {isOwnProfile ? (
                   <>
                     <button onClick={() => setIsEditing(true)} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-black font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px]">
