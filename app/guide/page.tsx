@@ -7,7 +7,8 @@ import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
-
+interface UserProfile {
+  name: string;
   totalCredits?: number;
   creditsA?: number;
   creditsB?: number;
@@ -70,8 +71,6 @@ export default function GuidePage() {
       if (currentUser) {
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
         if (userDoc.exists()) {
-          setUser(currentUser);
-          const data = userDoc.data() as UserProfile;
           setUser(currentUser);
           const data = userDoc.data() as UserProfile;
           setProfile(data);
@@ -314,9 +313,9 @@ export default function GuidePage() {
                   </div>
                 ) : neededA > 0 ? (
                   <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-200 shadow-sm">
-                    <p className="text-blue-700 font-extrabold text-lg mb-2">🔥 Kịch bản tối ưu nhất</p>
+                    <p className="text-blue-700 font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
                     <p className="text-blue-600 text-sm font-medium leading-relaxed">
-                      Chặng đường còn lại bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-white px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A (4.0), phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ vững điểm B (3.0) là chắc chắn hạ cánh ở mốc {targetGPA.toFixed(2)}!
+                      Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-white px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
                     </p>
                   </div>
                 ) : (
