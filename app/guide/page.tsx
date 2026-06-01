@@ -12,6 +12,7 @@ interface UserProfile {
   name: string;
   currentCredits?: number;
   currentGPA?: number;
+  totalCredits?: number;
 }
 
 // Xóa CHECKLIST_ITEMS
@@ -73,6 +74,7 @@ export default function GuidePage() {
           setProfile(data);
           setCurrentCredits(data.currentCredits ?? '');
           setCurrentGPA(data.currentGPA ?? '');
+          setTotalCredits(data.totalCredits ?? 130);
           setLoading(false);
         } else {
           router.push('/onboarding');
@@ -91,17 +93,19 @@ export default function GuidePage() {
 
   const [currentCredits, setCurrentCredits] = useState<number | ''>('');
   const [currentGPA, setCurrentGPA] = useState<number | ''>('');
+  const [totalCredits, setTotalCredits] = useState<number | ''>(130);
   const [targetGPA, setTargetGPA] = useState<number>(3.2);
 
   const [creditsError, setCreditsError] = useState('');
   const [gpaError, setGpaError] = useState('');
+  const [totalError, setTotalError] = useState('');
 
   // Handle Input Changes & Validation
   const handleCreditsChange = (val: string) => {
     if (val === '') {
       setCurrentCredits('');
       setCreditsError('');
-      saveToFirebase('', currentGPA);
+      saveToFirebase('', currentGPA, totalCredits);
       return;
     }
     const num = Number(val);
@@ -111,7 +115,25 @@ export default function GuidePage() {
     } else {
       setCreditsError('');
       setCurrentCredits(num);
-      saveToFirebase(num, currentGPA);
+      saveToFirebase(num, currentGPA, totalCredits);
+    }
+  };
+
+  const handleTotalChange = (val: string) => {
+    if (val === '') {
+      setTotalCredits('');
+      setTotalError('');
+      saveToFirebase(currentCredits, currentGPA, '');
+      return;
+    }
+    const num = Number(val);
+    if (num <= 0) {
+      setTotalError('Tổng tín chỉ phải lớn hơn 0');
+      setTotalCredits(num);
+    } else {
+      setTotalError('');
+      setTotalCredits(num);
+      saveToFirebase(currentCredits, currentGPA, num);
     }
   };
 
@@ -119,7 +141,7 @@ export default function GuidePage() {
     if (val === '') {
       setCurrentGPA('');
       setGpaError('');
-      saveToFirebase(currentCredits, '');
+      saveToFirebase(currentCredits, '', totalCredits);
       return;
     }
     const num = Number(val);
@@ -129,17 +151,18 @@ export default function GuidePage() {
     } else {
       setGpaError('');
       setCurrentGPA(num);
-      saveToFirebase(currentCredits, num);
+      saveToFirebase(currentCredits, num, totalCredits);
     }
   };
 
   // Debounced/Direct Save
-  const saveToFirebase = async (credits: number | '', gpa: number | '') => {
+  const saveToFirebase = async (credits: number | '', gpa: number | '', total: number | '') => {
     if (!user) return;
     try {
       await updateDoc(doc(db, 'users', user.uid), {
         currentCredits: credits === '' ? null : credits,
-        currentGPA: gpa === '' ? null : gpa
+        currentGPA: gpa === '' ? null : gpa,
+        totalCredits: total === '' ? null : total
       });
     } catch (err) {
       console.error("Lỗi lưu dữ liệu GPA:", err);
@@ -150,20 +173,17 @@ export default function GuidePage() {
     return <div className="min-h-screen bg-white flex items-center justify-center"><p className="text-slate-500 font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
   }
 
-  // Calculate Required Credits
-  let neededCredits: number | null = null;
-  let difficulty = ''; // 'easy' | 'challenging' | 'impossible'
+  // Calculate Required GPA
+  let reqGPA: number | null = null;
+  let remCredits = 0;
   
-  if (currentCredits !== '' && currentGPA !== '' && !creditsError && !gpaError) {
-    if (currentGPA >= targetGPA) {
-      neededCredits = 0;
+  if (currentCredits !== '' && currentGPA !== '' && totalCredits !== '' && !creditsError && !gpaError && !totalError) {
+    remCredits = totalCredits - currentCredits;
+    if (remCredits > 0) {
+      const reqPoints = (targetGPA * totalCredits) - (currentGPA * currentCredits);
+      reqGPA = reqPoints / remCredits;
     } else {
-      const needed = (currentCredits * (targetGPA - currentGPA)) / (4.0 - targetGPA);
-      neededCredits = Math.ceil(needed);
-      
-      if (neededCredits <= 15) difficulty = 'easy'; // Xanh
-      else if (neededCredits <= 35) difficulty = 'challenging'; // Cam
-      else difficulty = 'impossible'; // Đỏ
+      reqGPA = targetGPA <= currentGPA ? 0 : 5.0; // dummy for already finished
     }
   }
 
@@ -210,6 +230,18 @@ export default function GuidePage() {
               {/* Form Input */}
               <div className="p-6 space-y-5 bg-slate-50/50">
                 <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Tổng số tín chỉ toàn khóa</label>
+                  <input 
+                    type="number" 
+                    placeholder="VD: 130"
+                    value={totalCredits}
+                    onChange={(e) => handleTotalChange(e.target.value)}
+                    className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-medium text-black`}
+                  />
+                  {totalError && <p className="text-red-500 text-xs font-bold mt-1.5">{totalError}</p>}
+                </div>
+
+                <div>
                   <label className="block text-sm font-bold text-slate-700 mb-1.5">Tín chỉ đã tích lũy</label>
                   <input 
                     type="number" 
@@ -250,41 +282,35 @@ export default function GuidePage() {
 
               {/* Result Area */}
               <div className="p-6 bg-white border-t border-slate-100">
-                {neededCredits === null ? (
+                {reqGPA === null ? (
                   <div className="text-center py-6 text-slate-400 font-medium text-sm">
                     Nhập dữ liệu để xem kết quả
                   </div>
-                ) : neededCredits === 0 ? (
-                  <div className="text-center py-4 bg-green-50 rounded-xl border border-green-100">
-                    <p className="text-green-700 font-extrabold text-lg">🎉 Chúc mừng!</p>
-                    <p className="text-green-600 text-sm font-medium mt-1">Bạn đã đạt mục tiêu này rồi!</p>
+                ) : remCredits <= 0 && reqGPA > 4.0 ? (
+                  <div className="text-center py-4 bg-red-50 rounded-xl border border-red-100">
+                    <p className="text-red-700 font-extrabold text-lg">❌ Bất khả thi!</p>
+                    <p className="text-red-600 text-sm font-medium mt-1">Bạn đã học hết số tín chỉ toàn khóa và không đạt mục tiêu.</p>
+                  </div>
+                ) : reqGPA > 4.0 ? (
+                  <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
+                    <p className="text-red-700 font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
+                    <p className="text-red-600 text-sm font-medium leading-relaxed">
+                      Dù bạn đạt toàn điểm A (4.0) cho <span className="font-extrabold">{remCredits}</span> tín chỉ còn lại cũng không thể kéo lên mức này. Hãy đổi mục tiêu!
+                    </p>
+                  </div>
+                ) : reqGPA <= 0 ? (
+                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm">
+                    <p className="text-green-700 font-extrabold text-lg mb-2">🎉 Chúc mừng!</p>
+                    <p className="text-green-600 text-sm font-medium leading-relaxed">
+                      Bạn đã tích lũy dư quỹ điểm! Chỉ cần đảm bảo qua các môn còn lại là chắc chắn đạt mục tiêu.
+                    </p>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center text-center">
-                    <p className="text-slate-500 text-sm font-medium mb-2">Bạn cần thêm tối thiểu</p>
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-4xl font-black text-black tracking-tight">{neededCredits}</span>
-                      <span className="text-lg font-bold text-slate-400">tín chỉ A</span>
-                    </div>
-                    <p className="text-slate-500 text-sm font-medium mb-4">
-                      (Đạt điểm 4.0 tuyệt đối) để vươn tới mức {targetGPA}
+                  <div className={`text-center p-5 rounded-xl border shadow-sm ${reqGPA > 3.2 ? 'bg-amber-50 border-amber-200' : 'bg-blue-50 border-blue-200'}`}>
+                    <p className={`font-extrabold text-lg mb-2 ${reqGPA > 3.2 ? 'text-amber-700' : 'text-blue-700'}`}>Chặng đường còn dài!</p>
+                    <p className={`text-sm font-medium leading-relaxed ${reqGPA > 3.2 ? 'text-amber-600' : 'text-blue-600'}`}>
+                      Bạn còn <span className="font-extrabold">{remCredits}</span> tín chỉ chưa học. Để đạt mục tiêu, bạn bắt buộc phải duy trì GPA trung bình ở mức tối thiểu là <span className="font-extrabold text-lg bg-white px-2 py-0.5 rounded-md shadow-sm border border-current ml-1">{reqGPA.toFixed(2)}</span> cho toàn bộ số tín chỉ còn lại.
                     </p>
-
-                    {/* Progress Bar & Tags */}
-                    <div className="w-full">
-                      <div className="flex justify-between text-[11px] font-extrabold uppercase tracking-widest mb-1.5">
-                        <span className="text-slate-400">Độ khó</span>
-                        {difficulty === 'easy' && <span className="text-green-600">Dễ thở</span>}
-                        {difficulty === 'challenging' && <span className="text-amber-500">Thử thách</span>}
-                        {difficulty === 'impossible' && <span className="text-red-600">Bất khả thi</span>}
-                      </div>
-                      
-                      <div className="flex w-full h-2 rounded-full overflow-hidden bg-slate-100 gap-0.5">
-                        <div className={`h-full flex-1 ${['easy', 'challenging', 'impossible'].includes(difficulty) ? 'bg-green-500' : 'bg-slate-200'}`}></div>
-                        <div className={`h-full flex-1 ${['challenging', 'impossible'].includes(difficulty) ? 'bg-amber-400' : 'bg-slate-200'}`}></div>
-                        <div className={`h-full flex-1 ${difficulty === 'impossible' ? 'bg-red-500' : 'bg-slate-200'}`}></div>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>
