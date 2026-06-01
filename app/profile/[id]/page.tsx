@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import { useRouter, useParams } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc, collection, onSnapshot, query, where, orderBy, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, where, updateDoc } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { FTU_MAJORS } from '@/lib/constants/ftuMajors';
@@ -40,6 +40,9 @@ export default function ProfilePage() {
     goals: [] as string[],
     interests: ''
   });
+
+  const [connectionStatus, setConnectionStatus] = useState<'none' | 'pending_sent' | 'pending_received' | 'accepted'>('none');
+  const [connectionLoading, setConnectionLoading] = useState(false);
 
   const GOALS = [
     'Cải thiện điểm GPA',
@@ -113,6 +116,70 @@ export default function ProfilePage() {
 
     return () => unsubPosts();
   }, [profileId]);
+
+  // Handle Connections
+  useEffect(() => {
+    if (!currentUser || !profileId || currentUser.uid === profileId) return;
+
+    const connId = [currentUser.uid, profileId].sort().join('_');
+    const connRef = doc(db, 'connections', connId);
+    
+    const unsubConn = onSnapshot(connRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.status === 'accepted') {
+          setConnectionStatus('accepted');
+        } else if (data.status === 'pending') {
+          if (data.requesterId === currentUser.uid) {
+            setConnectionStatus('pending_sent');
+          } else {
+            setConnectionStatus('pending_received');
+          }
+        }
+      } else {
+        setConnectionStatus('none');
+      }
+    });
+
+    return () => unsubConn();
+  }, [currentUser, profileId]);
+
+  const handleConnectAction = async () => {
+    if (!currentUser || !profileId || connectionLoading) return;
+    setConnectionLoading(true);
+    try {
+      const connId = [currentUser.uid, profileId].sort().join('_');
+      const connRef = doc(db, 'connections', connId);
+
+      if (connectionStatus === 'none') {
+        await setDoc(connRef, {
+          requesterId: currentUser.uid,
+          receiverId: profileId,
+          status: 'pending',
+          createdAt: new Date().toISOString()
+        });
+      } else if (connectionStatus === 'pending_sent') {
+        // Hủy yêu cầu
+        await deleteDoc(connRef);
+      } else if (connectionStatus === 'pending_received') {
+        // Chấp nhận
+        await updateDoc(connRef, {
+          status: 'accepted',
+          updatedAt: new Date().toISOString()
+        });
+      } else if (connectionStatus === 'accepted') {
+        // Hủy kết bạn
+        if (confirm('Bạn có chắc muốn hủy kết bạn?')) {
+          await deleteDoc(connRef);
+        }
+      }
+    } catch (error) {
+      console.error("Lỗi khi kết nối:", error);
+      alert("Đã xảy ra lỗi, vui lòng thử lại.");
+    } finally {
+      setConnectionLoading(false);
+    }
+  };
 
   const handleSaveProfile = async () => {
     if (!isOwnProfile) return;
@@ -218,10 +285,31 @@ export default function ProfilePage() {
                   </>
                 ) : (
                   <>
-                    <button className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px]">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                      Kết nối
-                    </button>
+                    {connectionStatus === 'none' && (
+                      <button onClick={handleConnectAction} disabled={connectionLoading} className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px] disabled:opacity-50">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        Kết nối
+                      </button>
+                    )}
+                    {connectionStatus === 'pending_sent' && (
+                      <button onClick={handleConnectAction} disabled={connectionLoading} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-black font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px] disabled:opacity-50">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4 11H8v-2h8v2z"/></svg>
+                        Hủy lời mời
+                      </button>
+                    )}
+                    {connectionStatus === 'pending_received' && (
+                      <button onClick={handleConnectAction} disabled={connectionLoading} className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px] disabled:opacity-50">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Chấp nhận
+                      </button>
+                    )}
+                    {connectionStatus === 'accepted' && (
+                      <button onClick={handleConnectAction} disabled={connectionLoading} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-black font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px] disabled:opacity-50">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        Bạn bè
+                      </button>
+                    )}
+
                     <button className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-black font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px]">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
                       Nhắn tin
