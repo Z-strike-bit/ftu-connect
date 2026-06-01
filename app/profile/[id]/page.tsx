@@ -310,7 +310,7 @@ export default function ProfilePage() {
                       </button>
                     )}
 
-                    <button className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-black font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px]">
+                    <button onClick={() => window.dispatchEvent(new CustomEvent('openChat', { detail: profileId }))} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-black font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px]">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
                       Nhắn tin
                     </button>
