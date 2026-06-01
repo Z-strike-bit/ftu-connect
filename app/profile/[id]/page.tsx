@@ -263,7 +263,7 @@ export default function ProfilePage() {
               <div className="space-y-4 text-[15px] text-slate-900">
                 <div className="flex items-center gap-3">
                   <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                  <span>Chuyên ngành <span className="font-semibold">{targetProfile.major || 'Chưa cập nhật'}</span></span>
+                  <span>Chuyên ngành <span className="font-semibold">{targetProfile.major || 'Chưa cập nhật'}{targetProfile.specialization ? ` - ${targetProfile.specialization}` : ''}</span></span>
                 </div>
 
                 {targetProfile.contactLink && (
@@ -494,16 +494,30 @@ export default function ProfilePage() {
 
                 <div>
                   <label className="block text-[17px] font-bold text-black mb-2">Chuyên ngành học</label>
-                  <select 
-                    value={editFormData.major} 
-                    onChange={(e) => setEditFormData({...editFormData, major: e.target.value})} 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition"
-                  >
-                    <option value="">-- Chọn ngành --</option>
-                    {FTU_MAJORS.map(m => (
-                      <option key={m} value={m}>{m}</option>
-                    ))}
-                  </select>
+                  <div className="flex flex-col gap-3">
+                    <select 
+                      value={editFormData.major} 
+                      onChange={(e) => setEditFormData({...editFormData, major: e.target.value, specialization: ''})} 
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition"
+                    >
+                      <option value="">-- Chọn ngành --</option>
+                      {FTU_MAJORS.map(m => (
+                        <option key={m.id} value={m.majorName}>{m.majorName}</option>
+                      ))}
+                    </select>
+
+                    <select 
+                      value={editFormData.specialization} 
+                      onChange={(e) => setEditFormData({...editFormData, specialization: e.target.value})} 
+                      disabled={!editFormData.major}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <option value="">-- Chọn chuyên ngành --</option>
+                      {editFormData.major && FTU_MAJORS.find(m => m.majorName === editFormData.major)?.specializations.map(spec => (
+                        <option key={spec} value={spec}>{spec}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 {targetProfile.role === 'mentor' && (
