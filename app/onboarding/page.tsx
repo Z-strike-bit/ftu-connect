@@ -6,6 +6,7 @@ import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { motion } from 'framer-motion';
+import { FTU_MAJORS } from '@/lib/constants/ftuMajors';
 
 export default function Onboarding() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function Onboarding() {
   const [formData, setFormData] = useState({
     role: '', 
     major: '',
+    specialization: '',
     contactLink: '', 
     bio: '',
     gpa: '',
@@ -26,19 +28,6 @@ export default function Onboarding() {
     goals: [] as string[],
     interests: ''
   });
-
-  const MAJORS = [
-    'Kinh tế đối ngoại',
-    'Thương mại quốc tế',
-    'Quản trị kinh doanh',
-    'Kinh doanh quốc tế',
-    'Tài chính ngân hàng',
-    'Kế toán kiểm toán',
-    'Ngôn ngữ Anh',
-    'Ngôn ngữ Nhật',
-    'Ngôn ngữ Trung',
-    'Luật thương mại quốc tế'
-  ];
 
   const GOALS = [
     'Cải thiện điểm GPA',
@@ -88,7 +77,7 @@ export default function Onboarding() {
     e.preventDefault();
     if (!user) return;
     
-    if (!formData.role || !formData.major || !formData.contactLink) {
+    if (!formData.role || !formData.major || !formData.specialization || !formData.contactLink) {
       setError('Vui lòng điền các trường bắt buộc (*)');
       return;
     }
@@ -167,16 +156,31 @@ export default function Onboarding() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-bold text-black mb-2">Chuyên ngành <span className="text-red-600">*</span></label>
-                <select
-                  required
-                  value={formData.major}
-                  onChange={(e) => setFormData({...formData, major: e.target.value})}
-                  className="w-full rounded-xl border-slate-200 bg-slate-50 p-3.5 text-black focus:ring-2 focus:ring-red-100 focus:border-red-600 border outline-none font-medium transition-all"
-                >
-                  <option value="">-- Chọn chuyên ngành --</option>
-                  {MAJORS.map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
+                <label className="block text-sm font-bold text-black mb-2">Ngành học <span className="text-red-600">*</span></label>
+                <div className="flex flex-col gap-3">
+                  <select
+                    required
+                    value={formData.major}
+                    onChange={(e) => setFormData({...formData, major: e.target.value, specialization: ''})}
+                    className="w-full rounded-xl border-slate-200 bg-slate-50 p-3.5 text-black focus:ring-2 focus:ring-red-100 focus:border-red-600 border outline-none font-medium transition-all"
+                  >
+                    <option value="">-- Chọn ngành --</option>
+                    {FTU_MAJORS.map(m => <option key={m.id} value={m.majorName}>{m.majorName}</option>)}
+                  </select>
+
+                  <select
+                    required
+                    value={formData.specialization}
+                    onChange={(e) => setFormData({...formData, specialization: e.target.value})}
+                    disabled={!formData.major}
+                    className="w-full rounded-xl border-slate-200 bg-slate-50 p-3.5 text-black focus:ring-2 focus:ring-red-100 focus:border-red-600 border outline-none font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <option value="">-- Chọn chuyên ngành --</option>
+                    {formData.major && FTU_MAJORS.find(m => m.majorName === formData.major)?.specializations.map(spec => (
+                      <option key={spec} value={spec}>{spec}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
@@ -304,7 +308,7 @@ export default function Onboarding() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="submit"
-            disabled={saving || !formData.role || !formData.major || !formData.contactLink}
+            disabled={saving || !formData.role || !formData.major || !formData.specialization || !formData.contactLink}
             className="w-full flex justify-center py-4 px-4 rounded-xl shadow-lg shadow-red-600/20 text-lg font-bold text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {saving ? 'Đang lưu...' : 'Tham Gia Ngay'}
