@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Chatbot() {
@@ -18,7 +18,7 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  const handleSend = async (e?: React.FormEvent) => {
+  const handleSend = useCallback(async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || isLoading) return;
 
@@ -46,7 +46,7 @@ export default function Chatbot() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [input, isLoading]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
