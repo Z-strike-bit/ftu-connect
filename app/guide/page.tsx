@@ -7,6 +7,7 @@ import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
+import Image from 'next/image';
 interface UserProfile {
   name: string;
   totalCredits?: number;
@@ -305,21 +306,24 @@ export default function GuidePage() {
                     </p>
                   </div>
                 ) : neededA > remCredits ? (
-                  <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
+                  <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm flex flex-col items-center">
+                    <Image src="/assets/badges/badge-newbie.png" alt="Newbie Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
                     <p className="text-red-700 font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
                     <p className="text-red-600 text-sm font-medium leading-relaxed">
                       Đời còn dài, FTU-er còn nhiều việc phải làm! Quỹ tín chỉ của bạn đã hết room để kéo điểm lên mức này, dù có full A. Hãy cân nhắc hạ mục tiêu xuống một chút và tận hưởng thời sinh viên nhé!
                     </p>
                   </div>
                 ) : neededA > 0 ? (
-                  <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-200 shadow-sm">
+                  <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-200 shadow-sm flex flex-col items-center">
+                    <Image src="/assets/badges/badge-veteran.png" alt="Veteran Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
                     <p className="text-blue-700 font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
                     <p className="text-blue-600 text-sm font-medium leading-relaxed">
                       Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-white px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
                     </p>
                   </div>
                 ) : (
-                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm">
+                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm flex flex-col items-center">
+                    <Image src="/assets/badges/badge-gold.png" alt="Gold Badge" width={80} height={80} className="mb-3 animate-bounce drop-shadow-lg" />
                     <p className="text-green-700 font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
                     <p className="text-green-600 text-sm font-medium leading-relaxed">
                       Quỹ điểm của bạn đang rất dư dả. Chặng đường còn lại thậm chí không cần điểm A, chỉ cần đều đều điểm B (hoặc C) là vẫn thừa sức đạt mục tiêu!
