@@ -39,7 +39,7 @@ export default function Chatbot() {
       if (response.ok && data.reply) {
         setMessages(prev => [...prev, { role: 'bot', text: data.reply }]);
       } else {
-        setMessages(prev => [...prev, { role: 'bot', text: 'Xin lỗi em, Thổ địa đang bận chút xíu, em thử lại sau nha 🥲' }]);
+        setMessages(prev => [...prev, { role: 'bot', text: 'Xin lỗi em, Dino Ngoại Thương đang bận chút xíu, em thử lại sau nha 🥲' }]);
       }
     } catch (error) {
       setMessages(prev => [...prev, { role: 'bot', text: 'Lỗi mạng rồi em ơi, check lại wifi nha 😥' }]);
@@ -62,9 +62,9 @@ export default function Chatbot() {
             {/* Header */}
             <div className="bg-red-600 text-white p-4 flex justify-between items-center shrink-0">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🦖</span>
+                <img src="/avata_dino_ftu.jpeg" alt="Dino Ngoại Thương" className="w-9 h-9 rounded-full object-cover border-2 border-white/20 shadow-sm" />
                 <div>
-                  <h3 className="font-bold text-sm">Thổ địa FTU</h3>
+                  <h3 className="font-bold text-sm">Dino Ngoại Thương</h3>
                   <p className="text-[11px] opacity-80 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
                     Đang online
@@ -81,7 +81,7 @@ export default function Chatbot() {
               {messages.length === 0 && (
                 <div className="text-center text-slate-500 text-xs mt-10">
                   <span className="text-4xl block mb-2">👋</span>
-                  Chào ẻm, chị là Thổ địa FTU đây. Cần hỏi gì cứ nhắn chị nhé!
+                  Chào ẻm, chị là Dino Ngoại Thương đây. Cần hỏi gì cứ nhắn chị nhé!
                 </div>
               )}
               {messages.map((msg, idx) => (
@@ -110,7 +110,7 @@ export default function Chatbot() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Hỏi gì Thổ địa trả lời..."
+                  placeholder="Hỏi gì Dino trả lời..."
                   className="flex-1 bg-slate-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-500 transition-all text-black"
                 />
                 <button 
