@@ -53,6 +53,13 @@ export default function ProfilePage() {
     'Tìm việc Part-time / Intern'
   ];
 
+  const DEFAULT_AVATARS = [
+    '/assets/mascots/dino-newbie.jpeg',
+    '/assets/mascots/dino-math-crying.jpeg',
+    '/assets/mascots/dino-coding.jpeg',
+    '/assets/mascots/dino-foodie.jpeg'
+  ];
+
   const isOwnProfile = currentUser && currentUser.uid === profileId;
 
   useEffect(() => {
@@ -562,7 +569,24 @@ export default function ProfilePage() {
                     <label className="block text-[17px] font-bold text-black">Ảnh đại diện (Avatar URL)</label>
                   </div>
                   <input type="text" value={editFormData.photoURL} onChange={(e) => setEditFormData({...editFormData, photoURL: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 transition" placeholder="Nhập Link Ảnh URL..." />
-                  <div className="mt-3 flex justify-center">
+                  
+                  {/* Gợi ý Avatar */}
+                  <div className="mt-4">
+                    <p className="text-[13px] font-bold text-slate-500 mb-2">Gợi ý Avatar độc quyền:</p>
+                    <div className="flex gap-3">
+                      {DEFAULT_AVATARS.map((avatar, idx) => (
+                        <img 
+                          key={idx} 
+                          src={avatar} 
+                          alt="Dino Avatar" 
+                          onClick={() => setEditFormData({...editFormData, photoURL: avatar})}
+                          className={`w-12 h-12 rounded-full border-2 object-cover cursor-pointer hover:scale-110 transition-transform ${editFormData.photoURL === avatar ? 'border-red-600 shadow-md scale-110' : 'border-transparent hover:border-slate-300'}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex justify-center">
                     <img src={editFormData.photoURL || avatarPhoto} className="w-24 h-24 rounded-full border border-slate-200 object-cover" />
                   </div>
                 </div>
