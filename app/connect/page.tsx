@@ -80,7 +80,7 @@ export default function ConnectPage() {
 
   return (
     <div className="min-h-screen bg-[#f0f2f5] flex flex-col h-screen overflow-hidden">
-      <Navbar profileName={profile?.name} profileId={user?.uid} onSignOut={() => signOut(auth).then(() => router.push('/'))} />
+      <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={() => signOut(auth).then(() => router.push('/'))} />
 
       <div className="flex flex-1 overflow-hidden w-full max-w-[1920px] mx-auto">
         

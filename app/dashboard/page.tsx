@@ -217,7 +217,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen w-full bg-[#f0f2f5] font-sans selection:bg-red-200">
-      <Navbar profileName={profile?.name} profileId={user?.uid} onSignOut={handleSignOut} />
+      <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
 
       <div className="w-full mx-auto px-4 sm:px-0 lg:max-w-[1600px] mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-8">

@@ -109,7 +109,7 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 text-black font-sans pb-16 selection:bg-red-200">
-      <Navbar profileName={profile?.name} onSignOut={handleSignOut} />
+      <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
 
       {/* Main Container */}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

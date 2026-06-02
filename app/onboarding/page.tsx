@@ -49,6 +49,13 @@ export default function Onboarding() {
     'Tìm việc Part-time / Intern'
   ];
 
+  const DEFAULT_AVATARS = [
+    '/assets/mascots/dino-newbie.jpeg',
+    '/assets/mascots/dino-math-crying.jpeg',
+    '/assets/mascots/dino-coding.jpeg',
+    '/assets/mascots/dino-foodie.jpeg'
+  ];
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -89,9 +96,11 @@ export default function Onboarding() {
     setSaving(true);
     setError(null);
     try {
+      const randomAvatar = DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)];
       await setDoc(doc(db, 'users', user.uid), {
         name: user.displayName,
         email: user.email,
+        photoURL: randomAvatar,
         ...formData,
         createdAt: new Date().toISOString()
       });

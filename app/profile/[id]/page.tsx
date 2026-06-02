@@ -213,7 +213,7 @@ export default function ProfilePage() {
   if (!targetProfile) {
     return (
       <div className="min-h-screen bg-[#f0f2f5] font-sans">
-        <Navbar profileName={currentUserProfile?.name} onSignOut={() => signOut(auth).then(() => router.push('/'))} profileId={currentUser?.uid} />
+        <Navbar profileName={currentUserProfile?.name} onSignOut={() => signOut(auth).then(() => router.push('/'))} profileId={currentUser?.uid} profilePhoto={currentUserProfile?.photoURL} />
         <div className="text-center py-20 text-slate-500 font-bold">Người dùng không tồn tại.</div>
       </div>
     );
@@ -224,7 +224,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#f0f2f5] font-sans pb-10">
-      <Navbar profileName={currentUserProfile?.name} onSignOut={() => signOut(auth).then(() => router.push('/'))} profileId={currentUser?.uid} />
+      <Navbar profileName={currentUserProfile?.name} onSignOut={() => signOut(auth).then(() => router.push('/'))} profileId={currentUser?.uid} profilePhoto={currentUserProfile?.photoURL} />
 
       {/* HEADER: Cover + Avatar + Info */}
       <div className="bg-white shadow-sm mb-4">
