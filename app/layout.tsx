@@ -5,6 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 import GlobalChat from "@/components/GlobalChat";
+import Chatbot from "@/components/Chatbot";
 
 export const metadata: Metadata = {
   title: "FTU Connect - Nền tảng kết nối Mentor & Mentee",
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {children}
         <GlobalChat />
+        <Chatbot />
       </body>
     </html>
   );
