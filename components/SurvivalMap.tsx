@@ -23,12 +23,13 @@ export default function SurvivalMap() {
   const passPosition: [number, number] = [21.0220, 105.8010];
 
   return (
-    <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-slate-200 z-0 relative">
+    <div className="w-full h-full relative z-0">
       <MapContainer 
         center={ftuPosition} 
         zoom={16} 
         scrollWheelZoom={true} 
         style={{ height: '100%', width: '100%' }}
+        className="h-full w-full"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

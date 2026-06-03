@@ -47,7 +47,7 @@ export default function MapPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5] font-sans flex flex-col">
+    <div className="h-screen bg-[#f0f2f5] font-sans flex flex-col overflow-hidden">
       <Navbar 
         profileName={currentUserProfile?.name} 
         onSignOut={() => signOut(auth).then(() => router.push('/'))} 
@@ -55,24 +55,29 @@ export default function MapPage() {
         profilePhoto={currentUserProfile?.photoURL} 
       />
       
-      <div className="flex-1 max-w-[1095px] w-full mx-auto px-4 sm:px-8 py-6 flex flex-col">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-4 flex justify-between items-center shrink-0">
-          <div>
-            <h1 className="text-2xl font-bold text-black flex items-center gap-2">
-              🗺️ Bản Đồ Sinh Tồn Chùa Láng
-            </h1>
-            <p className="text-[15px] text-slate-500 mt-1">
-              Khám phá các góc ăn ngon, chỗ pass đồ và bí kíp sống sót quanh Ngoại Thương.
-            </p>
+      {/* Full-screen Map Container (Trừ đi Navbar h-16 = 64px) */}
+      <div className="relative h-[calc(100vh-64px)] w-full">
+        
+        {/* Floating Card */}
+        <div className="absolute top-4 left-4 sm:left-8 z-[1000] bg-white/95 backdrop-blur-sm p-4 sm:p-5 rounded-2xl shadow-xl w-[calc(100%-32px)] sm:w-full sm:max-w-[380px] border border-white/50">
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <h1 className="text-xl font-bold text-black flex items-center gap-2 leading-tight">
+                <span className="text-2xl">🗺️</span> Bản Đồ Sinh Tồn
+              </h1>
+            </div>
           </div>
-          <button className="hidden sm:flex bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-sm items-center gap-2 transition-colors shadow-md">
+          <p className="text-[14px] text-slate-600 mb-4 leading-snug">
+            Khám phá góc ăn ngon, chỗ học tập và bí kíp sống sót quanh Ngoại Thương.
+          </p>
+          <button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-bold text-[15px] flex justify-center items-center gap-2 transition-all shadow-md shadow-red-600/20 active:scale-[0.98]">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Ghim địa điểm mới
           </button>
         </div>
 
-        {/* Map Container - Flex 1 để đẩy full chiều cao còn lại */}
-        <div className="flex-1 min-h-[500px] w-full relative z-0">
+        {/* Map */}
+        <div className="absolute inset-0 z-0">
           <SurvivalMap />
         </div>
       </div>
