@@ -26,6 +26,15 @@ export default function Login() {
     }
   };
 
+  const handleGoogleLogin = () => {
+    const email = window.prompt("Giả lập Google SSO: Nhập email Google của bạn:", "sinhvien.k60@ftu.edu.vn");
+    if (email) {
+      // Giả lập thành công với Google
+      localStorage.setItem('currentUser', JSON.stringify({ username: email.split('@')[0] }));
+      router.push('/dashboard');
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#090909] p-4 font-sans relative overflow-hidden selection:bg-[#fff0f2] selection:text-[#0099ff]">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-br from-[#6a4cf5] to-[#d44df0] rounded-[100%] blur-[120px] opacity-20 pointer-events-none"></div>
@@ -36,11 +45,12 @@ export default function Login() {
         <p className="text-[#999999] font-medium mb-10 text-[15px]">Chào mừng trở lại FTU Connect</p>
         
         {error && (
-          <div className="bg-[#ff385c]/10 text-[#ff385c] p-4 rounded-xl text-sm font-bold border border-[#ff385c]/20 mb-6">
+          <div className="bg-[#ff385c]/10 text-[#ff385c] p-4 rounded-xl text-sm font-bold border border-[#ff385c]/20 mb-6 text-left">
             {error}
           </div>
         )}
 
+        {/* Phương thức 1: Username/Password */}
         <form onSubmit={handleLogin} className="flex flex-col gap-4 text-left">
           <div>
             <label className="block text-white text-sm font-semibold mb-2">Tên tài khoản</label>
@@ -68,9 +78,26 @@ export default function Login() {
             type="submit"
             className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300"
           >
-            Vào trong
+            Đăng nhập
           </button>
         </form>
+
+        {/* Dải phân cách */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 border-t border-white/10"></div>
+          <span className="px-3 text-[#6a6a6a] text-[13px] font-medium">Hoặc</span>
+          <div className="flex-1 border-t border-white/10"></div>
+        </div>
+
+        {/* Phương thức 2: Google SSO */}
+        <button
+          onClick={handleGoogleLogin}
+          type="button"
+          className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] border border-[#262626] text-white font-semibold py-[14px] px-6 rounded-[100px] hover:bg-[#262626] transition-all duration-300"
+        >
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6 shrink-0" />
+          <span className="text-[16px]">Đăng nhập bằng Google</span>
+        </button>
         
         <p className="mt-8 text-[14px] text-[#999999] font-medium px-4">
           Chưa có tài khoản? <Link href="/register" className="text-white hover:underline">Đăng ký ngay</Link>
