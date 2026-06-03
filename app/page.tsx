@@ -145,28 +145,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BRANDS ROW */}
-      <div className="brands relative z-10">
-        <div className="brand-item">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-          MaC FTU
-        </div>
-        <div className="brand-item">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-          Dynamic FTU
-        </div>
-        <div className="brand-item">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-          FBLC
-        </div>
-        <div className="brand-item">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-          FSC FTU
-        </div>
-        <div className="brand-item">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-          EZ Community
-        </div>
+      {/* FOOTER TEXT */}
+      <div className="brands relative z-10" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', letterSpacing: '0.05em' }}>
+        2514410250.k64.FTU.Đặng Quang Trung
       </div>
     </div>
   );
