@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Image from 'next/image';
+
 interface UserProfile {
   name: string;
   totalCredits?: number;
@@ -16,9 +17,8 @@ interface UserProfile {
   creditsC?: number;
   creditsD?: number;
   creditsF?: number;
+  photoURL?: string;
 }
-
-// Xóa CHECKLIST_ITEMS
 
 const COURSES = [
   { 
@@ -65,8 +65,6 @@ export default function GuidePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   
-  const [completedItems, setCompletedItems] = useState<string[]>([]);
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -143,11 +141,6 @@ export default function GuidePage() {
     }
   };
 
-  if (loading) {
-    return <div className="min-h-screen bg-[#141414] flex items-center justify-center"><p className="text-[#999999] font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
-  }
-
-  // Cấu trúc thuật toán Core
   const a = Number(creditsA) || 0;
   const b = Number(creditsB) || 0;
   const c = Number(creditsC) || 0;
@@ -158,6 +151,29 @@ export default function GuidePage() {
   const sumCredits = a + b + c + d + f;
   const curPoints = (a * 4) + (b * 3) + (c * 2) + (d * 1) + (f * 0);
   const currentGPA = sumCredits > 0 ? (curPoints / sumCredits) : 0;
+  
+  // Ticker Animation for GPA
+  const [animatedGPA, setAnimatedGPA] = useState(0);
+  useEffect(() => {
+    let start = animatedGPA;
+    let end = currentGPA;
+    let duration = 1000;
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setAnimatedGPA(start + (end - start) * easeOut);
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+    
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [currentGPA]);
   
   let rank = 'Chưa có';
   if (sumCredits > 0) {
@@ -176,11 +192,40 @@ export default function GuidePage() {
     neededA = Math.ceil(reqPoints - (3 * remCredits));
   }
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+    
+    requestAnimationFrame(() => {
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    requestAnimationFrame(() => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    });
+  };
+
+  if (loading) {
+    return <div className="min-h-screen bg-[#141414] flex items-center justify-center"><p className="text-[#999999] font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
+  }
+
   return (
     <div className="min-h-screen w-full bg-[#090909] text-white font-sans pb-16 selection:bg-red-200">
       <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
 
-      {/* Main Container */}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -194,7 +239,7 @@ export default function GuidePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
-          {/* Cột Trái: GPA Tracker (30%) */}
+          {/* Cột Trái: GPA Tracker */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -203,7 +248,6 @@ export default function GuidePage() {
           >
             <div className="bg-[#141414] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#1a1a1a] overflow-hidden sticky top-28">
               
-              {/* Header Widget */}
               <div className="p-6 border-b border-[#1a1a1a] bg-[#141414]">
                 <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
                   <div className="bg-[#ff385c]/10 p-2 rounded-xl text-[#ff385c]">
@@ -216,7 +260,6 @@ export default function GuidePage() {
                 </p>
               </div>
 
-              {/* Form Input */}
               <div className="p-6 space-y-6 bg-[#090909]">
                 <div>
                   <label className="block text-sm font-bold text-white mb-1.5">Tổng tín chỉ tối thiểu để ra trường</label>
@@ -256,7 +299,6 @@ export default function GuidePage() {
                   </div>
                 </div>
 
-                {/* Read Only Current Stats */}
                 <div className="bg-[#141414] p-4 rounded-xl border border-[#262626] shadow-sm">
                   <h3 className="text-xs font-bold text-[#6a6a6a] uppercase tracking-widest mb-3">Thống kê hiện tại</h3>
                   <div className="space-y-2 text-[14px]">
@@ -266,7 +308,7 @@ export default function GuidePage() {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-white/80">GPA Hiện tại:</span>
-                      <span className="font-extrabold text-[#ff385c] text-base">{currentGPA.toFixed(2)}</span>
+                      <span className="font-extrabold text-[#ff385c] text-base">{animatedGPA.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-white/80">Xếp loại:</span>
@@ -289,52 +331,53 @@ export default function GuidePage() {
                 </div>
               </div>
 
-              {/* Result Area */}
-              <div className="p-6 bg-[#141414] border-t border-[#1a1a1a]">
-                {sumCredits > total ? (
-                  <div className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/20 shadow-sm">
-                    <p className="text-[#ff385c] font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
-                    <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
-                      Tổng số tín chỉ bạn đã nhập ({sumCredits}) lớn hơn cả tổng tín chỉ toàn khóa ({total}). Vui lòng kiểm tra lại!
-                    </p>
-                  </div>
-                ) : remCredits <= 0 ? (
-                  <div className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/20 shadow-sm">
-                    <p className="text-green-400 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
-                    <p className="text-green-400 text-sm font-medium leading-relaxed">
-                      Bạn đã hoàn thành đủ số tín chỉ ra trường. GPA chung cuộc của bạn là <span className="font-extrabold">{currentGPA.toFixed(2)}</span> ({rank}).
-                    </p>
-                  </div>
-                ) : neededA > remCredits ? (
-                  <div className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/20 shadow-sm flex flex-col items-center">
-                    <Image src="/assets/badges/badge-newbie.png" alt="Newbie Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
-                    <p className="text-[#ff385c] font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
-                    <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
-                      Đời còn dài, FTU-er còn nhiều việc phải làm! Quỹ tín chỉ của bạn đã hết room để kéo điểm lên mức này, dù có full A. Hãy cân nhắc hạ mục tiêu xuống một chút và tận hưởng thời sinh viên nhé!
-                    </p>
-                  </div>
-                ) : neededA > 0 ? (
-                  <div className="text-center p-5 bg-[#0099ff]/10 rounded-xl border border-[#0099ff]/20 shadow-sm flex flex-col items-center">
-                    <Image src="/assets/badges/badge-veteran.png" alt="Veteran Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
-                    <p className="text-[#0099ff] font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
-                    <p className="text-[#0099ff] text-sm font-medium leading-relaxed">
-                      Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-[#141414] px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
-                    </p>
-                  </div>
-                ) : (
-                  <div className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/20 shadow-sm flex flex-col items-center">
-                    <Image src="/assets/badges/badge-gold.png" alt="Gold Badge" width={80} height={80} className="mb-3 animate-bounce drop-shadow-lg" />
-                    <p className="text-green-400 font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
-                    <p className="text-green-400 text-sm font-medium leading-relaxed">
-                      Quỹ điểm của bạn đang rất dư dả. Chặng đường còn lại thậm chí không cần điểm A, chỉ cần đều đều điểm B (hoặc C) là vẫn thừa sức đạt mục tiêu!
-                    </p>
-                  </div>
-                )}
+              <div className="p-6 bg-[#141414] border-t border-[#1a1a1a] min-h-[160px] overflow-hidden relative">
+                <AnimatePresence mode="wait">
+                  {sumCredits > total ? (
+                    <motion.div key="error" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/20 shadow-sm w-full">
+                      <p className="text-[#ff385c] font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
+                      <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
+                        Tổng số tín chỉ bạn đã nhập ({sumCredits}) lớn hơn cả tổng tín chỉ toàn khóa ({total}). Vui lòng kiểm tra lại!
+                      </p>
+                    </motion.div>
+                  ) : remCredits <= 0 ? (
+                    <motion.div key="done" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/20 shadow-sm w-full">
+                      <p className="text-green-400 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
+                      <p className="text-green-400 text-sm font-medium leading-relaxed">
+                        Bạn đã hoàn thành đủ số tín chỉ ra trường. GPA chung cuộc của bạn là <span className="font-extrabold">{currentGPA.toFixed(2)}</span> ({rank}).
+                      </p>
+                    </motion.div>
+                  ) : neededA > remCredits ? (
+                    <motion.div key="impossible" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/20 shadow-sm flex flex-col items-center w-full">
+                      <Image src="/assets/badges/badge-newbie.png" alt="Newbie Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
+                      <p className="text-[#ff385c] font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
+                      <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
+                        Đời còn dài, FTU-er còn nhiều việc phải làm! Quỹ tín chỉ của bạn đã hết room để kéo điểm lên mức này, dù có full A. Hãy cân nhắc hạ mục tiêu xuống một chút.
+                      </p>
+                    </motion.div>
+                  ) : neededA > 0 ? (
+                    <motion.div key="safe" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#0099ff]/10 rounded-xl border border-[#0099ff]/20 shadow-sm flex flex-col items-center w-full">
+                      <Image src="/assets/badges/badge-veteran.png" alt="Veteran Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
+                      <p className="text-[#0099ff] font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
+                      <p className="text-[#0099ff] text-sm font-medium leading-relaxed">
+                        Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-[#141414] px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
+                      </p>
+                    </motion.div>
+                  ) : (
+                    <motion.div key="easy" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/20 shadow-sm flex flex-col items-center w-full">
+                      <Image src="/assets/badges/badge-gold.png" alt="Gold Badge" width={80} height={80} className="mb-3 animate-bounce drop-shadow-lg" />
+                      <p className="text-green-400 font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
+                      <p className="text-green-400 text-sm font-medium leading-relaxed">
+                        Quỹ điểm của bạn đang rất dư dả. Chặng đường còn lại thậm chí không cần điểm A, chỉ cần đều đều điểm B (hoặc C) là vẫn thừa sức đạt mục tiêu!
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </motion.div>
 
-          {/* Cột Phải: Wiki Môn học (70%) */}
+          {/* Cột Phải: Wiki Môn học */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -355,21 +398,22 @@ export default function GuidePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {COURSES.map(course => (
-                  <motion.div 
-                    whileHover={{ y: -5 }}
-                    key={course.id} 
-                    className="group border border-[#262626] rounded-[1.5rem] p-6 hover:border-[#a855f7]/50 hover:shadow-[0_0_20px_rgba(106,76,245,0.2)] transition-all duration-300 bg-[#141414] flex flex-col h-full relative overflow-hidden"
+                  <div 
+                    key={course.id}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/30 animate-pulse-glow' : 'border-[#262626]'} rounded-[1.5rem] p-6 hover:shadow-[0_0_20px_rgba(106,76,245,0.2)] bg-[#141414] flex flex-col h-full relative overflow-hidden`}
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#6a4cf5] to-[#d44df0] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex justify-between items-start mb-4 relative z-20 pointer-events-none">
                       <h3 className="font-extrabold text-lg text-white group-hover:text-[#ff385c] transition-colors">{course.name}</h3>
                       <span className={`px-3 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-widest shrink-0 ${course.difficulty === 'Dễ thở' ? 'bg-[#1c1c1c] text-white/80' : 'bg-[#ff385c]/10 text-[#ff385c]'}`}>
                         {course.difficulty}
                       </span>
                     </div>
                     
-                    <div className="flex items-center gap-4 mb-5">
+                    <div className="flex items-center gap-4 mb-5 relative z-20 pointer-events-none">
                       <div className="flex items-center gap-1.5">
                         <span className="text-yellow-400 text-lg drop-shadow-sm">⭐</span>
                         <span className="font-extrabold text-white">{course.rating}</span>
@@ -377,11 +421,11 @@ export default function GuidePage() {
                       <span className="text-xs font-bold text-[#6a6a6a] border-l border-[#262626] pl-4 uppercase tracking-wider">{course.reviews} đánh giá</span>
                     </div>
                     
-                    <p className="text-sm text-white/80 font-medium leading-relaxed mb-8 flex-1">
+                    <p className="text-sm text-white/80 font-medium leading-relaxed mb-8 flex-1 relative z-20 pointer-events-none">
                       {course.description}
                     </p>
 
-                    <div className="mt-auto flex gap-3">
+                    <div className="mt-auto flex gap-3 relative z-20">
                       <a 
                         href={course.link}
                         target="_blank"
@@ -396,13 +440,16 @@ export default function GuidePage() {
                       </button>
                     </div>
 
-                  </motion.div>
+                  </div>
                 ))}
               </div>
               
-              <div className="mt-10 text-center p-8 bg-[#090909] border-2 border-[#262626] border-dashed rounded-3xl">
-                <p className="text-[#999999] font-bold text-sm">Chưa tìm thấy môn học bạn cần?</p>
-                <button className="mt-3 text-[#ff385c] font-extrabold hover:underline text-sm uppercase tracking-widest">Đóng góp môn học mới</button>
+              <div className="mt-10 text-center p-8 bg-[#090909] rounded-[1.5rem] relative overflow-hidden marching-ants-box cursor-pointer transition-all">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none marching-ants-svg">
+                  <rect width="100%" height="100%" rx="24" fill="none" stroke="#6a6a6a" strokeWidth="2" />
+                </svg>
+                <p className="text-[#999999] font-bold text-sm relative z-10 transition-colors group-hover:text-white">Chưa tìm thấy môn học bạn cần?</p>
+                <button className="mt-3 text-[#ff385c] font-extrabold text-sm uppercase tracking-widest relative z-10 transition-colors">Đóng góp môn học mới</button>
               </div>
 
             </div>

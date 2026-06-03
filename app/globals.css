@@ -378,3 +378,46 @@ body {
   transform: translate3d(var(--mag-x, 0), var(--mag-y, 0), 0) scale(1.1);
   box-shadow: 0 0 20px rgba(200, 160, 224, 0.6), inset 4px 4px 8px rgba(0,0,0,0.4);
 }
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(176, 48, 136, 0.2); border-color: rgba(176, 48, 136, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(240, 110, 210, 0.8); border-color: rgba(240, 110, 210, 0.8); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+@keyframes marching-ants {
+  to { stroke-dashoffset: -20; }
+}
+.marching-ants-svg rect {
+  stroke-dasharray: 10, 10;
+  animation: marching-ants 1s linear infinite;
+}
+.marching-ants-box:hover .marching-ants-svg rect {
+  stroke-dasharray: none;
+  stroke: rgba(240, 110, 210, 0.8);
+}
+.marching-ants-box:hover {
+  background-color: rgba(240, 110, 210, 0.1);
+  box-shadow: 0 4px 14px rgba(240, 110, 210, 0.4);
+}
+
+.holo-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.holo-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 10;
+}
+.holo-card:hover::after {
+  opacity: 1;
+}
