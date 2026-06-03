@@ -5,6 +5,8 @@ import Link from 'next/link';
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const requestRef = useRef<number | null>(null);
 
   const pipelineRef = useRef<HTMLDivElement>(null);
   const nodeLeftRef = useRef<HTMLDivElement>(null);
@@ -19,6 +21,22 @@ export default function HomePage() {
     // Handle body overflow on menu toggle
     document.body.style.overflow = menuOpen ? 'hidden' : 'auto';
   }, [menuOpen]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      requestRef.current = requestAnimationFrame(() => {
+        const x = (e.clientX / window.innerWidth) * 2 - 1;
+        const y = (e.clientY / window.innerHeight) * 2 - 1;
+        setMousePos({ x, y });
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     // Pipeline Beam Animation Logic
@@ -153,7 +171,7 @@ export default function HomePage() {
       </nav>
 
       {/* HERO CARD */}
-      <section className="hero-card">
+      <section className="hero-card" style={{ '--mouse-x': mousePos.x, '--mouse-y': mousePos.y } as React.CSSProperties}>
         <div className="hero-grid"></div>
 
         {/* ICON PIPELINE */}
