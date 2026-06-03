@@ -12,8 +12,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 const SurvivalMap = dynamic(() => import('@/components/SurvivalMap'), { 
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-[#f7f7f7]">
-      <div className="flex flex-col items-center gap-3 text-[#6a6a6a]">
+    <div className="w-full h-full flex items-center justify-center bg-black/90">
+      <div className="flex flex-col items-center gap-3 text-gray-300">
         <svg className="w-8 h-8 animate-spin text-[#ff385c]" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
         <p className="font-semibold text-[15px]">Đang tải Bản Đồ...</p>
       </div>
@@ -46,11 +46,11 @@ export default function MapPage() {
   }, [router]);
 
   if (loading) {
-    return <div className="min-h-screen bg-[#f7f7f7]" />;
+    return <div className="min-h-screen bg-black" />;
   }
 
   return (
-    <div className="h-screen bg-[#f7f7f7] font-sans flex flex-col overflow-hidden selection:bg-[#fff0f2] selection:text-[#ff385c]">
+    <div className="h-screen bg-black font-sans flex flex-col overflow-hidden selection:bg-[#fff0f2] selection:text-[#ff385c]">
       <Navbar 
         profileName={currentUserProfile?.name} 
         onSignOut={() => signOut(auth).then(() => router.push('/'))} 
@@ -62,25 +62,25 @@ export default function MapPage() {
       <div className="relative h-[calc(100vh-72px)] w-full">
         
         {/* Floating Card */}
-        <div className="absolute top-4 left-4 sm:left-6 z-[1000] bg-white p-5 sm:p-6 rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] border border-[#ebebeb] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px]">
+        <div className="absolute top-4 left-4 sm:left-6 z-[1000] liquid-glass p-5 sm:p-6 rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px]">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <h1 className="text-[20px] font-bold text-[#222222] flex items-center gap-2 leading-tight tracking-tight">
+              <h1 className="text-[20px] font-bold text-white flex items-center gap-2 leading-tight tracking-tight">
                 <span className="text-2xl">🗺️</span> Bản Đồ Sinh Tồn
               </h1>
             </div>
           </div>
-          <p className="text-[15px] text-[#6a6a6a] mb-5 leading-relaxed">
+          <p className="text-[15px] text-gray-300 mb-5 leading-relaxed">
             Khám phá góc ăn ngon, chỗ học tập và bí kíp sống sót quanh Ngoại Thương.
           </p>
-          <button className="w-full bg-[#ff385c] hover:bg-[#e00b41] text-white px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm">
+          <button className="w-full liquid-glass hover:bg-white/20 text-white px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Ghim địa điểm mới
           </button>
         </div>
 
         {/* Map */}
-        <div className="absolute inset-0 z-0 bg-[#ebebeb]">
+        <div className="absolute inset-0 z-0 bg-black">
           <SurvivalMap activeFilter={activeFilter} />
         </div>
 
@@ -97,25 +97,25 @@ export default function MapPage() {
               >
                 <button 
                   onClick={() => { setActiveFilter('all'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-[#222222] bg-[#222222] text-white scale-105' : 'border-[#ebebeb] bg-white text-[#222222] hover:bg-[#f7f7f7] hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
                 >
                   Tất cả 🌍
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('food'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-[#222222] bg-[#222222] text-white scale-105' : 'border-[#ebebeb] bg-white text-[#222222] hover:bg-[#f7f7f7] hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
                 >
                   Ăn uống 🍜
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('pass'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-[#222222] bg-[#222222] text-white scale-105' : 'border-[#ebebeb] bg-white text-[#222222] hover:bg-[#f7f7f7] hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
                 >
                   Pass đồ 📚
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('event'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-[#222222] bg-[#222222] text-white scale-105' : 'border-[#ebebeb] bg-white text-[#222222] hover:bg-[#f7f7f7] hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
                 >
                   Sự kiện 🌟
                 </button>
@@ -126,7 +126,7 @@ export default function MapPage() {
           {/* Nút Radar Chính */}
           <button 
             onClick={() => setIsRadarOpen(!isRadarOpen)}
-            className={`relative w-16 h-16 rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:scale-105 transition-all duration-300 z-50 ${isRadarOpen ? 'bg-[#222222]' : 'bg-[#ff385c]'}`}
+            className={`relative w-16 h-16 rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:scale-105 transition-all duration-300 z-50 liquid-glass border border-white/20`}
           >
             {/* Vòng lặp ping mượt mà */}
             {!isRadarOpen && (
