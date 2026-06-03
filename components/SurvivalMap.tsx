@@ -99,8 +99,21 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
         ⭐ {data.averageRating > 0 ? data.averageRating.toFixed(1) : 'Chưa có'}
       </div>
       <button 
-        onClick={() => onReviewClick(data)}
-        className="text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors font-semibold"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          onReviewClick(data);
+        }}
+        onTouchStart={(e) => {
+          e.stopPropagation();
+          onReviewClick(data);
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onReviewClick(data);
+        }}
+        type="button"
+        className="text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors font-semibold z-50 relative cursor-pointer"
       >
         + Đánh giá
       </button>
