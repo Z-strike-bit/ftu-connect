@@ -122,16 +122,15 @@ export default function HomePage() {
             <div className={`data-flow-beam ${isCenterHovered ? 'fast' : ''}`}></div>
           </div>
 
-          {/* Node Right: Map/Compass */}
+          {/* Node Right: Book */}
           <div 
             className={`icon-node magnetic-node ${isCenterHovered ? 'scale-up' : ''}`}
             onMouseMove={handleMagneticMove}
             onMouseLeave={handleMagneticLeave}
           >
             <svg viewBox="0 0 24 24">
-              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
-              <line x1="9" y1="3" x2="9" y2="18"></line>
-              <line x1="15" y1="6" x2="15" y2="21"></line>
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
             </svg>
           </div>
         </div>
