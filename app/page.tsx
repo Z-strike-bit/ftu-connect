@@ -211,12 +211,12 @@ export default function HomePage() {
 
         {/* HERO TEXT */}
         <div className="hero-content">
-          <h1 className="hero-heading">
-            Nền tảng sinh tồn <br/>
-            <strong>Kết nối tại Chùa Láng</strong>
+          <h1 className="hero-heading" style={{ lineHeight: '1.3' }}>
+            Trọn vẹn nhịp sống <br/>
+            <strong>Ngoại Thương</strong>
           </h1>
-          <p className="hero-sub">
-            Khám phá quán ăn ngon, săn giáo trình cũ và không bỏ lỡ bất kỳ sự kiện nào. Dành riêng cho sinh viên Ngoại Thương.
+          <p className="hero-sub" style={{ marginTop: '24px', marginBottom: '40px', lineHeight: '1.6' }}>
+            Từ giảng đường đến những góc phố quen. Mọi tiện ích thu bé lại trong một điểm chạm.
           </p>
           <Link href="/map" className="btn-cta">
             Khám phá Bản Đồ ngay
