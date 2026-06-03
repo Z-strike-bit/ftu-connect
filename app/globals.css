@@ -292,3 +292,35 @@ body {
   top: 10px !important;
   right: 10px !important;
 }
+
+@keyframes blur-reveal {
+  from { opacity: 0; filter: blur(10px); transform: translateY(20px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+@keyframes text-breathe {
+  0%, 100% { text-shadow: 0 0 10px rgba(176,48,136,0.2); }
+  50% { text-shadow: 0 0 30px rgba(240,110,210,0.6); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to { background-position: 200% center; }
+}
+
+.animate-blur-reveal {
+  opacity: 0;
+  animation: blur-reveal 1s ease-out forwards;
+}
+
+.text-apple-shimmer {
+  background: #8888a8 linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.9) 50%, transparent 80%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s infinite linear;
+}
+
+.text-breathe {
+  animation: text-breathe 3s infinite ease-in-out;
+}

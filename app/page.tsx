@@ -211,9 +211,9 @@ export default function HomePage() {
 
         {/* HERO TEXT */}
         <div className="hero-content">
-          <h1 className="hero-heading" style={{ lineHeight: '1.3' }}>
-            Trọn vẹn nhịp sống <br/>
-            <strong>Ngoại Thương</strong>
+          <h1 className="hero-heading animate-blur-reveal" style={{ lineHeight: '1.3' }}>
+            <span className="text-apple-shimmer">Trọn vẹn nhịp sống</span> <br/>
+            <strong className="text-breathe">Ngoại Thương</strong>
           </h1>
           <p className="hero-sub" style={{ marginTop: '24px', marginBottom: '40px', lineHeight: '1.6' }}>
             Từ giảng đường đến những góc phố quen. Mọi tiện ích thu bé lại trong một điểm chạm.
