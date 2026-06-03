@@ -544,31 +544,31 @@ export default function ProfilePage() {
       {/* MODAL CHỈNH SỬA THÔNG TIN */}
       <AnimatePresence>
         {isEditing && (
-          <div className="fixed inset-0 bg-[#222222]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-[#141414] border border-[#1a1a1a] shadow-2xl rounded-[14px] w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
+              className="bg-[#0f0c16]/80 backdrop-blur-2xl border border-white/10 shadow-[0_0_50px_rgba(176,64,144,0.15)] rounded-[20px] w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
             >
-              <div className="px-6 py-5 border-b border-[#1a1a1a] flex justify-between items-center shrink-0">
-                <h2 className="text-[20px] font-bold text-white">Chỉnh sửa trang cá nhân</h2>
-                <button onClick={() => setIsEditing(false)} className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center hover:bg-[#090909] transition border border-transparent hover:border-[#262626]">
+              <div className="px-6 py-5 border-b border-white/10 flex justify-between items-center shrink-0 bg-white/[0.02]">
+                <h2 className="text-[22px] font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#c8a0e0]">Chỉnh sửa trang cá nhân</h2>
+                <button onClick={() => setIsEditing(false)} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition border border-transparent hover:border-white/20">
                   <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
 
               <div className="p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar">
                 <div>
-                  <label className="block text-[16px] font-bold text-white mb-2">Tên hiển thị</label>
-                  <input type="text" value={editFormData.name} onChange={(e) => setEditFormData({...editFormData, name: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="Nhập tên của bạn..." />
+                  <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Tên hiển thị</label>
+                  <input type="text" value={editFormData.name} onChange={(e) => setEditFormData({...editFormData, name: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="Nhập tên của bạn..." />
                 </div>
 
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <label className="block text-[16px] font-bold text-white">Ảnh đại diện (Avatar URL)</label>
+                    <label className="block text-[15px] font-medium text-[#c8a0e0]">Ảnh đại diện (Avatar URL)</label>
                   </div>
-                  <input type="text" value={editFormData.photoURL} onChange={(e) => setEditFormData({...editFormData, photoURL: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="Nhập Link Ảnh URL..." />
+                  <input type="text" value={editFormData.photoURL} onChange={(e) => setEditFormData({...editFormData, photoURL: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="Nhập Link Ảnh URL..." />
                   
                   {/* Gợi ý Avatar */}
                   <div className="mt-4">
@@ -587,37 +587,37 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="mt-4 flex justify-center">
-                    <img src={editFormData.photoURL || avatarPhoto} className="w-28 h-28 rounded-full border border-[#1a1a1a] object-cover" />
+                    <img src={editFormData.photoURL || avatarPhoto} className="w-28 h-28 rounded-full border-4 border-[#b04090]/30 shadow-[0_0_20px_rgba(176,64,144,0.3)] object-cover" />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <label className="block text-[16px] font-bold text-white">Ảnh bìa (Cover URL)</label>
+                    <label className="block text-[15px] font-medium text-[#c8a0e0]">Ảnh bìa (Cover URL)</label>
                   </div>
-                  <input type="text" value={editFormData.coverPhotoUrl} onChange={(e) => setEditFormData({...editFormData, coverPhotoUrl: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="Nhập Link Ảnh URL..." />
+                  <input type="text" value={editFormData.coverPhotoUrl} onChange={(e) => setEditFormData({...editFormData, coverPhotoUrl: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="Nhập Link Ảnh URL..." />
                   <div className="mt-3">
-                    <img src={editFormData.coverPhotoUrl || coverPhoto} className="w-full h-36 rounded-lg border border-[#1a1a1a] object-cover" />
+                    <img src={editFormData.coverPhotoUrl || coverPhoto} className="w-full h-36 rounded-xl border border-white/10 object-cover shadow-lg" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[16px] font-bold text-white mb-2">Tiểu sử</label>
-                  <textarea rows={3} value={editFormData.bio} onChange={(e) => setEditFormData({...editFormData, bio: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition resize-none" placeholder="Mô tả bản thân..." />
+                  <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Tiểu sử</label>
+                  <textarea rows={3} value={editFormData.bio} onChange={(e) => setEditFormData({...editFormData, bio: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition resize-none" placeholder="Mô tả bản thân..." />
                 </div>
 
                 <div>
-                  <label className="block text-[16px] font-bold text-white mb-2">Link liên hệ (Mess/Zalo)</label>
-                  <input type="text" value={editFormData.contactLink} onChange={(e) => setEditFormData({...editFormData, contactLink: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="Ví dụ: https://m.me/your.username" />
+                  <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Link liên hệ (Mess/Zalo)</label>
+                  <input type="text" value={editFormData.contactLink} onChange={(e) => setEditFormData({...editFormData, contactLink: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="Ví dụ: https://m.me/your.username" />
                 </div>
 
                 <div>
-                  <label className="block text-[16px] font-bold text-white mb-2">Chuyên ngành học</label>
+                  <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Chuyên ngành học</label>
                   <div className="flex flex-col gap-3">
                     <select 
                       value={editFormData.major} 
                       onChange={(e) => setEditFormData({...editFormData, major: e.target.value, specialization: ''})} 
-                      className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition"
                     >
                       <option value="">-- Chọn ngành --</option>
                       {FTU_MAJORS.map(m => (
@@ -629,7 +629,7 @@ export default function ProfilePage() {
                       value={editFormData.specialization} 
                       onChange={(e) => setEditFormData({...editFormData, specialization: e.target.value})} 
                       disabled={!editFormData.major}
-                      className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition disabled:opacity-50 disabled:bg-[#090909]"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition disabled:opacity-50 disabled:bg-[#090909]"
                     >
                       <option value="">-- Chọn chuyên ngành --</option>
                       {editFormData.major && FTU_MAJORS.find(m => m.majorName === editFormData.major)?.specializations.map(spec => (
@@ -643,21 +643,21 @@ export default function ProfilePage() {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[16px] font-bold text-white mb-2">GPA / Thành tích</label>
-                        <input type="text" value={editFormData.gpa} onChange={(e) => setEditFormData({...editFormData, gpa: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="Ví dụ: 3.8/4.0" />
+                        <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">GPA / Thành tích</label>
+                        <input type="text" value={editFormData.gpa} onChange={(e) => setEditFormData({...editFormData, gpa: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="Ví dụ: 3.8/4.0" />
                       </div>
                       <div>
-                        <label className="block text-[16px] font-bold text-white mb-2">Câu lạc bộ</label>
-                        <input type="text" value={editFormData.clubs} onChange={(e) => setEditFormData({...editFormData, clubs: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="Ví dụ: TEC, YRC" />
+                        <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Câu lạc bộ</label>
+                        <input type="text" value={editFormData.clubs} onChange={(e) => setEditFormData({...editFormData, clubs: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="Ví dụ: TEC, YRC" />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[16px] font-bold text-white mb-2">Kỹ năng mạnh nhất</label>
-                      <input type="text" value={editFormData.skills} onChange={(e) => setEditFormData({...editFormData, skills: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="Ví dụ: IELTS 8.0, Thuyết trình" />
+                      <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Kỹ năng mạnh nhất</label>
+                      <input type="text" value={editFormData.skills} onChange={(e) => setEditFormData({...editFormData, skills: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="Ví dụ: IELTS 8.0, Thuyết trình" />
                     </div>
                     <div>
-                      <label className="block text-[16px] font-bold text-white mb-2">Trải nghiệm nổi bật</label>
-                      <textarea rows={2} value={editFormData.achievements} onChange={(e) => setEditFormData({...editFormData, achievements: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition resize-none" placeholder="Điểm tự hào nhất..." />
+                      <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Trải nghiệm nổi bật</label>
+                      <textarea rows={2} value={editFormData.achievements} onChange={(e) => setEditFormData({...editFormData, achievements: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition resize-none" placeholder="Điểm tự hào nhất..." />
                     </div>
                   </>
                 )}
@@ -665,10 +665,10 @@ export default function ProfilePage() {
                 {targetProfile.role === 'mentee' && (
                   <>
                     <div>
-                      <label className="block text-[16px] font-bold text-white mb-2">Mục tiêu học tập</label>
+                      <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Mục tiêu học tập</label>
                       <div className="grid grid-cols-2 gap-3">
                         {GOALS.map(goal => (
-                          <label key={goal} className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-all ${editFormData.goals.includes(goal) ? 'border-[#ff385c] bg-[#fff0f2] text-[#0099ff]' : 'border-[#262626] bg-[#141414] hover:bg-[#090909]'}`}>
+                          <label key={goal} className={`flex items-center space-x-3 p-3 border rounded-xl cursor-pointer transition-all ${editFormData.goals.includes(goal) ? 'border-[#b04090] bg-[#b04090]/10 text-[#c8a0e0]' : 'border-white/10 bg-black/20 hover:bg-white/5'}`}>
                             <input
                               type="checkbox"
                               checked={editFormData.goals.includes(goal)}
@@ -686,16 +686,16 @@ export default function ProfilePage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[16px] font-bold text-white mb-2">Sở thích cá nhân</label>
-                      <input type="text" value={editFormData.interests} onChange={(e) => setEditFormData({...editFormData, interests: e.target.value})} className="w-full bg-[#141414] border border-[#262626] rounded-lg px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-[#ff385c] transition" placeholder="VD: Đọc sách, Nghe Podcast..." />
+                      <label className="block text-[15px] font-medium text-[#c8a0e0] mb-2">Sở thích cá nhân</label>
+                      <input type="text" value={editFormData.interests} onChange={(e) => setEditFormData({...editFormData, interests: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] transition" placeholder="VD: Đọc sách, Nghe Podcast..." />
                     </div>
                   </>
                 )}
               </div>
 
-              <div className="p-5 border-t border-[#1a1a1a] flex justify-end gap-3 shrink-0 bg-[#141414]">
-                <button onClick={() => setIsEditing(false)} className="px-6 py-2.5 rounded-lg font-bold text-white hover:bg-[#090909] transition border border-transparent hover:border-[#262626]">Hủy</button>
-                <button onClick={handleSaveProfile} disabled={saving} className="px-8 py-2.5 bg-white hover:bg-gray-200 text-black rounded-lg font-bold transition disabled:opacity-50">
+              <div className="p-5 border-t border-white/10 flex justify-end gap-3 shrink-0 bg-white/[0.02]">
+                <button onClick={() => setIsEditing(false)} className="px-6 py-2.5 rounded-xl font-medium text-white/80 hover:bg-white/10 transition border border-transparent">Hủy</button>
+                <button onClick={handleSaveProfile} disabled={saving} className="px-8 py-2.5 bg-gradient-to-r from-[#b04090] to-[#8a2be2] hover:opacity-90 text-white shadow-[0_4px_15px_rgba(176,64,144,0.4)] rounded-xl font-bold transition disabled:opacity-50">
                   {saving ? 'Đang lưu...' : 'Lưu thay đổi'}
                 </button>
               </div>
