@@ -140,7 +140,7 @@ export default function HomePage() {
             Từ giảng đường đến những góc phố quen. Mọi tiện ích thu bé lại trong một điểm chạm.
           </p>
           <Link href="/map" className="btn-cta">
-            Khám phá Bản Đồ ngay
+            Khác biệt để dẫn đầu &rarr;
           </Link>
         </div>
       </section>
