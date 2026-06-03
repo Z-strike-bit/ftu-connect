@@ -102,7 +102,7 @@ export default function Onboarding() {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center bg-white"><p className="text-slate-500 font-medium animate-pulse">Đang tải biểu mẫu...</p></div>;
+    return <div className="min-h-screen flex items-center justify-center bg-[#141414]"><p className="text-slate-500 font-medium animate-pulse">Đang tải biểu mẫu...</p></div>;
   }
 
   return (
@@ -111,7 +111,7 @@ export default function Onboarding() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
+        className="max-w-3xl mx-auto bg-[#141414] rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
       >
         
         {/* Header */}
@@ -215,7 +215,7 @@ export default function Onboarding() {
                     placeholder="VD: 3.8/4.0"
                     value={formData.gpa}
                     onChange={(e) => setFormData({...formData, gpa: e.target.value})}
-                    className="w-full rounded-xl border-white/10 bg-white/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
+                    className="w-full rounded-xl border-white/10 bg-[#141414]/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
                   />
                 </div>
                 <div>
@@ -225,7 +225,7 @@ export default function Onboarding() {
                     placeholder="VD: TEC, YRC..."
                     value={formData.clubs}
                     onChange={(e) => setFormData({...formData, clubs: e.target.value})}
-                    className="w-full rounded-xl border-white/10 bg-white/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
+                    className="w-full rounded-xl border-white/10 bg-[#141414]/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
                   />
                 </div>
               </div>
@@ -237,7 +237,7 @@ export default function Onboarding() {
                   placeholder="VD: IELTS 8.0, Thuyết trình..."
                   value={formData.skills}
                   onChange={(e) => setFormData({...formData, skills: e.target.value})}
-                  className="w-full rounded-xl border-white/10 bg-white/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
+                  className="w-full rounded-xl border-white/10 bg-[#141414]/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
                 />
               </div>
 
@@ -248,7 +248,7 @@ export default function Onboarding() {
                   placeholder="Điều tự hào nhất..."
                   value={formData.achievements}
                   onChange={(e) => setFormData({...formData, achievements: e.target.value})}
-                  className="w-full rounded-xl border-white/10 bg-white/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none resize-none placeholder-slate-400"
+                  className="w-full rounded-xl border-white/10 bg-[#141414]/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none resize-none placeholder-slate-400"
                 />
               </div>
             </motion.div>
@@ -266,7 +266,7 @@ export default function Onboarding() {
                 <label className="block text-sm font-bold text-slate-300 mb-4">Bạn muốn đạt được điều gì?</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {GOALS.map(goal => (
-                    <label key={goal} className={`flex items-center space-x-3 p-3.5 border rounded-xl cursor-pointer transition-all ${formData.goals.includes(goal) ? 'border-red-500 bg-red-500/20' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}>
+                    <label key={goal} className={`flex items-center space-x-3 p-3.5 border rounded-xl cursor-pointer transition-all ${formData.goals.includes(goal) ? 'border-red-500 bg-red-500/20' : 'border-white/10 bg-[#141414]/5 hover:bg-[#141414]/10'}`}>
                       <input
                         type="checkbox"
                         checked={formData.goals.includes(goal)}
@@ -286,7 +286,7 @@ export default function Onboarding() {
                   placeholder="VD: Đọc sách, Nghe Podcast..."
                   value={formData.interests}
                   onChange={(e) => setFormData({...formData, interests: e.target.value})}
-                  className="w-full rounded-xl border-white/10 bg-white/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
+                  className="w-full rounded-xl border-white/10 bg-[#141414]/10 p-3.5 text-white focus:ring-2 focus:ring-red-500 border outline-none placeholder-slate-400"
                 />
               </div>
             </motion.div>

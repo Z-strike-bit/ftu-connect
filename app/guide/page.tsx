@@ -144,7 +144,7 @@ export default function GuidePage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-white flex items-center justify-center"><p className="text-slate-500 font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
+    return <div className="min-h-screen bg-[#141414] flex items-center justify-center"><p className="text-slate-500 font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
   }
 
   // Cấu trúc thuật toán Core
@@ -201,10 +201,10 @@ export default function GuidePage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-4"
           >
-            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden sticky top-28">
+            <div className="bg-[#141414] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden sticky top-28">
               
               {/* Header Widget */}
-              <div className="p-6 border-b border-slate-100 bg-white">
+              <div className="p-6 border-b border-slate-100 bg-[#141414]">
                 <h2 className="text-xl font-extrabold text-black flex items-center gap-2">
                   <div className="bg-red-50 p-2 rounded-xl text-red-600">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
@@ -257,7 +257,7 @@ export default function GuidePage() {
                 </div>
 
                 {/* Read Only Current Stats */}
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div className="bg-[#141414] p-4 rounded-xl border border-slate-200 shadow-sm">
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Thống kê hiện tại</h3>
                   <div className="space-y-2 text-[14px]">
                     <div className="flex justify-between items-center">
@@ -280,7 +280,7 @@ export default function GuidePage() {
                   <select 
                     value={targetGPA}
                     onChange={(e) => setTargetGPA(Number(e.target.value))}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all text-[15px] font-bold bg-white appearance-none cursor-pointer text-black"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all text-[15px] font-bold bg-[#141414] appearance-none cursor-pointer text-black"
                   >
                     <option value={2.5}>Bằng Khá (2.5)</option>
                     <option value={3.2}>Bằng Giỏi (3.2)</option>
@@ -290,7 +290,7 @@ export default function GuidePage() {
               </div>
 
               {/* Result Area */}
-              <div className="p-6 bg-white border-t border-slate-100">
+              <div className="p-6 bg-[#141414] border-t border-slate-100">
                 {sumCredits > total ? (
                   <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
                     <p className="text-red-700 font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
@@ -318,7 +318,7 @@ export default function GuidePage() {
                     <Image src="/assets/badges/badge-veteran.png" alt="Veteran Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
                     <p className="text-blue-700 font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
                     <p className="text-blue-600 text-sm font-medium leading-relaxed">
-                      Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-white px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
+                      Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-[#141414] px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
                     </p>
                   </div>
                 ) : (
@@ -341,7 +341,7 @@ export default function GuidePage() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="lg:col-span-8"
           >
-            <div className="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-8">
+            <div className="bg-[#141414] rounded-[2rem] shadow-sm border border-slate-200 p-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                 <div>
                   <h2 className="text-2xl font-extrabold text-black">Thư viện Wiki</h2>
@@ -358,7 +358,7 @@ export default function GuidePage() {
                   <motion.div 
                     whileHover={{ y: -5 }}
                     key={course.id} 
-                    className="group border border-slate-200 rounded-[1.5rem] p-6 hover:border-black hover:shadow-lg transition-all bg-white flex flex-col h-full"
+                    className="group border border-slate-200 rounded-[1.5rem] p-6 hover:border-black hover:shadow-lg transition-all bg-[#141414] flex flex-col h-full"
                   >
                     
                     <div className="flex justify-between items-start mb-4">

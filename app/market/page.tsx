@@ -126,10 +126,10 @@ export default function MarketPage() {
     ? products 
     : products.filter(p => p.category === activeCategory);
 
-  if (loading) return <div className="min-h-screen bg-white" />;
+  if (loading) return <div className="min-h-screen bg-[#141414]" />;
 
   return (
-    <div className="min-h-screen bg-white font-sans flex flex-col selection:bg-[#fff0f2] selection:text-[#ff385c]">
+    <div className="min-h-screen bg-[#141414] font-sans flex flex-col selection:bg-[#fff0f2] selection:text-[#0099ff]">
       <Navbar 
         profileName={currentUserProfile?.name} 
         onSignOut={() => signOut(auth).then(() => router.push('/'))} 
@@ -141,23 +141,23 @@ export default function MarketPage() {
         
         {/* Sidebar */}
         <div className="w-full md:w-[320px] shrink-0">
-          <div className="bg-white rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] border border-[#ebebeb] p-6 sticky top-[100px]">
-            <h1 className="text-[24px] font-bold text-[#222222] mb-1">Chợ Sinh Viên</h1>
-            <p className="text-[#6a6a6a] text-[15px] mb-6">Mua bán, pass đồ dễ dàng trong khuôn viên FTU.</p>
+          <div className="bg-[#141414] rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] border border-[#1a1a1a] p-6 sticky top-[100px]">
+            <h1 className="text-[24px] font-bold text-white mb-1">Chợ Sinh Viên</h1>
+            <p className="text-[#999999] text-[15px] mb-6">Mua bán, pass đồ dễ dàng trong khuôn viên FTU.</p>
             
-            <button className="w-full bg-[#ff385c] hover:bg-[#e00b41] text-white font-semibold py-3.5 px-4 rounded-lg mb-6 transition-all flex items-center justify-center gap-2">
+            <button className="w-full bg-white hover:bg-gray-200 text-black font-semibold py-3.5 px-4 rounded-lg mb-6 transition-all flex items-center justify-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4"/></svg>
               Tạo bài đăng bán
             </button>
 
-            <h3 className="font-semibold text-[16px] text-[#222222] mb-3 px-1">Danh mục</h3>
+            <h3 className="font-semibold text-[16px] text-white mb-3 px-1">Danh mục</h3>
             <div className="space-y-1">
               {categories.map(cat => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-semibold text-[15px] text-left
-                    ${activeCategory === cat.id ? 'bg-[#fff0f2] text-[#ff385c]' : 'text-[#222222] hover:bg-[#f7f7f7]'}`}
+                    ${activeCategory === cat.id ? 'bg-[#fff0f2] text-[#0099ff]' : 'text-white hover:bg-[#090909]'}`}
                 >
                   <span className="text-xl w-6 text-center">{cat.icon}</span>
                   {cat.name}
@@ -165,8 +165,8 @@ export default function MarketPage() {
               ))}
             </div>
             
-            <div className="mt-6 pt-6 border-t border-[#ebebeb]">
-              <div className="bg-[#f7f7f7] text-[#222222] p-4 rounded-xl border border-[#ebebeb]">
+            <div className="mt-6 pt-6 border-t border-[#1a1a1a]">
+              <div className="bg-[#090909] text-white p-4 rounded-xl border border-[#1a1a1a]">
                 <p className="text-[14px] leading-relaxed">
                   💡 <strong>Tip an toàn:</strong> Luôn ưu tiên giao dịch trực tiếp tại cổng trường hoặc trong khuôn viên nhà D để đảm bảo an toàn bạn nhé!
                 </p>
@@ -181,13 +181,13 @@ export default function MarketPage() {
             {filteredProducts.map(product => (
               <div key={product.id} className="cursor-pointer group flex flex-col">
                 {/* Image Wrapper */}
-                <div className="aspect-square sm:aspect-[4/3] w-full relative overflow-hidden bg-[#ebebeb] rounded-[14px] mb-3">
+                <div className="aspect-square sm:aspect-[4/3] w-full relative overflow-hidden bg-[#1c1c1c] rounded-[14px] mb-3">
                   <img 
                     src={product.image} 
                     alt={product.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-[#222222] text-[13px] font-semibold px-2.5 py-1 rounded-md shadow-sm">
+                  <div className="absolute top-3 left-3 bg-[#141414]/90 backdrop-blur-md text-white text-[13px] font-semibold px-2.5 py-1 rounded-md shadow-sm">
                     {product.condition}
                   </div>
                   <button className="absolute top-3 right-3 p-1.5 hover:scale-110 transition-transform">
@@ -198,24 +198,24 @@ export default function MarketPage() {
                 {/* Content */}
                 <div className="flex flex-col flex-1">
                   <div className="flex justify-between items-start mb-1">
-                    <div className="text-[16px] font-semibold text-[#222222] truncate pr-2 flex-1">
+                    <div className="text-[16px] font-semibold text-white truncate pr-2 flex-1">
                       {product.location}
                     </div>
                     <div className="flex items-center gap-1 text-[14px]">
-                      <span className="font-semibold text-[#222222]">★ Mới</span>
+                      <span className="font-semibold text-white">★ Mới</span>
                     </div>
                   </div>
                   
-                  <h3 className="text-[15px] text-[#6a6a6a] line-clamp-1 mb-1">
+                  <h3 className="text-[15px] text-[#999999] line-clamp-1 mb-1">
                     {product.title}
                   </h3>
                   
-                  <div className="text-[15px] text-[#6a6a6a] mb-1">
+                  <div className="text-[15px] text-[#999999] mb-1">
                     {product.timePosted}
                   </div>
                   
                   <div className="mt-1">
-                    <span className="text-[16px] font-semibold text-[#222222]">{product.price.toLocaleString('vi-VN')} đ</span>
+                    <span className="text-[16px] font-semibold text-white">{product.price.toLocaleString('vi-VN')} đ</span>
                   </div>
                 </div>
               </div>
@@ -225,10 +225,10 @@ export default function MarketPage() {
           {filteredProducts.length === 0 && (
             <div className="w-full flex flex-col items-center justify-center py-20 mt-2">
               <span className="text-6xl mb-4">🛒</span>
-              <p className="text-[#6a6a6a] font-medium text-[16px]">Chưa có sản phẩm nào trong danh mục này.</p>
+              <p className="text-[#999999] font-medium text-[16px]">Chưa có sản phẩm nào trong danh mục này.</p>
               <button 
                 onClick={() => setActiveCategory('all')}
-                className="mt-4 text-[#ff385c] font-semibold hover:underline"
+                className="mt-4 text-[#0099ff] font-semibold hover:underline"
               >
                 Xem tất cả sản phẩm
               </button>

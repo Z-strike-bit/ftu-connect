@@ -44,7 +44,7 @@ export default function HomePage() {
 
         {/* CTA */}
         <div>
-          <Link href="/login" className="px-5 py-2.5 bg-white text-ink text-sm font-medium rounded-full hover:bg-surface-soft transition-colors shadow-sm">
+          <Link href="/login" className="px-5 py-2.5 bg-[#141414] text-ink text-sm font-medium rounded-full hover:bg-surface-soft transition-colors shadow-sm">
             Đăng nhập
           </Link>
         </div>
@@ -60,7 +60,7 @@ export default function HomePage() {
         </p>
         <Link
           href="/map"
-          className="mt-10 px-8 py-4 liquid-glass text-white text-lg font-medium rounded-full hover:bg-white/20 transition-all duration-300 animate-fade-rise-delay-2 flex items-center gap-2 group"
+          className="mt-10 px-8 py-4 liquid-glass text-white text-lg font-medium rounded-full hover:bg-[#141414]/20 transition-all duration-300 animate-fade-rise-delay-2 flex items-center gap-2 group"
         >
           Khám phá Bản Đồ ngay
           <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

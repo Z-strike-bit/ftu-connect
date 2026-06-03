@@ -37,7 +37,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 font-sans">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-100">
+      <div className="max-w-md w-full bg-[#141414] rounded-3xl shadow-xl p-8 text-center border border-slate-100">
         <Image src="/logo.png" alt="FTU Connect" width={200} height={50} className="mx-auto mb-8 h-12 w-auto object-contain" priority />
         <h1 className="text-3xl font-extrabold text-black mb-2">Đăng nhập</h1>
         <p className="text-slate-500 font-medium mb-8">Sử dụng tài khoản Google để tiếp tục</p>
@@ -51,7 +51,7 @@ export default function Login() {
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 text-black font-bold py-4 px-4 rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 bg-[#141414] border-2 border-slate-200 text-black font-bold py-4 px-4 rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50"
         >
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6" />
           {loading ? 'Đang kết nối...' : 'Đăng nhập bằng Google'}

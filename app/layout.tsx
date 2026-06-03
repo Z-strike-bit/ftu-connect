@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-[#090909] text-white selection:bg-[#0099ff] selection:text-white`}>
         {children}
         <GlobalChat />
         <Chatbot />

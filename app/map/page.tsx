@@ -14,7 +14,7 @@ const SurvivalMap = dynamic(() => import('@/components/SurvivalMap'), {
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-black/90">
       <div className="flex flex-col items-center gap-3 text-gray-300">
-        <svg className="w-8 h-8 animate-spin text-[#ff385c]" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <svg className="w-8 h-8 animate-spin text-[#0099ff]" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
         <p className="font-semibold text-[15px]">Đang tải Bản Đồ...</p>
       </div>
     </div>
@@ -50,7 +50,7 @@ export default function MapPage() {
   }
 
   return (
-    <div className="h-screen bg-black font-sans flex flex-col overflow-hidden selection:bg-[#fff0f2] selection:text-[#ff385c]">
+    <div className="h-screen bg-black font-sans flex flex-col overflow-hidden selection:bg-[#fff0f2] selection:text-[#0099ff]">
       <Navbar 
         profileName={currentUserProfile?.name} 
         onSignOut={() => signOut(auth).then(() => router.push('/'))} 
@@ -73,7 +73,7 @@ export default function MapPage() {
           <p className="text-[15px] text-gray-300 mb-5 leading-relaxed">
             Khám phá góc ăn ngon, chỗ học tập và bí kíp sống sót quanh Ngoại Thương.
           </p>
-          <button className="w-full liquid-glass hover:bg-white/20 text-white px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm">
+          <button className="w-full liquid-glass hover:bg-[#141414]/20 text-white px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Ghim địa điểm mới
           </button>
@@ -97,25 +97,25 @@ export default function MapPage() {
               >
                 <button 
                   onClick={() => { setActiveFilter('all'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
                 >
                   Tất cả 🌍
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('food'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
                 >
                   Ăn uống 🍜
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('pass'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
                 >
                   Pass đồ 📚
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('event'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-white/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
                 >
                   Sự kiện 🌟
                 </button>
