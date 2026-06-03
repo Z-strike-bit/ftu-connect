@@ -358,8 +358,9 @@ export default function GuidePage() {
                   <motion.div 
                     whileHover={{ y: -5 }}
                     key={course.id} 
-                    className="group border border-[#262626] rounded-[1.5rem] p-6 hover:border-[#0099ff] hover:shadow-lg transition-all bg-[#141414] flex flex-col h-full"
+                    className="group border border-[#262626] rounded-[1.5rem] p-6 hover:border-[#a855f7]/50 hover:shadow-[0_0_20px_rgba(106,76,245,0.2)] transition-all duration-300 bg-[#141414] flex flex-col h-full relative overflow-hidden"
                   >
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#6a4cf5] to-[#d44df0] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
                     <div className="flex justify-between items-start mb-4">
                       <h3 className="font-extrabold text-lg text-white group-hover:text-[#ff385c] transition-colors">{course.name}</h3>

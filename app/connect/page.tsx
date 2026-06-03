@@ -115,7 +115,7 @@ export default function ConnectPage() {
         </div>
 
         {/* Cột Phải: Grid Card Gợi ý */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 custom-scrollbar bg-[#fdfdfd] mt-4">
+        <div className="flex-1 overflow-y-auto p-6 sm:p-8 custom-scrollbar bg-[#090909] mt-4">
           <div className="max-w-[1200px] mx-auto">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-[22px] font-bold text-white">Những người bạn có thể biết</h3>
@@ -124,7 +124,7 @@ export default function ConnectPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {suggestions.map((suggestion) => (
-                <div key={suggestion.id} className="bg-[#141414] rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col border border-[#1a1a1a] group">
+                <div key={suggestion.id} className="bg-[#141414] rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col border border-[#1a1a1a] hover:border-[#a855f7]/50 hover:shadow-[0_0_20px_rgba(106,76,245,0.2)] transition-all duration-300 group">
                   <div className="aspect-square w-full bg-[#1c1c1c] overflow-hidden shrink-0 relative">
                     <img 
                       src={"https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} 

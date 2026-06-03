@@ -60,7 +60,7 @@ export default function Navbar({ profileName, profileId, profilePhoto, onSignOut
             >
               {item.icon}
               {isActive && (
-                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#0099ff] rounded-t-md" />
+                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white rounded-t-md" />
               )}
             </Link>
           );

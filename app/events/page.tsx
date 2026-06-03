@@ -130,10 +130,10 @@ export default function EventsPage() {
               key={event.id} 
               variants={itemVariants}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="bg-[#141414] rounded-[20px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] border border-[#262626] overflow-hidden flex flex-col group cursor-pointer hover:border-[#6a6a6a] transition-colors"
+              className="bg-[#141414] rounded-[20px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] border border-[#262626] overflow-hidden flex flex-col group cursor-pointer hover:border-[#a855f7]/50 hover:shadow-[0_0_20px_rgba(106,76,245,0.2)] transition-all duration-300"
             >
               {/* Cover Gradient */}
-              <div className="h-[120px] w-full bg-[#1c1c1c] relative overflow-hidden flex items-start justify-end p-5 border-b border-[#262626]">
+              <div className="h-[120px] w-full bg-gradient-to-br from-[#6a4cf5] to-[#d44df0] relative overflow-hidden flex items-start justify-end p-5 border-b border-[#262626]">
                 <div className={`border ${event.tagColor} px-3 py-1 rounded-[100px] text-[12px] font-bold uppercase shadow-sm`}>
                   {event.tagText}
                 </div>
