@@ -124,16 +124,16 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
   const [showReviews, setShowReviews] = useState(false);
 
   return (
-    <div className="p-1 min-w-[220px] max-w-[280px]">
-      <h3 className="font-bold text-[17px] text-orange-600 mb-1 leading-tight">{data.restaurantName}</h3>
-      <p className="text-[13px] text-slate-600 mb-3 flex items-start gap-1">
+    <div className="p-2 min-w-[240px] max-w-[300px]">
+      <h3 className="font-semibold text-[20px] text-[#222222] mb-1 leading-tight tracking-tight">{data.restaurantName}</h3>
+      <p className="text-[14px] text-[#6a6a6a] mb-4 flex items-start gap-1">
         <span className="shrink-0 mt-0.5">📍</span> {data.address}
       </p>
       
-      <div className="border-t border-slate-200 pt-3 flex items-center justify-between">
-        <div className="flex items-center gap-1 text-[13px] font-bold text-amber-500">
+      <div className="border-t border-[#ebebeb] pt-4 flex items-center justify-between">
+        <div className="flex items-center gap-1 text-[16px] font-bold text-[#222222]">
           ⭐ {data.averageRating > 0 ? data.averageRating.toFixed(1) : 'Chưa có'} 
-          <span className="text-slate-400 font-normal ml-1">({data.reviews.length})</span>
+          <span className="text-[#6a6a6a] font-normal ml-1 text-[14px]">({data.reviews.length})</span>
         </div>
         <button 
           onMouseDown={(e) => {
@@ -150,14 +150,14 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
             onReviewClick(data);
           }}
           type="button"
-          className="text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors font-semibold z-50 relative cursor-pointer"
+          className="text-[14px] border border-[#222222] bg-white hover:bg-[#f7f7f7] text-[#222222] px-4 py-1.5 rounded-full transition-colors font-semibold z-50 relative cursor-pointer"
         >
-          + Đánh giá
+          Đánh giá
         </button>
       </div>
 
       {data.reviews.length > 0 && (
-        <div className="mt-3">
+        <div className="mt-4">
           <button 
             onClick={(e) => {
               e.preventDefault();
@@ -166,10 +166,10 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
             }}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="w-full text-center text-[12px] text-slate-500 hover:text-slate-700 font-medium py-1.5 bg-slate-50 rounded-lg flex justify-center items-center gap-1 transition-colors"
+            className="w-full text-center text-[14px] text-[#222222] font-semibold py-2 hover:underline flex justify-center items-center gap-1 transition-colors"
           >
             {showReviews ? 'Ẩn bình luận' : 'Xem bình luận'}
-            <svg className={`w-3 h-3 transition-transform ${showReviews ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+            <svg className={`w-4 h-4 transition-transform ${showReviews ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
           </button>
           
           <AnimatePresence>
@@ -180,14 +180,14 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <div className="mt-2 space-y-2 max-h-[150px] overflow-y-auto pr-1 custom-scrollbar">
+                <div className="mt-2 space-y-3 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
                   {data.reviews.map((rev, idx) => (
-                    <div key={idx} className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                    <div key={idx} className="bg-white p-3 rounded-[14px] border border-[#ebebeb]">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="font-bold text-[12px] text-slate-700">{rev.user}</span>
-                        <span className="text-[10px] text-amber-500 tracking-widest">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</span>
+                        <span className="font-semibold text-[14px] text-[#222222]">{rev.user}</span>
+                        <span className="text-[12px] text-[#222222] font-bold">★ {rev.rating}</span>
                       </div>
-                      <p className="text-[12px] text-slate-600 leading-snug">{rev.comment}</p>
+                      <p className="text-[14px] text-[#3f3f3f] leading-snug">{rev.comment}</p>
                     </div>
                   ))}
                 </div>
@@ -201,38 +201,38 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
 };
 
 const PassItemPopup = ({ data }: { data: PassItemMarker }) => (
-  <div className="p-1 min-w-[200px]">
-    <h3 className="font-bold text-[17px] text-blue-600 mb-1 leading-tight">{data.itemName}</h3>
-    <p className="text-[13px] text-slate-700 mb-4 whitespace-pre-wrap">{data.description}</p>
+  <div className="p-2 min-w-[220px]">
+    <h3 className="font-semibold text-[20px] text-[#222222] mb-1 leading-tight tracking-tight">{data.itemName}</h3>
+    <p className="text-[14px] text-[#3f3f3f] mb-5 whitespace-pre-wrap">{data.description}</p>
     
     <a 
       href={data.inboxLink.startsWith('http') ? data.inboxLink : `https://${data.inboxLink}`} 
       target="_blank" 
       rel="noreferrer"
-      className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-colors mb-3 text-[14px]"
+      className="block w-full text-center bg-[#ff385c] hover:bg-[#e00b41] text-white font-semibold py-[14px] rounded-lg transition-colors mb-4 text-[16px]"
     >
       Nhắn tin ngay
     </a>
     
-    <div className="text-[12px] font-bold text-red-500 text-center bg-red-50 py-1 rounded-md border border-red-100">
-      ⏳ Tự hủy sau: {formatTimeLeft(data.expireAt)}
+    <div className="text-[13px] font-medium text-[#6a6a6a] text-center border-t border-[#ebebeb] pt-3">
+      Tự hủy sau: {formatTimeLeft(data.expireAt)}
     </div>
   </div>
 );
 
 const EventPopup = ({ data }: { data: EventMarker }) => (
-  <div className="p-1 min-w-[220px]">
-    <div className="flex items-center gap-1.5 mb-2">
-      <div className="bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-blue-200">
-        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+  <div className="p-2 min-w-[240px]">
+    <div className="flex items-center gap-1.5 mb-3">
+      <div className="bg-[#f2f2f2] text-[#222222] text-[11px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 border border-[#dddddd]">
+        <svg className="w-3 h-3 text-[#ff385c]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
         VERIFIED CLUB
       </div>
     </div>
-    <h3 className="font-bold text-[18px] bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent mb-1 leading-tight">{data.eventName}</h3>
-    <p className="text-[14px] font-bold text-slate-700 mb-3">{data.clubName}</p>
+    <h3 className="font-semibold text-[22px] text-[#222222] mb-1 leading-tight tracking-tight">{data.eventName}</h3>
+    <p className="text-[16px] font-medium text-[#6a6a6a] mb-4">{data.clubName}</p>
     
-    <div className="bg-slate-50 p-2 rounded-lg border border-slate-100 mb-2">
-      <p className="text-[12px] text-slate-600 flex items-start gap-1">
+    <div className="bg-white border border-[#dddddd] p-3 rounded-[14px] mb-2">
+      <p className="text-[14px] text-[#222222] flex items-start gap-2 font-medium">
         <span className="shrink-0">📍</span> {data.locationDesc}
       </p>
     </div>
@@ -448,29 +448,29 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[1000]">
         <button 
           onClick={flyToUser}
-          className="bg-white p-3 rounded-full shadow-lg border border-slate-100 text-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center group"
+          className="bg-white w-10 h-10 rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)] text-[#222222] hover:bg-[#f7f7f7] transition-colors flex items-center justify-center group"
           title="Định vị trí của tôi"
         >
-          <svg className="w-6 h-6 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+          <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
         </button>
       </div>
 
       {/* Modal Form Thêm Địa Điểm */}
       <AnimatePresence>
         {tempPos && (
-          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/50 p-4">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white p-5 rounded-2xl shadow-2xl w-full max-w-md border border-slate-100"
+              className="bg-white p-6 sm:p-8 rounded-[14px] shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)] w-full max-w-[480px]"
             >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-[20px] font-bold text-black flex items-center gap-2">
-                  📍 Thêm ghim mới
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-[22px] font-semibold text-[#222222] tracking-tight">
+                  Thêm ghim mới
                 </h2>
-                <button onClick={handleCloseModal} className="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors">
-                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onClick={handleCloseModal} className="w-8 h-8 hover:bg-[#f7f7f7] rounded-full flex items-center justify-center transition-colors">
+                  <svg className="w-5 h-5 text-[#222222]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               
@@ -606,17 +606,17 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
                 )}
               </div>
 
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-3 mt-8 border-t border-[#ebebeb] pt-6">
                 <button 
                   onClick={handleCloseModal}
-                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl transition-colors text-[14px]"
+                  className="flex-1 bg-white border border-[#222222] hover:bg-[#f7f7f7] text-[#222222] font-semibold py-[14px] rounded-lg transition-colors text-[16px]"
                 >
                   Hủy
                 </button>
                 <button 
                   onClick={handleSaveMarker}
                   disabled={formType === 'food' ? (!foodForm.name || !foodForm.address) : formType === 'pass' ? (!passForm.name || !passForm.link) : (!eventForm.eventName || !eventForm.clubName)}
-                  className={`flex-1 font-bold py-2.5 rounded-xl transition-colors text-white text-[14px] disabled:opacity-50 shadow-md ${formType === 'food' ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20' : formType === 'pass' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20' : 'bg-red-600 hover:bg-red-700 shadow-red-600/20'}`}
+                  className={`flex-1 font-semibold py-[14px] rounded-lg transition-colors text-white text-[16px] disabled:opacity-50 disabled:bg-[#ffd1da] bg-[#ff385c] hover:bg-[#e00b41]`}
                 >
                   Lưu địa điểm
                 </button>
@@ -629,19 +629,19 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
       {/* Modal Đánh Giá Quán Ăn */}
       <AnimatePresence>
         {reviewMarker && (
-          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/50 p-4">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-100"
+              className="bg-white p-6 sm:p-8 rounded-[14px] shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)] w-full max-w-[400px]"
             >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-[18px] font-bold text-black flex items-center gap-2">
-                  ⭐ Đánh giá quán ăn
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-[22px] font-semibold text-[#222222] tracking-tight">
+                  Đánh giá quán ăn
                 </h2>
-                <button onClick={() => setReviewMarker(null)} className="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors">
-                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onClick={() => setReviewMarker(null)} className="w-8 h-8 hover:bg-[#f7f7f7] rounded-full flex items-center justify-center transition-colors">
+                  <svg className="w-5 h-5 text-[#222222]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               
@@ -678,7 +678,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
                 </div>
               </div>
 
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-3 mt-8 border-t border-[#ebebeb] pt-6">
                 <button 
                   onClick={() => {
                     if (reviewForm.comment.trim() === '') {
@@ -700,7 +700,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
                     setReviewMarker(null);
                     setReviewForm({ rating: 5, comment: '' });
                   }}
-                  className="w-full font-bold py-2.5 rounded-xl transition-colors text-white text-[15px] bg-orange-600 hover:bg-orange-700 shadow-md shadow-orange-600/20"
+                  className="w-full font-semibold py-[14px] rounded-lg transition-colors text-white text-[16px] bg-[#ff385c] hover:bg-[#e00b41]"
                 >
                   Gửi đánh giá
                 </button>

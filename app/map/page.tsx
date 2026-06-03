@@ -60,18 +60,18 @@ export default function MapPage() {
       <div className="relative h-[calc(100vh-64px)] w-full">
         
         {/* Floating Card */}
-        <div className="absolute top-4 left-4 sm:left-8 z-[1000] bg-white/95 backdrop-blur-sm p-4 sm:p-5 rounded-2xl shadow-xl w-[calc(100%-32px)] sm:w-full sm:max-w-[380px] border border-white/50">
+        <div className="absolute top-4 left-4 sm:left-8 z-[1000] bg-white p-6 sm:p-8 rounded-[14px] shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)] w-[calc(100%-32px)] sm:w-full sm:max-w-[400px]">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <h1 className="text-xl font-bold text-black flex items-center gap-2 leading-tight">
+              <h1 className="text-[22px] font-semibold text-[#222222] flex items-center gap-2 leading-tight tracking-tight">
                 <span className="text-2xl">🗺️</span> Bản Đồ Sinh Tồn
               </h1>
             </div>
           </div>
-          <p className="text-[14px] text-slate-600 mb-4 leading-snug">
+          <p className="text-[16px] text-[#6a6a6a] mb-6 leading-relaxed">
             Khám phá góc ăn ngon, chỗ học tập và bí kíp sống sót quanh Ngoại Thương.
           </p>
-          <button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-bold text-[15px] flex justify-center items-center gap-2 transition-all shadow-md shadow-red-600/20 active:scale-[0.98]">
+          <button className="w-full bg-[#ff385c] hover:bg-[#e00b41] text-white px-6 py-[14px] rounded-lg font-semibold text-[16px] flex justify-center items-center gap-2 transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Ghim địa điểm mới
           </button>
@@ -83,30 +83,30 @@ export default function MapPage() {
         </div>
 
         {/* Radar Filter (Bottom Right) */}
-        <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-[1000] bg-white/90 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-white flex flex-col sm:flex-row gap-2">
+        <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-[1000] flex flex-col sm:flex-row gap-3">
           <button 
             onClick={() => setActiveFilter('all')}
-            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm ${activeFilter === 'all' ? 'bg-slate-800 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
+            className={`px-5 py-2.5 rounded-full text-[14px] font-semibold transition-all border ${activeFilter === 'all' ? 'border-[#222222] bg-[#222222] text-white shadow-[0_2px_6px_rgba(0,0,0,0.1)]' : 'border-[#dddddd] bg-white text-[#222222] hover:border-[#222222] hover:shadow-[0_2px_6px_rgba(0,0,0,0.05)]'}`}
           >
             Tất cả
           </button>
           <button 
             onClick={() => setActiveFilter('food')}
-            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'food' ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-orange-50'}`}
+            className={`px-5 py-2.5 rounded-full text-[14px] font-semibold transition-all border flex items-center gap-2 ${activeFilter === 'food' ? 'border-[#222222] bg-[#222222] text-white shadow-[0_2px_6px_rgba(0,0,0,0.1)]' : 'border-[#dddddd] bg-white text-[#222222] hover:border-[#222222] hover:shadow-[0_2px_6px_rgba(0,0,0,0.05)]'}`}
           >
             🍜 Ăn uống
           </button>
           <button 
             onClick={() => setActiveFilter('pass')}
-            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'pass' ? 'bg-blue-600 text-white' : 'bg-white text-slate-600 hover:bg-blue-50'}`}
+            className={`px-5 py-2.5 rounded-full text-[14px] font-semibold transition-all border flex items-center gap-2 ${activeFilter === 'pass' ? 'border-[#222222] bg-[#222222] text-white shadow-[0_2px_6px_rgba(0,0,0,0.1)]' : 'border-[#dddddd] bg-white text-[#222222] hover:border-[#222222] hover:shadow-[0_2px_6px_rgba(0,0,0,0.05)]'}`}
           >
             📚 Pass đồ
           </button>
           <button 
             onClick={() => setActiveFilter('event')}
-            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'event' ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-yellow-50'}`}
+            className={`px-5 py-2.5 rounded-full text-[14px] font-semibold transition-all border flex items-center gap-2 ${activeFilter === 'event' ? 'border-[#222222] bg-[#222222] text-white shadow-[0_2px_6px_rgba(0,0,0,0.1)]' : 'border-[#dddddd] bg-white text-[#222222] hover:border-[#222222] hover:shadow-[0_2px_6px_rgba(0,0,0,0.05)]'}`}
           >
-            🌟 Sự kiện CLB
+            🌟 Sự kiện
           </button>
         </div>
       </div>
