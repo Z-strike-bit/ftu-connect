@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Tooltip, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -64,6 +64,17 @@ const studyIcon = new L.DivIcon({
   iconAnchor: [16, 32],
   popupAnchor: [0, -36],
   tooltipAnchor: [0, -36]
+});
+
+// USER LOCATION ICON (Blue Dot)
+const userIcon = new L.DivIcon({
+  html: `<div class="relative flex items-center justify-center">
+           <div class="absolute w-8 h-8 bg-blue-500 rounded-full animate-ping opacity-60"></div>
+           <div class="relative w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-[0_0_10px_rgba(37,99,235,0.8)] z-10"></div>
+         </div>`,
+  className: 'custom-leaflet-icon',
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
 });
 
 // GLOWING EVENT ICON
@@ -231,6 +242,30 @@ const EventPopup = ({ data }: { data: EventMarker }) => (
 
 export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: string }) {
   const ftuPosition: [number, number] = [21.0230, 105.8050];
+  const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        setUserLocation([position.coords.latitude, position.coords.longitude]);
+      },
+      (error) => console.warn('Lỗi lấy vị trí:', error.message),
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
+
+  const flyToUser = () => {
+    if (mapInstance && userLocation) {
+      mapInstance.flyTo(userLocation, 17, { animate: true });
+    } else {
+      alert("Chưa lấy được vị trí hoặc bạn chưa cấp quyền truy cập vị trí!");
+    }
+  };
 
   const [markers, setMarkers] = useState<MapMarker[]>([
     {
@@ -373,6 +408,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
         scrollWheelZoom={true} 
         style={{ height: '100%', width: '100%' }}
         className="h-full w-full"
+        ref={setMapInstance}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -398,7 +434,26 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
             </Popup>
           </Marker>
         ))}
+        {/* Marker vị trí người dùng */}
+        {userLocation && (
+          <Marker position={userLocation} icon={userIcon}>
+            <Tooltip permanent direction="top" className="font-bold text-blue-600 bg-white px-2 py-1 rounded shadow-md border-none">
+              Bạn đang ở đây
+            </Tooltip>
+          </Marker>
+        )}
       </MapContainer>
+
+      {/* Nút Định vị tôi (Locate Me) */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[1000]">
+        <button 
+          onClick={flyToUser}
+          className="bg-white p-3 rounded-full shadow-lg border border-slate-100 text-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center group"
+          title="Định vị trí của tôi"
+        >
+          <svg className="w-6 h-6 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+        </button>
+      </div>
 
       {/* Modal Form Thêm Địa Điểm */}
       <AnimatePresence>
