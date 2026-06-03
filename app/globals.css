@@ -13,4 +13,38 @@ body {
   background-color: var(--color-canvas, #ffffff);
   color: var(--color-ink, #222222);
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Roboto", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes fade-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-rise {
+  animation: fade-rise 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-rise-delay {
+  opacity: 0;
+  animation: fade-rise 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+.animate-fade-rise-delay-2 {
+  opacity: 0;
+  animation: fade-rise 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+.liquid-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
