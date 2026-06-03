@@ -147,6 +147,14 @@ export default function HomePage() {
 
   return (
     <div style={{ background: 'var(--bg, #0a0a0f)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '14px', fontFamily: '"Inter", sans-serif' }}>
+      <svg width="0" height="0" className="absolute">
+        <filter id="wave-noise">
+          <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="2" result="noise">
+            <animate attributeName="baseFrequency" values="0.01 0.05; 0.015 0.07; 0.01 0.05" dur="5s" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </svg>
       {/* NAVBAR */}
       <nav className="xero-nav relative z-[1002]">
         <span className="nav-logo">FTU Connect</span>
