@@ -2,6 +2,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { Playfair_Display } from 'next/font/google';
+
+const playfair = Playfair_Display({ subsets: ['vietnamese'], weight: ['700', '900'] });
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -237,7 +240,7 @@ export default function HomePage() {
 
         {/* HERO TEXT */}
         <div className="hero-content">
-          <h1 className="hero-heading animate-blur-reveal" style={{ lineHeight: '1.3' }}>
+          <h1 className={`hero-heading animate-blur-reveal ${playfair.className}`} style={{ lineHeight: '1.3', fontSize: 'clamp(3rem, 6.5vw, 4.8rem)' }}>
             <span className="text-apple-shimmer">Trọn vẹn nhịp sống</span> <br/>
             <strong className="text-breathe">Ngoại Thương</strong>
           </h1>
