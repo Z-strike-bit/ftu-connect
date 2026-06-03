@@ -87,7 +87,7 @@ const formatTimeLeft = (expireAt: number) => {
   return `${minutes} phút`;
 };
 
-const FoodPopup = ({ data }: { data: FoodMarker }) => (
+const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (marker: FoodMarker) => void }) => (
   <div className="p-1 min-w-[200px]">
     <h3 className="font-bold text-[17px] text-orange-600 mb-1 leading-tight">{data.restaurantName}</h3>
     <p className="text-[13px] text-slate-600 mb-3 flex items-start gap-1">
@@ -98,7 +98,10 @@ const FoodPopup = ({ data }: { data: FoodMarker }) => (
       <div className="flex items-center gap-1 text-[13px] font-bold text-amber-500">
         ⭐ {data.averageRating > 0 ? data.averageRating.toFixed(1) : 'Chưa có'}
       </div>
-      <button className="text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors font-semibold">
+      <button 
+        onClick={() => onReviewClick(data)}
+        className="text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors font-semibold"
+      >
         + Đánh giá
       </button>
     </div>
@@ -160,6 +163,10 @@ export default function SurvivalMap() {
   const [formType, setFormType] = useState<'food' | 'pass'>('food');
   const [foodForm, setFoodForm] = useState({ name: '', address: '' });
   const [passForm, setPassForm] = useState({ name: '', desc: '', link: '', duration: '24h' });
+
+  // State cho Modal đánh giá
+  const [reviewMarker, setReviewMarker] = useState<FoodMarker | null>(null);
+  const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
 
   // Component lắng nghe sự kiện click trên bản đồ
   const MapEvents = () => {
@@ -246,7 +253,7 @@ export default function SurvivalMap() {
         {markers.map(m => (
           <Marker key={m.id} position={m.position} icon={getIconByType(m.type)}>
             <Popup className="custom-popup">
-              {m.type === 'food' ? <FoodPopup data={m} /> : <PassItemPopup data={m} />}
+              {m.type === 'food' ? <FoodPopup data={m as FoodMarker} onReviewClick={setReviewMarker} /> : <PassItemPopup data={m as PassItemMarker} />}
             </Popup>
           </Marker>
         ))}
@@ -373,6 +380,74 @@ export default function SurvivalMap() {
                   className={`flex-1 font-bold py-3 rounded-xl transition-colors text-white text-[15px] disabled:opacity-50 ${formType === 'food' ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-600 hover:bg-blue-700'}`}
                 >
                   Lưu địa điểm
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* Modal Đánh Giá Quán Ăn */}
+      <AnimatePresence>
+        {reviewMarker && (
+          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-100"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-[18px] font-bold text-black flex items-center gap-2">
+                  ⭐ Đánh giá quán ăn
+                </h2>
+                <button onClick={() => setReviewMarker(null)} className="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors">
+                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              
+              <div className="mb-4">
+                <p className="text-sm text-slate-500">Đang đánh giá:</p>
+                <p className="text-[15px] font-bold text-orange-600">{reviewMarker.restaurantName}</p>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[14px] font-bold text-slate-700 mb-2">Chấm điểm</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <button 
+                        key={star}
+                        onClick={() => setReviewForm({...reviewForm, rating: star})}
+                        className={`text-2xl transition-transform hover:scale-110 ${reviewForm.rating >= star ? 'text-amber-400' : 'text-slate-200'}`}
+                      >
+                        ★
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[14px] font-bold text-slate-700 mb-1.5">Nhận xét của bạn</label>
+                  <textarea 
+                    rows={3}
+                    value={reviewForm.comment}
+                    onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
+                    placeholder="Quán ngon, cô chủ nhiệt tình..." 
+                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 resize-none transition-shadow"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button 
+                  onClick={() => {
+                    alert('Đã gửi đánh giá thành công!');
+                    setReviewMarker(null);
+                    setReviewForm({ rating: 5, comment: '' });
+                  }}
+                  className="w-full font-bold py-2.5 rounded-xl transition-colors text-white text-[15px] bg-orange-600 hover:bg-orange-700 shadow-md shadow-orange-600/20"
+                >
+                  Gửi đánh giá
                 </button>
               </div>
             </motion.div>
