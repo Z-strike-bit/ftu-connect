@@ -11,6 +11,9 @@ interface User {
 import { motion, AnimatePresence } from 'framer-motion';
 import ConnectModal from '@/components/ConnectModal';
 import Navbar from '@/components/Navbar';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { collection, query, getDocs, doc, getDoc, addDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 
 interface UserProfile {
   name: string;
@@ -71,34 +74,59 @@ export default function Dashboard() {
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
 
   useEffect(() => {
-    const userStr = localStorage.getItem('currentUser');
-    if (userStr) {
-      const userData = JSON.parse(userStr);
-      setUser({ uid: userData.username });
-      setProfile({
-        name: userData.username,
-        email: '',
-        major: '',
-        role: 'mentee',
-        bio: '',
-        points: 0
-      });
-      setLoading(false);
-    } else {
-      router.push('/login');
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser({ uid: currentUser.uid, photoURL: currentUser.photoURL || '' });
+        
+        const docRef = doc(db, 'users', currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setProfile({
+            name: data.name || data.username,
+            email: data.email,
+            major: data.major || '',
+            role: data.role || 'mentee',
+            bio: data.bio || '',
+            points: data.points || 0,
+            photoURL: data.photoURL || currentUser.photoURL
+          } as UserProfile);
+        }
+        setLoading(false);
+      } else {
+        router.push('/login');
+      }
+    });
+    return () => unsubscribe();
   }, [router]);
 
   useEffect(() => {
-    setSuggestions([]);
-  }, [profile]);
+    if (!user) return;
+    const q = query(collection(db, 'users'));
+    getDocs(q).then(snap => {
+      const usersList = snap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter((u: any) => u.id !== user.uid)
+        .slice(0, 5);
+      setSuggestions(usersList);
+    });
+  }, [user]);
 
   useEffect(() => {
-    setPosts([]);
+    const q = query(collection(db, 'posts'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedPosts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Post[];
+      fetchedPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setPosts(fetchedPosts);
+    });
+    return () => unsubscribe();
   }, []);
 
   const handleSignOut = async () => {
-    localStorage.removeItem('currentUser');
+    await signOut(auth);
     router.push('/');
   };
 
@@ -106,23 +134,23 @@ export default function Dashboard() {
     if (!postContent.trim() || !user || !profile || isPosting) return;
     setIsPosting(true);
     try {
-      const newPost: Post = {
-        id: Date.now().toString(),
+      await addDoc(collection(db, 'posts'), {
         content: postContent,
         uid: user.uid,
         authorName: profile.name,
-        authorBadge: getBadge(0),
+        authorBadge: getBadge(profile.points || 0),
         isAnonymous,
         tag: postTag,
         likes: 0,
         likedBy: [],
         comments: [],
         createdAt: new Date().toISOString()
-      };
-      setPosts([newPost, ...posts]);
+      });
       setPostContent('');
       setPostTag('Thảo luận');
       setIsAnonymous(false);
+    } catch (error) {
+      console.error(error);
     } finally {
       setIsPosting(false);
     }
@@ -130,34 +158,32 @@ export default function Dashboard() {
 
   const handleComment = async (postId: string) => {
     if (!user || !profile || !commentInputs[postId]?.trim()) return;
-    const newComment: Comment = {
+    const postRef = doc(db, 'posts', postId);
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    const newComment = {
       uid: user.uid,
       authorName: profile.name,
       content: commentInputs[postId].trim(),
       createdAt: new Date().toISOString()
     };
-    setPosts(prev => prev.map(p => {
-      if (p.id === postId) {
-        return { ...p, comments: [...(p.comments || []), newComment] };
-      }
-      return p;
-    }));
+
+    await updateDoc(postRef, {
+      comments: [...post.comments, newComment]
+    });
     setCommentInputs(prev => ({ ...prev, [postId]: '' }));
   };
 
   const handleLike = async (postId: string, likedBy: string[], currentLikes: number) => {
     if (!user) return;
     const hasLiked = likedBy.includes(user.uid);
-    setPosts(prev => prev.map(p => {
-      if (p.id === postId) {
-        return {
-          ...p,
-          likedBy: hasLiked ? p.likedBy.filter(id => id !== user.uid) : [...p.likedBy, user.uid],
-          likes: hasLiked ? p.likes - 1 : p.likes + 1
-        };
-      }
-      return p;
-    }));
+    const postRef = doc(db, 'posts', postId);
+    
+    await updateDoc(postRef, {
+      likedBy: hasLiked ? likedBy.filter(id => id !== user.uid) : [...likedBy, user.uid],
+      likes: hasLiked ? currentLikes - 1 : currentLikes + 1
+    });
   };
 
   if (loading) {

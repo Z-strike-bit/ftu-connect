@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { auth, googleProvider } from '@/lib/firebase';
-import { signInWithPopup, signOut } from 'firebase/auth';
+import { auth, googleProvider, db } from '@/lib/firebase';
+import { signInWithPopup, signOut, updatePassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc, getDocs, query, collection, where } from 'firebase/firestore';
 
 export default function Register() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function Register() {
     }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -44,20 +45,46 @@ export default function Register() {
       return;
     }
 
-    const storedUsersStr = localStorage.getItem('registeredUsers');
-    const storedUsers = storedUsersStr ? JSON.parse(storedUsersStr) : {};
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Chưa xác thực Google SSO.");
 
-    if (storedUsers[username]) {
-      setError('Tên tài khoản đã tồn tại.');
-      return;
+      const q = query(collection(db, 'users'), where('username', '==', username));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        setError('Tên tài khoản đã tồn tại.');
+        return;
+      }
+
+      await updatePassword(user, password);
+      await updateProfile(user, { displayName: username });
+
+      await setDoc(doc(db, 'users', user.uid), {
+        username,
+        email: user.email,
+        name: username,
+        role: 'mentee',
+        points: 0,
+        createdAt: new Date().toISOString(),
+        photoURL: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`,
+        bio: '',
+        major: '',
+        specialization: '',
+        coverPhotoUrl: '',
+        contactLink: '',
+        gpa: '',
+        clubs: '',
+        achievements: '',
+        skills: '',
+        goals: [],
+        interests: ''
+      });
+
+      router.push('/dashboard');
+    } catch (err: any) {
+      console.error(err);
+      setError('Có lỗi xảy ra: ' + err.message);
     }
-
-    storedUsers[username] = { password, email: googleEmail };
-    localStorage.setItem('registeredUsers', JSON.stringify(storedUsers));
-    
-    // Đăng nhập tự động sau khi tạo
-    localStorage.setItem('currentUser', JSON.stringify({ username }));
-    router.push('/dashboard');
   };
 
   return (

@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { auth, googleProvider } from '@/lib/firebase';
-import { signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider, db } from '@/lib/firebase';
+import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
+import { collection, query, where, getDocs, getDoc, doc } from 'firebase/firestore';
 
 export default function Login() {
   const router = useRouter();
@@ -13,17 +14,26 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    const storedUsersStr = localStorage.getItem('registeredUsers');
-    const storedUsers = storedUsersStr ? JSON.parse(storedUsersStr) : {};
+    try {
+      const q = query(collection(db, 'users'), where('username', '==', username));
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        setError('Tên tài khoản hoặc mật khẩu không chính xác.');
+        return;
+      }
 
-    if (storedUsers[username] && storedUsers[username].password === password) {
-      localStorage.setItem('currentUser', JSON.stringify({ username }));
+      const userDoc = querySnapshot.docs[0].data();
+      const email = userDoc.email;
+
+      await signInWithEmailAndPassword(auth, email, password);
       router.push('/dashboard');
-    } else {
+    } catch (err: any) {
+      console.error(err);
       setError('Tên tài khoản hoặc mật khẩu không chính xác.');
     }
   };
@@ -33,8 +43,12 @@ export default function Login() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       if (result.user.email) {
-        localStorage.setItem('currentUser', JSON.stringify({ username: result.user.email.split('@')[0] }));
-        router.push('/dashboard');
+        const userDoc = await getDoc(doc(db, 'users', result.user.uid));
+        if (!userDoc.exists()) {
+          router.push('/register');
+        } else {
+          router.push('/dashboard');
+        }
       }
     } catch (err: any) {
       console.error(err);

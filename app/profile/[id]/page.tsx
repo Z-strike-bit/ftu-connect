@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import { useRouter, useParams } from 'next/navigation';
-// Using localStorage mock instead of Firebase for now
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, where, updateDoc } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { FTU_MAJORS } from '@/lib/constants/ftuMajors';
@@ -61,122 +63,142 @@ export default function ProfilePage() {
   const isOwnProfile = currentUser && currentUser.uid === profileId;
 
   useEffect(() => {
-    const userStr = localStorage.getItem('currentUser');
-    if (userStr) {
-      const userData = JSON.parse(userStr);
-      setCurrentUser({ uid: userData.username });
-      
-      const storedUsersStr = localStorage.getItem('registeredUsers');
-      const storedUsers = storedUsersStr ? JSON.parse(storedUsersStr) : {};
-      const profile = storedUsers[userData.username] || {};
-      
-      setCurrentUserProfile({
-        name: profile.name || userData.username,
-        photoURL: profile.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.username}`
-      });
-    } else {
-      router.push('/login');
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setCurrentUser(user);
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setCurrentUserProfile(userDoc.data());
+        }
+      } else {
+        router.push('/login');
+      }
+    });
+    return () => unsubscribe();
   }, [router]);
-
-  const handleSignOut = () => {
-    localStorage.removeItem('currentUser');
-    router.push('/login');
-  };
 
   useEffect(() => {
     if (!profileId) return;
 
-    const fetchProfile = () => {
-      const storedUsersStr = localStorage.getItem('registeredUsers');
-      const storedUsers = storedUsersStr ? JSON.parse(storedUsersStr) : {};
-      
-      if (storedUsers[profileId] || profileId === currentUser?.uid) {
-        const data = storedUsers[profileId] || {};
-        const profileName = data.name || profileId;
-        
-        const loadedProfile = {
-          name: profileName,
+    // Fetch Target Profile
+    const fetchProfile = async () => {
+      const pDoc = await getDoc(doc(db, 'users', profileId));
+      if (pDoc.exists()) {
+        const data = pDoc.data();
+        setTargetProfile(data);
+        setEditFormData({
+          name: data.name || '',
           bio: data.bio || '',
           major: data.major || '',
           specialization: data.specialization || '',
           coverPhotoUrl: data.coverPhotoUrl || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-          photoURL: data.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileName}`,
+          photoURL: data.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.name}`,
           contactLink: data.contactLink || '',
           gpa: data.gpa || '',
           clubs: data.clubs || '',
           achievements: data.achievements || '',
           skills: data.skills || '',
           goals: data.goals || [],
-          interests: data.interests || '',
-          points: data.points || 0,
-          role: data.role || 'mentee'
-        };
-        
-        setTargetProfile(loadedProfile);
-        setEditFormData({
-          ...loadedProfile,
-          coverPhotoUrl: data.coverPhotoUrl || '',
-          photoURL: data.photoURL || ''
+          interests: data.interests || ''
         });
       } else {
-        setTargetProfile(null);
+        // User not found
       }
       setLoading(false);
     };
 
     fetchProfile();
-    setTargetPosts([]);
-  }, [profileId, currentUser]);
 
-  // Handle Connections (Mocked)
+    // Fetch Target Posts
+    const q = query(collection(db, 'posts'), where('uid', '==', profileId));
+    const unsubPosts = onSnapshot(q, (snapshot) => {
+      const postsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      // Sắp xếp posts ở client vì Firebase cần composite index nếu sort và where cùng lúc trên nhiều trường
+      postsData.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setTargetPosts(postsData);
+    });
+
+    return () => unsubPosts();
+  }, [profileId]);
+
+  // Handle Connections
   useEffect(() => {
     if (!currentUser || !profileId || currentUser.uid === profileId) return;
-    setConnectionStatus('none');
+
+    const connId = [currentUser.uid, profileId].sort().join('_');
+    const connRef = doc(db, 'connections', connId);
+    
+    const unsubConn = onSnapshot(connRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.status === 'accepted') {
+          setConnectionStatus('accepted');
+        } else if (data.status === 'pending') {
+          if (data.requesterId === currentUser.uid) {
+            setConnectionStatus('pending_sent');
+          } else {
+            setConnectionStatus('pending_received');
+          }
+        }
+      } else {
+        setConnectionStatus('none');
+      }
+    });
+
+    return () => unsubConn();
   }, [currentUser, profileId]);
 
   const handleConnectAction = async () => {
     if (!currentUser || !profileId || connectionLoading) return;
     setConnectionLoading(true);
-    setTimeout(() => {
+    try {
+      const connId = [currentUser.uid, profileId].sort().join('_');
+      const connRef = doc(db, 'connections', connId);
+
       if (connectionStatus === 'none') {
-        setConnectionStatus('pending_sent');
+        await setDoc(connRef, {
+          requesterId: currentUser.uid,
+          receiverId: profileId,
+          status: 'pending',
+          createdAt: new Date().toISOString()
+        });
       } else if (connectionStatus === 'pending_sent') {
-        setConnectionStatus('none');
+        // Hủy yêu cầu
+        await deleteDoc(connRef);
       } else if (connectionStatus === 'pending_received') {
-        setConnectionStatus('accepted');
+        // Chấp nhận
+        await updateDoc(connRef, {
+          status: 'accepted',
+          updatedAt: new Date().toISOString()
+        });
       } else if (connectionStatus === 'accepted') {
+        // Hủy kết bạn
         if (confirm('Bạn có chắc muốn hủy kết bạn?')) {
-          setConnectionStatus('none');
+          await deleteDoc(connRef);
         }
       }
+    } catch (error) {
+      console.error("Lỗi khi kết nối:", error);
+      alert("Đã xảy ra lỗi, vui lòng thử lại.");
+    } finally {
       setConnectionLoading(false);
-    }, 500);
+    }
   };
 
   const handleSaveProfile = async () => {
     if (!isOwnProfile) return;
     setSaving(true);
     try {
-      const storedUsersStr = localStorage.getItem('registeredUsers');
-      const storedUsers = storedUsersStr ? JSON.parse(storedUsersStr) : {};
-      
-      if (!storedUsers[currentUser.uid]) {
-        storedUsers[currentUser.uid] = {};
-      }
-      
-      storedUsers[currentUser.uid] = {
-        ...storedUsers[currentUser.uid],
+      await updateDoc(doc(db, 'users', currentUser.uid), {
         ...editFormData
-      };
-      
-      localStorage.setItem('registeredUsers', JSON.stringify(storedUsers));
-
-      setTargetProfile((prev: any) => ({
+      });
+      setTargetProfile(prev => ({
         ...prev,
         ...editFormData
       }));
-      
       setIsEditing(false);
     } catch (err) {
       console.error(err);
@@ -198,7 +220,7 @@ export default function ProfilePage() {
   if (!targetProfile) {
     return (
       <div className="min-h-screen bg-[#090909] font-sans">
-        <Navbar profileName={currentUserProfile?.name} onSignOut={handleSignOut} profileId={currentUser?.uid} profilePhoto={currentUserProfile?.photoURL} />
+        <Navbar profileName={currentUserProfile?.name} onSignOut={() => signOut(auth).then(() => router.push('/'))} profileId={currentUser?.uid} profilePhoto={currentUserProfile?.photoURL} />
         <div className="text-center py-20 text-[#999999] font-semibold">Người dùng không tồn tại.</div>
       </div>
     );
