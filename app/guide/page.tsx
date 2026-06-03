@@ -144,7 +144,7 @@ export default function GuidePage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-[#141414] flex items-center justify-center"><p className="text-slate-500 font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
+    return <div className="min-h-screen bg-[#141414] flex items-center justify-center"><p className="text-[#999999] font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
   }
 
   // Cấu trúc thuật toán Core
@@ -177,7 +177,7 @@ export default function GuidePage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 text-black font-sans pb-16 selection:bg-red-200">
+    <div className="min-h-screen w-full bg-[#090909] text-white font-sans pb-16 selection:bg-red-200">
       <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
 
       {/* Main Container */}
@@ -186,10 +186,10 @@ export default function GuidePage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-10 border-b border-slate-200 pb-8"
+          className="mb-10 border-b border-[#262626] pb-8"
         >
-          <h1 className="text-4xl font-extrabold text-black tracking-tight uppercase">Cẩm nang <span className="text-red-600">Tân sinh viên</span></h1>
-          <p className="text-slate-500 mt-2 text-lg font-medium">Bí kíp sinh tồn và chinh phục 4 năm rực rỡ tại Ngoại Thương.</p>
+          <h1 className="text-4xl font-extrabold text-white tracking-tight uppercase">Cẩm nang <span className="text-[#ff385c]">Tân sinh viên</span></h1>
+          <p className="text-[#999999] mt-2 text-lg font-medium">Bí kíp sinh tồn và chinh phục 4 năm rực rỡ tại Ngoại Thương.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -201,86 +201,86 @@ export default function GuidePage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-4"
           >
-            <div className="bg-[#141414] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden sticky top-28">
+            <div className="bg-[#141414] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#1a1a1a] overflow-hidden sticky top-28">
               
               {/* Header Widget */}
-              <div className="p-6 border-b border-slate-100 bg-[#141414]">
-                <h2 className="text-xl font-extrabold text-black flex items-center gap-2">
-                  <div className="bg-red-50 p-2 rounded-xl text-red-600">
+              <div className="p-6 border-b border-[#1a1a1a] bg-[#141414]">
+                <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
+                  <div className="bg-[#ff385c]/10 p-2 rounded-xl text-[#ff385c]">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                   </div>
                   GPA Tracker
                 </h2>
-                <p className="text-[13px] text-slate-500 font-medium mt-2 leading-relaxed">
+                <p className="text-[13px] text-[#999999] font-medium mt-2 leading-relaxed">
                   Công cụ phân tích điểm rơi chiến thuật dành riêng cho FTU-er.
                 </p>
               </div>
 
               {/* Form Input */}
-              <div className="p-6 space-y-6 bg-slate-50/50">
+              <div className="p-6 space-y-6 bg-[#090909]">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Tổng tín chỉ tối thiểu để ra trường</label>
+                  <label className="block text-sm font-bold text-white mb-1.5">Tổng tín chỉ tối thiểu để ra trường</label>
                   <input 
                     type="number" 
                     placeholder="VD: 130"
                     value={totalCredits}
                     onChange={(e) => handleTotalChange(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-red-400 bg-red-50 focus:ring-red-200' : 'border-slate-200 focus:border-red-500 focus:ring-red-100'} outline-none focus:ring-4 transition-all text-[15px] font-bold text-black`}
+                    className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-[#ff385c] bg-[#ff385c]/10 focus:ring-[#0099ff]/40' : 'border-[#262626] focus:border-[#0099ff] focus:ring-[#0099ff]/20'} outline-none focus:ring-4 transition-all text-[15px] font-bold text-white`}
                   />
                   {totalError && <p className="text-red-500 text-xs font-bold mt-1.5">{totalError}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">Nhập điểm thành phần (Tín chỉ)</label>
+                  <label className="block text-sm font-bold text-white mb-2">Nhập điểm thành phần (Tín chỉ)</label>
                   <div className="grid grid-cols-5 gap-2">
                     <div className="flex flex-col items-center">
-                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm A</span>
-                      <input type="number" value={creditsA} onChange={(e) => setCreditsA(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                      <span className="text-xs font-extrabold text-[#6a6a6a] mb-1 uppercase">Điểm A</span>
+                      <input type="number" value={creditsA} onChange={(e) => setCreditsA(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-[#262626] focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none font-bold text-sm text-white" />
                     </div>
                     <div className="flex flex-col items-center">
-                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm B</span>
-                      <input type="number" value={creditsB} onChange={(e) => setCreditsB(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                      <span className="text-xs font-extrabold text-[#6a6a6a] mb-1 uppercase">Điểm B</span>
+                      <input type="number" value={creditsB} onChange={(e) => setCreditsB(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-[#262626] focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none font-bold text-sm text-white" />
                     </div>
                     <div className="flex flex-col items-center">
-                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm C</span>
-                      <input type="number" value={creditsC} onChange={(e) => setCreditsC(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                      <span className="text-xs font-extrabold text-[#6a6a6a] mb-1 uppercase">Điểm C</span>
+                      <input type="number" value={creditsC} onChange={(e) => setCreditsC(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-[#262626] focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none font-bold text-sm text-white" />
                     </div>
                     <div className="flex flex-col items-center">
-                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm D</span>
-                      <input type="number" value={creditsD} onChange={(e) => setCreditsD(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                      <span className="text-xs font-extrabold text-[#6a6a6a] mb-1 uppercase">Điểm D</span>
+                      <input type="number" value={creditsD} onChange={(e) => setCreditsD(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-[#262626] focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none font-bold text-sm text-white" />
                     </div>
                     <div className="flex flex-col items-center">
-                      <span className="text-xs font-extrabold text-slate-400 mb-1 uppercase">Điểm F</span>
-                      <input type="number" value={creditsF} onChange={(e) => setCreditsF(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none font-bold text-sm text-black" />
+                      <span className="text-xs font-extrabold text-[#6a6a6a] mb-1 uppercase">Điểm F</span>
+                      <input type="number" value={creditsF} onChange={(e) => setCreditsF(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg border border-[#262626] focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none font-bold text-sm text-white" />
                     </div>
                   </div>
                 </div>
 
                 {/* Read Only Current Stats */}
-                <div className="bg-[#141414] p-4 rounded-xl border border-slate-200 shadow-sm">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Thống kê hiện tại</h3>
+                <div className="bg-[#141414] p-4 rounded-xl border border-[#262626] shadow-sm">
+                  <h3 className="text-xs font-bold text-[#6a6a6a] uppercase tracking-widest mb-3">Thống kê hiện tại</h3>
                   <div className="space-y-2 text-[14px]">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium text-slate-600">Tổng tín đã tích lũy:</span>
-                      <span className="font-extrabold text-black">{sumCredits}</span>
+                      <span className="font-medium text-white/80">Tổng tín đã tích lũy:</span>
+                      <span className="font-extrabold text-white">{sumCredits}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="font-medium text-slate-600">GPA Hiện tại:</span>
-                      <span className="font-extrabold text-red-600 text-base">{currentGPA.toFixed(2)}</span>
+                      <span className="font-medium text-white/80">GPA Hiện tại:</span>
+                      <span className="font-extrabold text-[#ff385c] text-base">{currentGPA.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="font-medium text-slate-600">Xếp loại:</span>
-                      <span className="font-extrabold text-black bg-slate-100 px-2 py-0.5 rounded">{rank}</span>
+                      <span className="font-medium text-white/80">Xếp loại:</span>
+                      <span className="font-extrabold text-white bg-[#1c1c1c] px-2 py-0.5 rounded">{rank}</span>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Mục tiêu mong muốn</label>
+                  <label className="block text-sm font-bold text-white mb-1.5">Mục tiêu mong muốn</label>
                   <select 
                     value={targetGPA}
                     onChange={(e) => setTargetGPA(Number(e.target.value))}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all text-[15px] font-bold bg-[#141414] appearance-none cursor-pointer text-black"
+                    className="w-full px-4 py-3 rounded-xl border border-[#262626] outline-none focus:border-[#0099ff] focus:ring-4 focus:ring-[#0099ff]/20 transition-all text-[15px] font-bold bg-[#141414] appearance-none cursor-pointer text-white"
                   >
                     <option value={2.5}>Bằng Khá (2.5)</option>
                     <option value={3.2}>Bằng Giỏi (3.2)</option>
@@ -290,42 +290,42 @@ export default function GuidePage() {
               </div>
 
               {/* Result Area */}
-              <div className="p-6 bg-[#141414] border-t border-slate-100">
+              <div className="p-6 bg-[#141414] border-t border-[#1a1a1a]">
                 {sumCredits > total ? (
-                  <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm">
-                    <p className="text-red-700 font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
-                    <p className="text-red-600 text-sm font-medium leading-relaxed">
+                  <div className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/20 shadow-sm">
+                    <p className="text-[#ff385c] font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
+                    <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
                       Tổng số tín chỉ bạn đã nhập ({sumCredits}) lớn hơn cả tổng tín chỉ toàn khóa ({total}). Vui lòng kiểm tra lại!
                     </p>
                   </div>
                 ) : remCredits <= 0 ? (
-                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm">
-                    <p className="text-green-700 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
-                    <p className="text-green-600 text-sm font-medium leading-relaxed">
+                  <div className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/20 shadow-sm">
+                    <p className="text-green-400 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
+                    <p className="text-green-400 text-sm font-medium leading-relaxed">
                       Bạn đã hoàn thành đủ số tín chỉ ra trường. GPA chung cuộc của bạn là <span className="font-extrabold">{currentGPA.toFixed(2)}</span> ({rank}).
                     </p>
                   </div>
                 ) : neededA > remCredits ? (
-                  <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200 shadow-sm flex flex-col items-center">
+                  <div className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/20 shadow-sm flex flex-col items-center">
                     <Image src="/assets/badges/badge-newbie.png" alt="Newbie Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
-                    <p className="text-red-700 font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
-                    <p className="text-red-600 text-sm font-medium leading-relaxed">
+                    <p className="text-[#ff385c] font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
+                    <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
                       Đời còn dài, FTU-er còn nhiều việc phải làm! Quỹ tín chỉ của bạn đã hết room để kéo điểm lên mức này, dù có full A. Hãy cân nhắc hạ mục tiêu xuống một chút và tận hưởng thời sinh viên nhé!
                     </p>
                   </div>
                 ) : neededA > 0 ? (
-                  <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-200 shadow-sm flex flex-col items-center">
+                  <div className="text-center p-5 bg-[#0099ff]/10 rounded-xl border border-[#0099ff]/20 shadow-sm flex flex-col items-center">
                     <Image src="/assets/badges/badge-veteran.png" alt="Veteran Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-md" />
-                    <p className="text-blue-700 font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
-                    <p className="text-blue-600 text-sm font-medium leading-relaxed">
+                    <p className="text-[#0099ff] font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
+                    <p className="text-[#0099ff] text-sm font-medium leading-relaxed">
                       Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-[#141414] px-2 py-0.5 rounded-md shadow-sm border border-current">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
                     </p>
                   </div>
                 ) : (
-                  <div className="text-center p-5 bg-green-50 rounded-xl border border-green-200 shadow-sm flex flex-col items-center">
+                  <div className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/20 shadow-sm flex flex-col items-center">
                     <Image src="/assets/badges/badge-gold.png" alt="Gold Badge" width={80} height={80} className="mb-3 animate-bounce drop-shadow-lg" />
-                    <p className="text-green-700 font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
-                    <p className="text-green-600 text-sm font-medium leading-relaxed">
+                    <p className="text-green-400 font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
+                    <p className="text-green-400 text-sm font-medium leading-relaxed">
                       Quỹ điểm của bạn đang rất dư dả. Chặng đường còn lại thậm chí không cần điểm A, chỉ cần đều đều điểm B (hoặc C) là vẫn thừa sức đạt mục tiêu!
                     </p>
                   </div>
@@ -341,15 +341,15 @@ export default function GuidePage() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="lg:col-span-8"
           >
-            <div className="bg-[#141414] rounded-[2rem] shadow-sm border border-slate-200 p-8">
+            <div className="bg-[#141414] rounded-[2rem] shadow-sm border border-[#262626] p-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                 <div>
-                  <h2 className="text-2xl font-extrabold text-black">Thư viện Wiki</h2>
-                  <p className="text-sm font-medium text-slate-500 mt-1">Review chân thực và kho tài liệu khổng lồ.</p>
+                  <h2 className="text-2xl font-extrabold text-white">Thư viện Wiki</h2>
+                  <p className="text-sm font-medium text-[#999999] mt-1">Review chân thực và kho tài liệu khổng lồ.</p>
                 </div>
                 <div className="relative">
-                  <input type="text" placeholder="Tìm kiếm môn học..." className="w-full sm:w-72 pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-600 font-bold transition-all"/>
-                  <svg className="w-5 h-5 text-slate-400 absolute left-4 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                  <input type="text" placeholder="Tìm kiếm môn học..." className="w-full sm:w-72 pl-12 pr-4 py-3 bg-[#090909] border border-[#262626] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#0099ff]/20 focus:border-red-600 font-bold transition-all"/>
+                  <svg className="w-5 h-5 text-[#6a6a6a] absolute left-4 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
               </div>
 
@@ -358,12 +358,12 @@ export default function GuidePage() {
                   <motion.div 
                     whileHover={{ y: -5 }}
                     key={course.id} 
-                    className="group border border-slate-200 rounded-[1.5rem] p-6 hover:border-black hover:shadow-lg transition-all bg-[#141414] flex flex-col h-full"
+                    className="group border border-[#262626] rounded-[1.5rem] p-6 hover:border-[#0099ff] hover:shadow-lg transition-all bg-[#141414] flex flex-col h-full"
                   >
                     
                     <div className="flex justify-between items-start mb-4">
-                      <h3 className="font-extrabold text-lg text-black group-hover:text-red-600 transition-colors">{course.name}</h3>
-                      <span className={`px-3 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-widest shrink-0 ${course.difficulty === 'Dễ thở' ? 'bg-slate-100 text-slate-600' : 'bg-red-50 text-red-600'}`}>
+                      <h3 className="font-extrabold text-lg text-white group-hover:text-[#ff385c] transition-colors">{course.name}</h3>
+                      <span className={`px-3 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-widest shrink-0 ${course.difficulty === 'Dễ thở' ? 'bg-[#1c1c1c] text-white/80' : 'bg-[#ff385c]/10 text-[#ff385c]'}`}>
                         {course.difficulty}
                       </span>
                     </div>
@@ -371,12 +371,12 @@ export default function GuidePage() {
                     <div className="flex items-center gap-4 mb-5">
                       <div className="flex items-center gap-1.5">
                         <span className="text-yellow-400 text-lg drop-shadow-sm">⭐</span>
-                        <span className="font-extrabold text-black">{course.rating}</span>
+                        <span className="font-extrabold text-white">{course.rating}</span>
                       </div>
-                      <span className="text-xs font-bold text-slate-400 border-l border-slate-200 pl-4 uppercase tracking-wider">{course.reviews} đánh giá</span>
+                      <span className="text-xs font-bold text-[#6a6a6a] border-l border-[#262626] pl-4 uppercase tracking-wider">{course.reviews} đánh giá</span>
                     </div>
                     
-                    <p className="text-sm text-slate-600 font-medium leading-relaxed mb-8 flex-1">
+                    <p className="text-sm text-white/80 font-medium leading-relaxed mb-8 flex-1">
                       {course.description}
                     </p>
 
@@ -385,12 +385,12 @@ export default function GuidePage() {
                         href={course.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-black hover:bg-red-600 text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
+                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-white hover:bg-gray-200 text-black rounded-xl text-sm font-bold transition-colors shadow-sm"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         Tài liệu
                       </a>
-                      <button className="flex items-center justify-center px-6 border-2 border-slate-200 hover:border-black text-black rounded-xl text-sm font-bold transition-colors">
+                      <button className="flex items-center justify-center px-6 border-2 border-[#262626] hover:border-[#0099ff] text-white rounded-xl text-sm font-bold transition-colors">
                         Review
                       </button>
                     </div>
@@ -399,9 +399,9 @@ export default function GuidePage() {
                 ))}
               </div>
               
-              <div className="mt-10 text-center p-8 bg-slate-50 border-2 border-slate-200 border-dashed rounded-3xl">
-                <p className="text-slate-500 font-bold text-sm">Chưa tìm thấy môn học bạn cần?</p>
-                <button className="mt-3 text-red-600 font-extrabold hover:underline text-sm uppercase tracking-widest">Đóng góp môn học mới</button>
+              <div className="mt-10 text-center p-8 bg-[#090909] border-2 border-[#262626] border-dashed rounded-3xl">
+                <p className="text-[#999999] font-bold text-sm">Chưa tìm thấy môn học bạn cần?</p>
+                <button className="mt-3 text-[#ff385c] font-extrabold hover:underline text-sm uppercase tracking-widest">Đóng góp môn học mới</button>
               </div>
 
             </div>
