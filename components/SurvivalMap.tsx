@@ -11,7 +11,7 @@ interface BaseMarker {
   id: string;
   position: [number, number];
   createdBy: string;
-  type: 'food' | 'pass';
+  type: 'food' | 'pass' | 'event';
 }
 
 interface Review {
@@ -37,7 +37,15 @@ interface PassItemMarker extends BaseMarker {
   expireAt: number;
 }
 
-type MapMarker = FoodMarker | PassItemMarker;
+interface EventMarker extends BaseMarker {
+  type: 'event';
+  eventName: string;
+  clubName: string;
+  locationDesc: string;
+  isVerified: boolean;
+}
+
+type MapMarker = FoodMarker | PassItemMarker | EventMarker;
 
 // --- CUSTOM DIV ICONS ---
 const foodIcon = new L.DivIcon({
@@ -58,6 +66,19 @@ const studyIcon = new L.DivIcon({
   tooltipAnchor: [0, -36]
 });
 
+// GLOWING EVENT ICON
+const eventIcon = new L.DivIcon({
+  html: `<div class="relative w-12 h-12 flex items-center justify-center">
+           <div class="absolute inset-0 bg-yellow-400 rounded-full animate-ping opacity-60"></div>
+           <div class="relative w-10 h-10 bg-gradient-to-tr from-yellow-400 to-red-500 rounded-full border-2 border-white shadow-[0_0_15px_rgba(250,204,21,0.8)] flex items-center justify-center text-xl z-10">🌟</div>
+         </div>`,
+  className: 'custom-leaflet-icon',
+  iconSize: [48, 48],
+  iconAnchor: [24, 48],
+  popupAnchor: [0, -48],
+  tooltipAnchor: [0, -48]
+});
+
 // FTU Main Icon
 const ftuIcon = new L.DivIcon({
   html: `<div class="w-10 h-10 rounded-full bg-white border-2 border-red-600 shadow-lg flex items-center justify-center p-1"><img src="/logo_ftu_don_gian.png" class="w-full h-full object-contain" /></div>`,
@@ -67,7 +88,8 @@ const ftuIcon = new L.DivIcon({
   tooltipAnchor: [0, -40]
 });
 
-const getIconByType = (type: 'food' | 'pass') => {
+const getIconByType = (type: 'food' | 'pass' | 'event') => {
+  if (type === 'event') return eventIcon;
   return type === 'food' ? foodIcon : studyIcon;
 };
 
@@ -181,14 +203,33 @@ const PassItemPopup = ({ data }: { data: PassItemMarker }) => (
       Nhắn tin ngay
     </a>
     
-    <div className="text-[12px] font-bold text-red-500 text-center bg-red-50 py-1 rounded-md">
+    <div className="text-[12px] font-bold text-red-500 text-center bg-red-50 py-1 rounded-md border border-red-100">
       ⏳ Tự hủy sau: {formatTimeLeft(data.expireAt)}
     </div>
   </div>
 );
 
+const EventPopup = ({ data }: { data: EventMarker }) => (
+  <div className="p-1 min-w-[220px]">
+    <div className="flex items-center gap-1.5 mb-2">
+      <div className="bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-blue-200">
+        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+        VERIFIED CLUB
+      </div>
+    </div>
+    <h3 className="font-bold text-[18px] bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent mb-1 leading-tight">{data.eventName}</h3>
+    <p className="text-[14px] font-bold text-slate-700 mb-3">{data.clubName}</p>
+    
+    <div className="bg-slate-50 p-2 rounded-lg border border-slate-100 mb-2">
+      <p className="text-[12px] text-slate-600 flex items-start gap-1">
+        <span className="shrink-0">📍</span> {data.locationDesc}
+      </p>
+    </div>
+  </div>
+);
 
-export default function SurvivalMap() {
+
+export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: string }) {
   const ftuPosition: [number, number] = [21.0230, 105.8050];
 
   const [markers, setMarkers] = useState<MapMarker[]>([
@@ -215,16 +256,38 @@ export default function SurvivalMap() {
       inboxLink: 'https://m.me/username',
       createdAt: Date.now(),
       expireAt: Date.now() + 3 * 24 * 60 * 60 * 1000 // 3 days
+    },
+    {
+      id: 'm3',
+      position: [21.0230, 105.8040],
+      createdBy: 'admin',
+      type: 'event',
+      eventName: 'Gala Nhạc Kịch 2026',
+      clubName: 'CLB Tiếng Anh (SEC)',
+      locationDesc: 'Sân nhà D - Bán vé trực tiếp tại bàn',
+      isVerified: true
     }
   ]);
+
+  // Bộ lọc hiển thị (Radar + Tự Hủy)
+  const visibleMarkers = markers.filter(m => {
+    // Lọc theo Radar
+    if (activeFilter !== 'all' && m.type !== activeFilter) return false;
+    
+    // Lọc Tự hủy (Auto-destruct) cho loại Pass Đồ
+    if (m.type === 'pass' && m.expireAt < Date.now()) return false;
+
+    return true;
+  });
 
   // State cho Modal thả ghim
   const [tempPos, setTempPos] = useState<[number, number] | null>(null);
   
   // Dynamic Form States
-  const [formType, setFormType] = useState<'food' | 'pass'>('food');
+  const [formType, setFormType] = useState<'food' | 'pass' | 'event'>('food');
   const [foodForm, setFoodForm] = useState({ name: '', address: '' });
   const [passForm, setPassForm] = useState({ name: '', desc: '', link: '', duration: '24h' });
+  const [eventForm, setEventForm] = useState({ eventName: '', clubName: '', locDesc: '' });
 
   // State cho Modal đánh giá
   const [reviewMarker, setReviewMarker] = useState<FoodMarker | null>(null);
@@ -245,6 +308,7 @@ export default function SurvivalMap() {
     setFormType('food');
     setFoodForm({ name: '', address: '' });
     setPassForm({ name: '', desc: '', link: '', duration: '24h' });
+    setEventForm({ eventName: '', clubName: '', locDesc: '' });
   };
 
   const handleSaveMarker = () => {
@@ -263,7 +327,7 @@ export default function SurvivalMap() {
         reviews: []
       };
       setMarkers(prev => [...prev, newFood]);
-    } else {
+    } else if (formType === 'pass') {
       if (!passForm.name || !passForm.link) return;
       const now = Date.now();
       let expireAdd = 24 * 60 * 60 * 1000;
@@ -282,6 +346,19 @@ export default function SurvivalMap() {
         expireAt: now + expireAdd
       };
       setMarkers(prev => [...prev, newPass]);
+    } else if (formType === 'event') {
+      if (!eventForm.eventName || !eventForm.clubName) return;
+      const newEvent: EventMarker = {
+        id: Date.now().toString(),
+        position: tempPos,
+        createdBy: 'user',
+        type: 'event',
+        eventName: eventForm.eventName,
+        clubName: eventForm.clubName,
+        locationDesc: eventForm.locDesc,
+        isVerified: true // Giả lập tick xanh
+      };
+      setMarkers(prev => [...prev, newEvent]);
     }
 
     handleCloseModal();
@@ -311,11 +388,13 @@ export default function SurvivalMap() {
           </Tooltip>
         </Marker>
 
-        {/* Render danh sách Markers */}
-        {markers.map(m => (
+        {/* Render danh sách Markers (Đã lọc qua Radar và Tự hủy) */}
+        {visibleMarkers.map(m => (
           <Marker key={m.id} position={m.position} icon={getIconByType(m.type)}>
             <Popup className="custom-popup">
-              {m.type === 'food' ? <FoodPopup data={m as FoodMarker} onReviewClick={setReviewMarker} /> : <PassItemPopup data={m as PassItemMarker} />}
+              {m.type === 'food' && <FoodPopup data={m as FoodMarker} onReviewClick={setReviewMarker} />}
+              {m.type === 'pass' && <PassItemPopup data={m as PassItemMarker} />}
+              {m.type === 'event' && <EventPopup data={m as EventMarker} />}
             </Popup>
           </Marker>
         ))}
@@ -329,9 +408,9 @@ export default function SurvivalMap() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md border border-slate-100"
+              className="bg-white p-5 rounded-2xl shadow-2xl w-full max-w-md border border-slate-100"
             >
-              <div className="flex justify-between items-center mb-5">
+              <div className="flex justify-between items-center mb-4">
                 <h2 className="text-[20px] font-bold text-black flex items-center gap-2">
                   📍 Thêm ghim mới
                 </h2>
@@ -341,74 +420,80 @@ export default function SurvivalMap() {
               </div>
               
               {/* Tabs */}
-              <div className="flex gap-2 p-1 bg-slate-100 rounded-xl mb-5">
+              <div className="flex gap-1 p-1 bg-slate-100 rounded-xl mb-5 overflow-x-auto custom-scrollbar">
                 <button 
                   onClick={() => setFormType('food')}
-                  className={`flex-1 py-2 text-[14px] font-bold rounded-lg transition-all ${formType === 'food' ? 'bg-white shadow-sm text-orange-600' : 'text-slate-500 hover:bg-slate-200/50'}`}
+                  className={`flex-1 min-w-[90px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'food' ? 'bg-white shadow-sm text-orange-600' : 'text-slate-500 hover:bg-slate-200/50'}`}
                 >
                   🍜 Quán Ăn
                 </button>
                 <button 
                   onClick={() => setFormType('pass')}
-                  className={`flex-1 py-2 text-[14px] font-bold rounded-lg transition-all ${formType === 'pass' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:bg-slate-200/50'}`}
+                  className={`flex-1 min-w-[90px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'pass' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:bg-slate-200/50'}`}
                 >
                   📚 Pass Đồ
+                </button>
+                <button 
+                  onClick={() => setFormType('event')}
+                  className={`flex-1 min-w-[100px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'event' ? 'bg-white shadow-sm text-red-600' : 'text-slate-500 hover:bg-slate-200/50'}`}
+                >
+                  🌟 Sự kiện CLB
                 </button>
               </div>
 
               {/* Dynamic Forms */}
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 {formType === 'food' ? (
                   <>
                     <div>
-                      <label className="block text-[14px] font-bold text-slate-700 mb-1.5">Tên quán ăn <span className="text-red-600">*</span></label>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Tên quán ăn <span className="text-red-600">*</span></label>
                       <input 
                         type="text" 
                         value={foodForm.name}
                         onChange={e => setFoodForm({...foodForm, name: e.target.value})}
                         placeholder="VD: Phở xào bà béo..." 
-                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-shadow"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[14px] font-bold text-slate-700 mb-1.5">Địa chỉ <span className="text-red-600">*</span></label>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Địa chỉ <span className="text-red-600">*</span></label>
                       <input 
                         type="text" 
                         value={foodForm.address}
                         onChange={e => setFoodForm({...foodForm, address: e.target.value})}
                         placeholder="VD: Ngõ 84 Chùa Láng..." 
-                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-shadow"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-shadow"
                       />
                     </div>
                   </>
-                ) : (
+                ) : formType === 'pass' ? (
                   <>
                     <div>
-                      <label className="block text-[14px] font-bold text-slate-700 mb-1.5">Tên món đồ <span className="text-red-600">*</span></label>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Tên món đồ <span className="text-red-600">*</span></label>
                       <input 
                         type="text" 
                         value={passForm.name}
                         onChange={e => setPassForm({...passForm, name: e.target.value})}
                         placeholder="VD: Giáo trình Vĩ mô K64..." 
-                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[14px] font-bold text-slate-700 mb-1.5">Link Inbox (Mess/Zalo) <span className="text-red-600">*</span></label>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Link Inbox (Mess/Zalo) <span className="text-red-600">*</span></label>
                       <input 
                         type="text" 
                         value={passForm.link}
                         onChange={e => setPassForm({...passForm, link: e.target.value})}
                         placeholder="VD: m.me/username..." 
-                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[14px] font-bold text-slate-700 mb-1.5">Thời gian hiển thị</label>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Thời gian hiển thị</label>
                       <select 
                         value={passForm.duration}
                         onChange={e => setPassForm({...passForm, duration: e.target.value})}
-                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
                       >
                         <option value="24h">24 Giờ</option>
                         <option value="3d">3 Ngày</option>
@@ -416,30 +501,67 @@ export default function SurvivalMap() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-[14px] font-bold text-slate-700 mb-1.5">Mô tả thêm</label>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Mô tả thêm</label>
                       <textarea 
                         rows={2}
                         value={passForm.desc}
                         onChange={e => setPassForm({...passForm, desc: e.target.value})}
                         placeholder="Tình trạng đồ, giá cả..." 
-                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-shadow"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-shadow"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-blue-50 text-blue-700 p-2 rounded-lg border border-blue-100 text-[12px] flex items-center gap-2 font-medium mb-2">
+                      <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                      Ghim của bạn sẽ được cấp Tick Xanh (Verified)
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Tên sự kiện <span className="text-red-600">*</span></label>
+                      <input 
+                        type="text" 
+                        value={eventForm.eventName}
+                        onChange={e => setEventForm({...eventForm, eventName: e.target.value})}
+                        placeholder="VD: Đêm nhạc Mùa hè..." 
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-shadow"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Tên Câu Lạc Bộ <span className="text-red-600">*</span></label>
+                      <input 
+                        type="text" 
+                        value={eventForm.clubName}
+                        onChange={e => setEventForm({...eventForm, clubName: e.target.value})}
+                        placeholder="VD: CLB Tiếng Anh (SEC)..." 
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-shadow"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold text-slate-700 mb-1.5">Mô tả địa điểm / Chỉ đường</label>
+                      <input 
+                        type="text" 
+                        value={eventForm.locDesc}
+                        onChange={e => setEventForm({...eventForm, locDesc: e.target.value})}
+                        placeholder="VD: Tầng 1 nhà D..." 
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-shadow"
                       />
                     </div>
                   </>
                 )}
               </div>
 
-              <div className="flex gap-3 mt-7">
+              <div className="flex gap-3 mt-6">
                 <button 
                   onClick={handleCloseModal}
-                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-colors text-[15px]"
+                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl transition-colors text-[14px]"
                 >
                   Hủy
                 </button>
                 <button 
                   onClick={handleSaveMarker}
-                  disabled={formType === 'food' ? (!foodForm.name || !foodForm.address) : (!passForm.name || !passForm.link)}
-                  className={`flex-1 font-bold py-3 rounded-xl transition-colors text-white text-[15px] disabled:opacity-50 ${formType === 'food' ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-600 hover:bg-blue-700'}`}
+                  disabled={formType === 'food' ? (!foodForm.name || !foodForm.address) : formType === 'pass' ? (!passForm.name || !passForm.link) : (!eventForm.eventName || !eventForm.clubName)}
+                  className={`flex-1 font-bold py-2.5 rounded-xl transition-colors text-white text-[14px] disabled:opacity-50 shadow-md ${formType === 'food' ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20' : formType === 'pass' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20' : 'bg-red-600 hover:bg-red-700 shadow-red-600/20'}`}
                 >
                   Lưu địa điểm
                 </button>
@@ -448,6 +570,7 @@ export default function SurvivalMap() {
           </div>
         )}
       </AnimatePresence>
+
       {/* Modal Đánh Giá Quán Ăn */}
       <AnimatePresence>
         {reviewMarker && (

@@ -25,6 +25,7 @@ export default function MapPage() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [currentUserProfile, setCurrentUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'food' | 'pass' | 'event'>('all');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -78,7 +79,35 @@ export default function MapPage() {
 
         {/* Map */}
         <div className="absolute inset-0 z-0">
-          <SurvivalMap />
+          <SurvivalMap activeFilter={activeFilter} />
+        </div>
+
+        {/* Radar Filter (Bottom Right) */}
+        <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-[1000] bg-white/90 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-white flex flex-col sm:flex-row gap-2">
+          <button 
+            onClick={() => setActiveFilter('all')}
+            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm ${activeFilter === 'all' ? 'bg-slate-800 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
+          >
+            Tất cả
+          </button>
+          <button 
+            onClick={() => setActiveFilter('food')}
+            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'food' ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-orange-50'}`}
+          >
+            🍜 Ăn uống
+          </button>
+          <button 
+            onClick={() => setActiveFilter('pass')}
+            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'pass' ? 'bg-blue-600 text-white' : 'bg-white text-slate-600 hover:bg-blue-50'}`}
+          >
+            📚 Pass đồ
+          </button>
+          <button 
+            onClick={() => setActiveFilter('event')}
+            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'event' ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-yellow-50'}`}
+          >
+            🌟 Sự kiện CLB
+          </button>
         </div>
       </div>
     </div>
