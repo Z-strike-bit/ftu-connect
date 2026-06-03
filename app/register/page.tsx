@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { auth, googleProvider } from '@/lib/firebase';
+import { signInWithPopup, signOut } from 'firebase/auth';
 
 export default function Register() {
   const router = useRouter();
@@ -14,18 +16,22 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const handleSimulateGoogle = () => {
+  const handleGoogleLogin = async () => {
     setError(null);
-    // Giả lập popup đăng nhập Google
-    const email = window.prompt("Giả lập Google SSO: Nhập email Google của bạn:", "sinhvien.k60@ftu.edu.vn");
-    
-    if (email === null) return; // Hủy
-    
-    if (email.endsWith('@ftu.edu.vn')) {
-      setGoogleEmail(email);
-      setStep(2);
-    } else {
-      setError('Chỉ email trường (@ftu.edu.vn) mới được phép đăng ký');
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const email = result.user.email;
+      
+      if (email && email.endsWith('@ftu.edu.vn')) {
+        setGoogleEmail(email);
+        setStep(2);
+      } else {
+        await signOut(auth);
+        setError('Truy cập bị từ chối. Chỉ email trường (@ftu.edu.vn) mới được phép đăng ký.');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError('Lỗi kết nối với Google.');
     }
   };
 
@@ -75,7 +81,7 @@ export default function Register() {
         {step === 1 && (
           <div className="flex flex-col gap-4">
             <button
-              onClick={handleSimulateGoogle}
+              onClick={handleGoogleLogin}
               className="w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-300"
             >
               <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6 shrink-0" />

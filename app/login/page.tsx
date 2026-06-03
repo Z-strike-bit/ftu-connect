@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { auth, googleProvider } from '@/lib/firebase';
+import { signInWithPopup } from 'firebase/auth';
 
 export default function Login() {
   const router = useRouter();
@@ -26,12 +28,17 @@ export default function Login() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    const email = window.prompt("Giả lập Google SSO: Nhập email Google của bạn:", "sinhvien.k60@ftu.edu.vn");
-    if (email) {
-      // Giả lập thành công với Google
-      localStorage.setItem('currentUser', JSON.stringify({ username: email.split('@')[0] }));
-      router.push('/dashboard');
+  const handleGoogleLogin = async () => {
+    setError(null);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      if (result.user.email) {
+        localStorage.setItem('currentUser', JSON.stringify({ username: result.user.email.split('@')[0] }));
+        router.push('/dashboard');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError('Lỗi đăng nhập với Google.');
     }
   };
 
