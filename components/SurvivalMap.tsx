@@ -125,15 +125,15 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
 
   return (
     <div className="p-2 min-w-[240px] max-w-[300px]">
-      <h3 className="font-semibold text-[20px] text-white mb-1 leading-tight tracking-tight">{data.restaurantName}</h3>
-      <p className="text-[14px] text-gray-300 mb-4 flex items-start gap-1">
+      <h3 className="font-semibold text-[20px] text-gray-900 mb-1 leading-tight tracking-tight">{data.restaurantName}</h3>
+      <p className="text-[14px] text-gray-600 mb-4 flex items-start gap-1">
         <span className="shrink-0 mt-0.5">📍</span> {data.address}
       </p>
       
-      <div className="border-t border-white/20 pt-4 flex items-center justify-between">
-        <div className="flex items-center gap-1 text-[16px] font-bold text-white">
+      <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+        <div className="flex items-center gap-1 text-[16px] font-bold text-gray-900">
           ⭐ {data.averageRating > 0 ? data.averageRating.toFixed(1) : 'Chưa có'} 
-          <span className="text-gray-400 font-normal ml-1 text-[14px]">({data.reviews.length})</span>
+          <span className="text-gray-500 font-normal ml-1 text-[14px]">({data.reviews.length})</span>
         </div>
         <button 
           onMouseDown={(e) => {
@@ -150,7 +150,7 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
             onReviewClick(data);
           }}
           type="button"
-          className="text-[14px] liquid-glass hover:bg-white/20 text-white px-4 py-1.5 rounded-full transition-colors font-semibold z-50 relative cursor-pointer"
+          className="text-[14px] bg-black hover:bg-gray-800 text-white px-4 py-1.5 rounded-full transition-colors font-semibold z-50 relative cursor-pointer"
         >
           Đánh giá
         </button>
@@ -166,7 +166,7 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
             }}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="w-full text-center text-[14px] text-white font-semibold py-2 hover:underline flex justify-center items-center gap-1 transition-colors"
+            className="w-full text-center text-[14px] text-gray-900 font-semibold py-2 hover:underline flex justify-center items-center gap-1 transition-colors"
           >
             {showReviews ? 'Ẩn bình luận' : 'Xem bình luận'}
             <svg className={`w-4 h-4 transition-transform ${showReviews ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
@@ -182,12 +182,12 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
               >
                 <div className="mt-2 space-y-3 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
                   {data.reviews.map((rev, idx) => (
-                    <div key={idx} className="liquid-glass p-3 rounded-[14px]">
+                    <div key={idx} className="bg-gray-50 p-3 rounded-xl border border-gray-100">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="font-semibold text-[14px] text-white">{rev.user}</span>
+                        <span className="font-semibold text-[14px] text-gray-900">{rev.user}</span>
                         <span className="text-[12px] text-amber-400 font-bold">★ {rev.rating}</span>
                       </div>
-                      <p className="text-[14px] text-gray-300 leading-snug">{rev.comment}</p>
+                      <p className="text-[14px] text-gray-600 leading-snug">{rev.comment}</p>
                     </div>
                   ))}
                 </div>
@@ -202,19 +202,19 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
 
 const PassItemPopup = ({ data }: { data: PassItemMarker }) => (
   <div className="p-2 min-w-[220px]">
-    <h3 className="font-semibold text-[20px] text-white mb-1 leading-tight tracking-tight">{data.itemName}</h3>
-    <p className="text-[14px] text-gray-300 mb-5 whitespace-pre-wrap">{data.description}</p>
+    <h3 className="font-semibold text-[20px] text-gray-900 mb-1 leading-tight tracking-tight">{data.itemName}</h3>
+    <p className="text-[14px] text-gray-600 mb-5 whitespace-pre-wrap">{data.description}</p>
     
     <a 
       href={data.inboxLink.startsWith('http') ? data.inboxLink : `https://${data.inboxLink}`} 
       target="_blank" 
       rel="noreferrer"
-      className="block w-full text-center liquid-glass hover:bg-white/20 text-white font-semibold py-[14px] rounded-lg transition-colors mb-4 text-[16px] border border-white/20"
+      className="block w-full text-center bg-black hover:bg-gray-800 text-white font-semibold py-[14px] rounded-lg transition-colors mb-4 text-[16px]"
     >
       Nhắn tin ngay
     </a>
     
-    <div className="text-[13px] font-medium text-gray-400 text-center border-t border-white/20 pt-3">
+    <div className="text-[13px] font-medium text-gray-500 text-center border-t border-gray-200 pt-3">
       Tự hủy sau: {formatTimeLeft(data.expireAt)}
     </div>
   </div>
@@ -223,16 +223,16 @@ const PassItemPopup = ({ data }: { data: PassItemMarker }) => (
 const EventPopup = ({ data }: { data: EventMarker }) => (
   <div className="p-2 min-w-[240px]">
     <div className="flex items-center gap-1.5 mb-3">
-      <div className="liquid-glass text-white text-[11px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 border border-white/20">
+      <div className="bg-gray-100 text-gray-900 text-[11px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 border border-gray-200">
         <svg className="w-3 h-3 text-[#ff385c]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
         VERIFIED CLUB
       </div>
     </div>
-    <h3 className="font-semibold text-[22px] text-white mb-1 leading-tight tracking-tight">{data.eventName}</h3>
-    <p className="text-[16px] font-medium text-gray-300 mb-4">{data.clubName}</p>
+    <h3 className="font-semibold text-[22px] text-gray-900 mb-1 leading-tight tracking-tight">{data.eventName}</h3>
+    <p className="text-[16px] font-medium text-gray-600 mb-4">{data.clubName}</p>
     
-    <div className="liquid-glass border border-white/20 p-3 rounded-[14px] mb-2">
-      <p className="text-[14px] text-white flex items-start gap-2 font-medium">
+    <div className="bg-gray-50 border border-gray-200 p-3 rounded-xl mb-2">
+      <p className="text-[14px] text-gray-900 flex items-start gap-2 font-medium">
         <span className="shrink-0">📍</span> {data.locationDesc}
       </p>
     </div>
@@ -411,8 +411,8 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
         ref={setMapInstance}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
         <MapEvents />
@@ -458,39 +458,39 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
       {/* Modal Form Thêm Địa Điểm */}
       <AnimatePresence>
         {tempPos && (
-              <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+              <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-gray-50 backdrop-blur-sm p-4">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="liquid-glass p-6 sm:p-8 rounded-[14px] shadow-2xl w-full max-w-[480px]"
+              className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-[480px]"
             >
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-[22px] font-semibold text-white tracking-tight">
+                <h2 className="text-[22px] font-semibold text-gray-900 tracking-tight">
                   Thêm ghim mới
                 </h2>
-                <button onClick={handleCloseModal} className="w-8 h-8 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onClick={handleCloseModal} className="w-8 h-8 hover:bg-gray-100 rounded-full flex items-center justify-center transition-colors">
+                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               
               {/* Tabs */}
-              <div className="flex gap-1 p-1 bg-white/10 rounded-xl mb-5 overflow-x-auto custom-scrollbar border border-white/10">
+              <div className="flex gap-1 p-1 bg-gray-100 rounded-xl mb-5 overflow-x-auto custom-scrollbar border border-gray-100">
                 <button 
                   onClick={() => setFormType('food')}
-                  className={`flex-1 min-w-[90px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'food' ? 'liquid-glass shadow-sm text-white border-white/20' : 'text-gray-400 hover:bg-white/5'}`}
+                  className={`flex-1 min-w-[90px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'food' ? 'bg-white shadow-sm text-gray-900 border border-gray-200' : 'text-gray-500 hover:bg-gray-50'}`}
                 >
                   🍜 Quán Ăn
                 </button>
                 <button 
                   onClick={() => setFormType('pass')}
-                  className={`flex-1 min-w-[90px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'pass' ? 'liquid-glass shadow-sm text-white border-white/20' : 'text-gray-400 hover:bg-white/5'}`}
+                  className={`flex-1 min-w-[90px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'pass' ? 'bg-white shadow-sm text-gray-900 border border-gray-200' : 'text-gray-500 hover:bg-gray-50'}`}
                 >
                   📚 Pass Đồ
                 </button>
                 <button 
                   onClick={() => setFormType('event')}
-                  className={`flex-1 min-w-[100px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'event' ? 'liquid-glass shadow-sm text-white border-white/20' : 'text-gray-400 hover:bg-white/5'}`}
+                  className={`flex-1 min-w-[100px] py-2 px-1 text-[13px] font-bold rounded-lg transition-all ${formType === 'event' ? 'bg-white shadow-sm text-gray-900 border border-gray-200' : 'text-gray-500 hover:bg-gray-50'}`}
                 >
                   🌟 Sự kiện CLB
                 </button>
@@ -501,54 +501,54 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
                 {formType === 'food' ? (
                   <>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Tên quán ăn <span className="text-red-400">*</span></label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Tên quán ăn <span className="text-red-400">*</span></label>
                       <input 
                         type="text" 
                         value={foodForm.name}
                         onChange={e => setFoodForm({...foodForm, name: e.target.value})}
                         placeholder="VD: Phở xào bà béo..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Địa chỉ <span className="text-red-400">*</span></label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Địa chỉ <span className="text-red-400">*</span></label>
                       <input 
                         type="text" 
                         value={foodForm.address}
                         onChange={e => setFoodForm({...foodForm, address: e.target.value})}
                         placeholder="VD: Ngõ 84 Chùa Láng..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       />
                     </div>
                   </>
                 ) : formType === 'pass' ? (
                   <>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Tên món đồ <span className="text-red-400">*</span></label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Tên món đồ <span className="text-red-400">*</span></label>
                       <input 
                         type="text" 
                         value={passForm.name}
                         onChange={e => setPassForm({...passForm, name: e.target.value})}
                         placeholder="VD: Giáo trình Vĩ mô K64..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Link Inbox (Mess/Zalo) <span className="text-red-400">*</span></label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Link Inbox (Mess/Zalo) <span className="text-red-400">*</span></label>
                       <input 
                         type="text" 
                         value={passForm.link}
                         onChange={e => setPassForm({...passForm, link: e.target.value})}
                         placeholder="VD: m.me/username..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Thời gian hiển thị</label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Thời gian hiển thị</label>
                       <select 
                         value={passForm.duration}
                         onChange={e => setPassForm({...passForm, duration: e.target.value})}
-                        className="w-full bg-black/40 border border-white/20 text-white rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       >
                         <option value="24h">24 Giờ</option>
                         <option value="3d">3 Ngày</option>
@@ -556,67 +556,67 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
                       </select>
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Mô tả thêm</label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Mô tả thêm</label>
                       <textarea 
                         rows={2}
                         value={passForm.desc}
                         onChange={e => setPassForm({...passForm, desc: e.target.value})}
                         placeholder="Tình trạng đồ, giá cả..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 resize-none transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 resize-none transition-shadow"
                       />
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="bg-white/10 text-white p-2 rounded-lg border border-white/20 text-[12px] flex items-center gap-2 font-medium mb-2">
+                    <div className="bg-gray-100 text-gray-900 p-2 rounded-lg border border-gray-200 text-[12px] flex items-center gap-2 font-medium mb-2">
                       <svg className="w-5 h-5 shrink-0 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
                       Ghim của bạn sẽ được cấp Tick Xanh (Verified)
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Tên sự kiện <span className="text-red-400">*</span></label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Tên sự kiện <span className="text-red-400">*</span></label>
                       <input 
                         type="text" 
                         value={eventForm.eventName}
                         onChange={e => setEventForm({...eventForm, eventName: e.target.value})}
                         placeholder="VD: Đêm nhạc Mùa hè..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Tên Câu Lạc Bộ <span className="text-red-400">*</span></label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Tên Câu Lạc Bộ <span className="text-red-400">*</span></label>
                       <input 
                         type="text" 
                         value={eventForm.clubName}
                         onChange={e => setEventForm({...eventForm, clubName: e.target.value})}
                         placeholder="VD: CLB Tiếng Anh (SEC)..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       />
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-200 mb-1.5">Mô tả địa điểm / Chỉ đường</label>
+                      <label className="block text-[13px] font-bold text-gray-800 mb-1.5">Mô tả địa điểm / Chỉ đường</label>
                       <input 
                         type="text" 
                         value={eventForm.locDesc}
                         onChange={e => setEventForm({...eventForm, locDesc: e.target.value})}
                         placeholder="VD: Tầng 1 nhà D..." 
-                        className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-shadow"
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2 text-[14px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-shadow"
                       />
                     </div>
                   </>
                 )}
               </div>
 
-              <div className="flex gap-3 mt-8 border-t border-white/20 pt-6">
+              <div className="flex gap-3 mt-8 border-t border-gray-200 pt-6">
                 <button 
                   onClick={handleCloseModal}
-                  className="flex-1 bg-transparent border border-white/30 hover:bg-white/10 text-white font-semibold py-[14px] rounded-lg transition-colors text-[16px]"
+                  className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 font-semibold py-[14px] rounded-lg transition-colors text-[16px]"
                 >
                   Hủy
                 </button>
                 <button 
                   onClick={handleSaveMarker}
                   disabled={formType === 'food' ? (!foodForm.name || !foodForm.address) : formType === 'pass' ? (!passForm.name || !passForm.link) : (!eventForm.eventName || !eventForm.clubName)}
-                  className={`flex-1 font-semibold py-[14px] rounded-lg transition-colors text-white text-[16px] disabled:opacity-50 disabled:bg-gray-500 liquid-glass border border-white/20 hover:bg-white/20`}
+                  className={`flex-1 font-semibold py-[14px] rounded-lg transition-colors text-gray-900 text-[16px] disabled:opacity-50 disabled:bg-gray-500 bg-black text-white hover:bg-gray-800`}
                 >
                   Lưu địa điểm
                 </button>
@@ -629,36 +629,36 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
       {/* Modal Đánh Giá Quán Ăn */}
       <AnimatePresence>
         {reviewMarker && (
-          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-gray-50 backdrop-blur-sm p-4">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="liquid-glass p-6 sm:p-8 rounded-[14px] shadow-2xl w-full max-w-[400px]"
+              className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-[400px]"
             >
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-[22px] font-semibold text-white tracking-tight">
+                <h2 className="text-[22px] font-semibold text-gray-900 tracking-tight">
                   Đánh giá quán ăn
                 </h2>
-                <button onClick={() => setReviewMarker(null)} className="w-8 h-8 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onClick={() => setReviewMarker(null)} className="w-8 h-8 hover:bg-gray-100 rounded-full flex items-center justify-center transition-colors">
+                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               
               <div className="mb-4">
-                <p className="text-sm text-gray-400">Đang đánh giá:</p>
-                <p className="text-[15px] font-bold text-white">{reviewMarker.restaurantName}</p>
+                <p className="text-sm text-gray-500">Đang đánh giá:</p>
+                <p className="text-[15px] font-bold text-gray-900">{reviewMarker.restaurantName}</p>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-[14px] font-bold text-gray-200 mb-2">Chấm điểm</label>
+                  <label className="block text-[14px] font-bold text-gray-800 mb-2">Chấm điểm</label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map(star => (
                       <button 
                         key={star}
                         onClick={() => setReviewForm({...reviewForm, rating: star})}
-                        className={`text-2xl transition-transform hover:scale-110 ${reviewForm.rating >= star ? 'text-amber-400' : 'text-white/20'}`}
+                        className={`text-2xl transition-transform hover:scale-110 ${reviewForm.rating >= star ? 'text-amber-400' : 'text-gray-900/20'}`}
                       >
                         ★
                       </button>
@@ -667,18 +667,18 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
                 </div>
 
                 <div>
-                  <label className="block text-[14px] font-bold text-gray-200 mb-1.5">Nhận xét của bạn</label>
+                  <label className="block text-[14px] font-bold text-gray-800 mb-1.5">Nhận xét của bạn</label>
                   <textarea 
                     rows={3}
                     value={reviewForm.comment}
                     onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
                     placeholder="Quán ngon, cô chủ nhiệt tình..." 
-                    className="w-full bg-black/40 border border-white/20 text-white placeholder-gray-400 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 resize-none transition-shadow"
+                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-2.5 text-[15px] outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 resize-none transition-shadow"
                   />
                 </div>
               </div>
 
-              <div className="flex gap-3 mt-8 border-t border-white/20 pt-6">
+              <div className="flex gap-3 mt-8 border-t border-gray-200 pt-6">
                 <button 
                   onClick={() => {
                     if (reviewForm.comment.trim() === '') {
@@ -700,7 +700,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
                     setReviewMarker(null);
                     setReviewForm({ rating: 5, comment: '' });
                   }}
-                  className="w-full font-semibold py-[14px] rounded-lg transition-colors text-white text-[16px] liquid-glass border border-white/20 hover:bg-white/20"
+                  className="w-full font-semibold py-[14px] rounded-lg transition-colors text-gray-900 text-[16px] bg-black text-white hover:bg-gray-800"
                 >
                   Gửi đánh giá
                 </button>

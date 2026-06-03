@@ -62,18 +62,18 @@ export default function MapPage() {
       <div className="relative h-[calc(100vh-72px)] w-full">
         
         {/* Floating Card */}
-        <div className="absolute top-4 left-4 sm:left-6 z-[1000] liquid-glass p-5 sm:p-6 rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px]">
+        <div className="absolute top-4 left-4 sm:left-6 z-[1000] bg-white/95 p-5 sm:p-6 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px]">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <h1 className="text-[20px] font-bold text-white flex items-center gap-2 leading-tight tracking-tight">
+              <h1 className="text-[20px] font-bold text-gray-900 flex items-center gap-2 leading-tight tracking-tight">
                 <span className="text-2xl">🗺️</span> Bản Đồ Sinh Tồn
               </h1>
             </div>
           </div>
-          <p className="text-[15px] text-gray-300 mb-5 leading-relaxed">
+          <p className="text-[15px] text-gray-600 mb-5 leading-relaxed">
             Khám phá góc ăn ngon, chỗ học tập và bí kíp sống sót quanh Ngoại Thương.
           </p>
-          <button className="w-full liquid-glass hover:bg-[#141414]/20 text-white px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm">
+          <button className="w-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Ghim địa điểm mới
           </button>
@@ -97,25 +97,25 @@ export default function MapPage() {
               >
                 <button 
                   onClick={() => { setActiveFilter('all'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Tất cả 🌍
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('food'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Ăn uống 🍜
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('pass'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Pass đồ 📚
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('event'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-white/60 liquid-glass text-white scale-105 backdrop-blur-md' : 'border-transparent liquid-glass text-gray-300 hover:bg-[#141414]/10 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Sự kiện 🌟
                 </button>
@@ -126,29 +126,29 @@ export default function MapPage() {
           {/* Nút Radar Chính */}
           <button 
             onClick={() => setIsRadarOpen(!isRadarOpen)}
-            className={`relative w-16 h-16 rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:scale-105 transition-all duration-300 z-50 liquid-glass border border-white/20`}
+            className={`relative w-16 h-16 rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:scale-105 transition-all duration-300 z-50 bg-white border border-gray-200`}
           >
             {/* Vòng lặp ping mượt mà */}
             {!isRadarOpen && (
               <>
-                <div className="absolute inset-0 rounded-full border border-[#ff385c] animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] opacity-70"></div>
-                <div className="absolute inset-0 rounded-full border-2 border-[#ff385c] animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite] opacity-40 delay-300"></div>
+                <div className="absolute inset-0 rounded-full border border-[#0099ff] animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] opacity-70"></div>
+                <div className="absolute inset-0 rounded-full border-2 border-[#0099ff] animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite] opacity-40 delay-300"></div>
               </>
             )}
             
             {/* Icon Radar */}
             {isRadarOpen ? (
-              <svg className="w-7 h-7 text-white rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-7 h-7 text-gray-900 rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
               <div className="relative w-8 h-8">
                 {/* Tia quét radar quay vòng */}
-                <svg className="absolute inset-0 w-8 h-8 text-white animate-[spin_3s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute inset-0 w-8 h-8 text-gray-900 animate-[spin_3s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 12L12 2" />
                 </svg>
                 {/* Vòng tròn trung tâm */}
-                <svg className="absolute inset-0 w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute inset-0 w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="3" strokeWidth="2" />
                   <circle cx="12" cy="12" r="9" strokeWidth="2" strokeDasharray="4 4" />
                 </svg>
