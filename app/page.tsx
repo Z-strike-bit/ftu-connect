@@ -44,7 +44,7 @@ export default function HomePage() {
 
         {/* CTA */}
         <div>
-          <Link href="/login" className="px-5 py-2.5 bg-[#141414] text-ink text-sm font-medium rounded-full hover:bg-surface-soft transition-colors shadow-sm">
+          <Link href="/login" className="px-6 py-2.5 bg-white text-black text-[15px] font-bold rounded-[100px] hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-300">
             Đăng nhập
           </Link>
         </div>
