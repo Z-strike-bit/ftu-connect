@@ -126,10 +126,10 @@ export default function MarketPage() {
     ? products 
     : products.filter(p => p.category === activeCategory);
 
-  if (loading) return <div className="min-h-screen bg-[#f0f2f5]" />;
+  if (loading) return <div className="min-h-screen bg-white" />;
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5] font-sans flex flex-col">
+    <div className="min-h-screen bg-white font-sans flex flex-col selection:bg-[#fff0f2] selection:text-[#ff385c]">
       <Navbar 
         profileName={currentUserProfile?.name} 
         onSignOut={() => signOut(auth).then(() => router.push('/'))} 
@@ -137,27 +137,27 @@ export default function MarketPage() {
         profilePhoto={currentUserProfile?.photoURL} 
       />
       
-      <div className="max-w-[1300px] mx-auto w-full flex flex-col md:flex-row pt-6 px-4 sm:px-6 lg:px-8 gap-6 flex-1">
+      <div className="max-w-[1600px] mx-auto w-full flex flex-col md:flex-row pt-6 px-4 sm:px-6 lg:px-8 gap-8 flex-1">
         
         {/* Sidebar */}
         <div className="w-full md:w-[320px] shrink-0">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sticky top-[88px]">
-            <h1 className="text-2xl font-bold text-black mb-1">Chợ Sinh Viên</h1>
-            <p className="text-slate-500 text-[14px] mb-5">Mua bán, pass đồ dễ dàng trong khuôn viên FTU.</p>
+          <div className="bg-white rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] border border-[#ebebeb] p-6 sticky top-[100px]">
+            <h1 className="text-[24px] font-bold text-[#222222] mb-1">Chợ Sinh Viên</h1>
+            <p className="text-[#6a6a6a] text-[15px] mb-6">Mua bán, pass đồ dễ dàng trong khuôn viên FTU.</p>
             
-            <button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 px-4 rounded-xl mb-6 transition-all shadow-md shadow-red-600/20 active:scale-[0.98] flex items-center justify-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4"/></svg>
+            <button className="w-full bg-[#ff385c] hover:bg-[#e00b41] text-white font-semibold py-3.5 px-4 rounded-lg mb-6 transition-all flex items-center justify-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4"/></svg>
               Tạo bài đăng bán
             </button>
 
-            <h3 className="font-bold text-[15px] text-slate-800 mb-2 px-1">Danh mục</h3>
+            <h3 className="font-semibold text-[16px] text-[#222222] mb-3 px-1">Danh mục</h3>
             <div className="space-y-1">
               {categories.map(cat => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-colors font-medium text-[15px] text-left
-                    ${activeCategory === cat.id ? 'bg-red-50 text-red-700' : 'text-slate-600 hover:bg-slate-100'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-semibold text-[15px] text-left
+                    ${activeCategory === cat.id ? 'bg-[#fff0f2] text-[#ff385c]' : 'text-[#222222] hover:bg-[#f7f7f7]'}`}
                 >
                   <span className="text-xl w-6 text-center">{cat.icon}</span>
                   {cat.name}
@@ -165,9 +165,9 @@ export default function MarketPage() {
               ))}
             </div>
             
-            <div className="mt-6 pt-5 border-t border-slate-100">
-              <div className="bg-orange-50 text-orange-800 p-4 rounded-xl border border-orange-100">
-                <p className="text-[13px] font-medium leading-relaxed">
+            <div className="mt-6 pt-6 border-t border-[#ebebeb]">
+              <div className="bg-[#f7f7f7] text-[#222222] p-4 rounded-xl border border-[#ebebeb]">
+                <p className="text-[14px] leading-relaxed">
                   💡 <strong>Tip an toàn:</strong> Luôn ưu tiên giao dịch trực tiếp tại cổng trường hoặc trong khuôn viên nhà D để đảm bảo an toàn bạn nhé!
                 </p>
               </div>
@@ -177,39 +177,45 @@ export default function MarketPage() {
 
         {/* Main Content (Grid) */}
         <div className="flex-1 pb-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map(product => (
-              <div key={product.id} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group flex flex-col">
+              <div key={product.id} className="cursor-pointer group flex flex-col">
                 {/* Image Wrapper */}
-                <div className="aspect-[4/3] w-full relative overflow-hidden bg-slate-100">
+                <div className="aspect-square sm:aspect-[4/3] w-full relative overflow-hidden bg-[#ebebeb] rounded-[14px] mb-3">
                   <img 
                     src={product.image} 
                     alt={product.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[12px] font-bold px-2 py-1 rounded-lg">
+                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-[#222222] text-[13px] font-semibold px-2.5 py-1 rounded-md shadow-sm">
                     {product.condition}
                   </div>
+                  <button className="absolute top-3 right-3 p-1.5 hover:scale-110 transition-transform">
+                    <svg className="w-6 h-6 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                  </button>
                 </div>
                 
                 {/* Content */}
-                <div className="p-4 flex flex-col flex-1">
-                  <div className="text-[18px] font-extrabold text-black mb-1.5">
-                    {product.price.toLocaleString('vi-VN')} đ
+                <div className="flex flex-col flex-1">
+                  <div className="flex justify-between items-start mb-1">
+                    <div className="text-[16px] font-semibold text-[#222222] truncate pr-2 flex-1">
+                      {product.location}
+                    </div>
+                    <div className="flex items-center gap-1 text-[14px]">
+                      <span className="font-semibold text-[#222222]">★ Mới</span>
+                    </div>
                   </div>
-                  <h3 className="text-[15px] text-slate-800 font-medium mb-3 line-clamp-2 leading-snug flex-1 group-hover:text-red-600 transition-colors">
+                  
+                  <h3 className="text-[15px] text-[#6a6a6a] line-clamp-1 mb-1">
                     {product.title}
                   </h3>
                   
-                  <div className="flex flex-col gap-1.5 pt-3 border-t border-slate-100">
-                    <div className="flex items-center text-[13px] text-slate-500 gap-1.5">
-                      <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                      <span className="truncate">{product.location}</span>
-                    </div>
-                    <div className="flex items-center text-[13px] text-slate-400 gap-1.5">
-                      <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                      {product.timePosted}
-                    </div>
+                  <div className="text-[15px] text-[#6a6a6a] mb-1">
+                    {product.timePosted}
+                  </div>
+                  
+                  <div className="mt-1">
+                    <span className="text-[16px] font-semibold text-[#222222]">{product.price.toLocaleString('vi-VN')} đ</span>
                   </div>
                 </div>
               </div>
@@ -217,12 +223,12 @@ export default function MarketPage() {
           </div>
 
           {filteredProducts.length === 0 && (
-            <div className="w-full flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200 mt-2">
+            <div className="w-full flex flex-col items-center justify-center py-20 mt-2">
               <span className="text-6xl mb-4">🛒</span>
-              <p className="text-slate-500 font-medium text-[15px]">Chưa có sản phẩm nào trong danh mục này.</p>
+              <p className="text-[#6a6a6a] font-medium text-[16px]">Chưa có sản phẩm nào trong danh mục này.</p>
               <button 
                 onClick={() => setActiveCategory('all')}
-                className="mt-4 text-red-600 font-bold hover:underline"
+                className="mt-4 text-[#ff385c] font-semibold hover:underline"
               >
                 Xem tất cả sản phẩm
               </button>

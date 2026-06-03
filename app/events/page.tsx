@@ -19,9 +19,9 @@ const EVENTS = [
     date: '15/09/2026 - 08:30 AM',
     location: 'Hội trường VJCC, FTU',
     organizer: 'CLB Kế toán - Kiểm toán CFA',
-    gradient: 'from-black to-slate-800',
+    gradient: 'from-[#222222] to-[#6a6a6a]',
     tagText: 'Nổi bật',
-    tagColor: 'bg-red-600 text-white',
+    tagColor: 'bg-[#ff385c] text-white',
     link: 'https://forms.gle/test1'
   },
   {
@@ -30,9 +30,9 @@ const EVENTS = [
     date: 'Hạn chót: 20/09/2026',
     location: 'Online (Phỏng vấn trực tiếp tại D201)',
     organizer: 'Đoàn Thanh Niên FTU',
-    gradient: 'from-slate-200 to-slate-100',
+    gradient: 'from-[#ebebeb] to-[#dddddd]',
     tagText: 'Tuyển dụng',
-    tagColor: 'bg-black text-white',
+    tagColor: 'bg-[#222222] text-white',
     link: 'https://forms.gle/test2'
   },
   {
@@ -41,9 +41,9 @@ const EVENTS = [
     date: '25/09/2026 - 14:00 PM',
     location: 'Phòng D201, Tòa nhà D',
     organizer: 'Phòng Hợp tác Quốc tế',
-    gradient: 'from-red-600 to-red-500',
+    gradient: 'from-[#ff385c] to-[#e00b41]',
     tagText: 'Workshop',
-    tagColor: 'bg-white text-red-600',
+    tagColor: 'bg-white text-[#ff385c]',
     link: 'https://forms.gle/test3'
   },
   {
@@ -52,9 +52,9 @@ const EVENTS = [
     date: '02/10/2026 - 18:00 PM',
     location: 'Sân nhà G',
     organizer: 'Hội Sinh viên FTU',
-    gradient: 'from-zinc-900 to-black',
+    gradient: 'from-[#222222] to-black',
     tagText: 'Networking',
-    tagColor: 'bg-slate-800 text-white',
+    tagColor: 'bg-[#ebebeb] text-[#222222]',
     link: 'https://forms.gle/test4'
   }
 ];
@@ -104,59 +104,59 @@ export default function EventsPage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-white flex items-center justify-center"><p className="text-slate-500 font-bold animate-pulse">Đang tải Sự kiện...</p></div>;
+    return <div className="min-h-screen bg-white flex items-center justify-center"><p className="text-[#6a6a6a] font-semibold animate-pulse">Đang tải Sự kiện...</p></div>;
   }
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 text-black font-sans pb-16 selection:bg-red-200">
+    <div className="min-h-screen w-full bg-white text-[#222222] font-sans pb-16 selection:bg-[#fff0f2] selection:text-[#ff385c]">
       <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
 
       {/* Main Container */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-12 text-center sm:text-left border-b border-slate-200 pb-8"
+          className="mb-10 text-center sm:text-left border-b border-[#ebebeb] pb-6"
         >
-          <h1 className="text-4xl font-extrabold text-black tracking-tight uppercase">Sự kiện <span className="text-red-600">Độc quyền</span></h1>
-          <p className="text-slate-500 mt-3 text-lg max-w-2xl font-medium">Khám phá các bộ sưu tập sự kiện và cơ hội tuyển dụng mới nhất từ các tổ chức sinh viên hàng đầu.</p>
+          <h1 className="text-[32px] font-bold text-[#222222] tracking-tight">Sự kiện <span className="text-[#ff385c]">Độc quyền</span></h1>
+          <p className="text-[#6a6a6a] mt-2 text-[16px] max-w-2xl font-medium">Khám phá các bộ sưu tập sự kiện và cơ hội tuyển dụng mới nhất từ các tổ chức sinh viên hàng đầu.</p>
         </motion.div>
 
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {EVENTS.map(event => (
             <motion.div 
               key={event.id} 
               variants={itemVariants}
-              whileHover={{ y: -8, transition: { duration: 0.2 } }}
-              className="bg-white rounded-[2rem] shadow-sm border border-slate-200 overflow-hidden flex flex-col group cursor-pointer"
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="bg-white rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] border border-[#ebebeb] overflow-hidden flex flex-col group cursor-pointer"
             >
               {/* Cover Gradient */}
-              <div className={`h-40 w-full bg-gradient-to-br ${event.gradient} relative overflow-hidden flex items-center justify-center`}>
-                <div className={`absolute top-4 left-4 ${event.tagColor} px-4 py-1.5 rounded-full text-[10px] font-extrabold tracking-widest uppercase shadow-sm`}>
+              <div className={`h-[160px] w-full bg-gradient-to-br ${event.gradient} relative overflow-hidden flex items-center justify-center`}>
+                <div className={`absolute top-4 left-4 ${event.tagColor} px-3 py-1 rounded-md text-[12px] font-bold uppercase shadow-sm`}>
                   {event.tagText}
                 </div>
                 {/* Decorative circle */}
-                <div className="w-64 h-64 border border-white/10 rounded-full absolute -right-20 -bottom-20 scale-150 group-hover:scale-100 transition-transform duration-700 ease-in-out"></div>
+                <div className="w-48 h-48 border border-white/10 rounded-full absolute -right-12 -bottom-12 scale-150 group-hover:scale-100 transition-transform duration-700 ease-in-out"></div>
               </div>
               
               {/* Content */}
-              <div className="p-7 flex-1 flex flex-col">
-                <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-3">{event.organizer}</p>
-                <h3 className="text-xl font-bold text-black mb-5 leading-snug group-hover:text-red-600 transition-colors">{event.title}</h3>
+              <div className="p-6 flex-1 flex flex-col">
+                <p className="text-[12px] font-bold text-[#6a6a6a] uppercase tracking-wider mb-2">{event.organizer}</p>
+                <h3 className="text-[18px] font-semibold text-[#222222] mb-4 leading-snug group-hover:text-[#ff385c] transition-colors line-clamp-2">{event.title}</h3>
                 
-                <div className="space-y-3 mb-8 flex-1">
-                  <div className="flex items-center text-sm text-slate-600 font-medium">
-                    <span className="w-1.5 h-1.5 bg-black rounded-full mr-3 shrink-0"></span>
+                <div className="space-y-2.5 mb-6 flex-1">
+                  <div className="flex items-center text-[14px] text-[#6a6a6a] font-medium">
+                    <span className="w-1.5 h-1.5 bg-[#222222] rounded-full mr-3 shrink-0"></span>
                     <span>{event.date}</span>
                   </div>
-                  <div className="flex items-center text-sm text-slate-600 font-medium">
-                    <span className="w-1.5 h-1.5 bg-red-600 rounded-full mr-3 shrink-0"></span>
+                  <div className="flex items-center text-[14px] text-[#6a6a6a] font-medium">
+                    <span className="w-1.5 h-1.5 bg-[#ff385c] rounded-full mr-3 shrink-0"></span>
                     <span>{event.location}</span>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export default function EventsPage() {
                   href={event.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full block text-center bg-white border-2 border-black hover:bg-black hover:text-white text-black font-bold py-3.5 rounded-2xl transition-all shadow-sm"
+                  className="w-full block text-center bg-white border border-[#222222] hover:bg-[#f7f7f7] text-[#222222] font-semibold py-3 rounded-lg transition-all"
                 >
                   Đăng ký tham gia
                 </a>
