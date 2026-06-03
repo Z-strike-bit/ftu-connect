@@ -71,11 +71,6 @@ export default function HomePage() {
         </button>
 
         <div className={`nav-menu ${menuOpen ? 'active' : ''}`}>
-          <ul className="nav-links">
-            <li><Link href="/map" onClick={() => setMenuOpen(false)}>Bản Đồ</Link></li>
-            <li><Link href="/market" onClick={() => setMenuOpen(false)}>Góc Pass Đồ</Link></li>
-            <li><Link href="/events" onClick={() => setMenuOpen(false)}>Sự Kiện CLB</Link></li>
-          </ul>
           <div className="nav-actions">
             <Link href="/login" className="btn-login" onClick={() => setMenuOpen(false)}>Đăng nhập</Link>
             <Link href="/register" className="btn-signup" onClick={() => setMenuOpen(false)}>Đăng ký</Link>
