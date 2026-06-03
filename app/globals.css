@@ -340,3 +340,40 @@ body {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(0, 40px, 0); }
 }
+
+@keyframes data-flow {
+  0% { transform: translate3d(-100%, 0, 0); }
+  100% { transform: translate3d(100%, 0, 0); }
+}
+
+.data-flow-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.data-flow-beam {
+  position: absolute;
+  top: -10px; left: 0; bottom: -10px; width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  animation: data-flow 2s linear infinite;
+  will-change: transform;
+  filter: blur(2px);
+}
+
+.data-flow-beam.fast {
+  animation-duration: 0.8s;
+  background: linear-gradient(90deg, transparent, rgba(240, 110, 210, 0.9), transparent);
+}
+
+.magnetic-node {
+  transform: translate3d(var(--mag-x, 0), var(--mag-y, 0), 0);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s;
+  will-change: transform;
+}
+.magnetic-node.glow {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4), inset 4px 4px 8px rgba(0,0,0,0.4) !important;
+}
+.magnetic-node.scale-up {
+  transform: translate3d(var(--mag-x, 0), var(--mag-y, 0), 0) scale(1.1);
+  box-shadow: 0 0 20px rgba(200, 160, 224, 0.6), inset 4px 4px 8px rgba(0,0,0,0.4);
+}
