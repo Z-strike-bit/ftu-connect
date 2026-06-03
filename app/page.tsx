@@ -147,7 +147,7 @@ export default function HomePage() {
           </ul>
           <div className="nav-actions">
             <Link href="/login" className="btn-login" onClick={() => setMenuOpen(false)}>Đăng nhập</Link>
-            <Link href="/login" className="btn-signup" onClick={() => setMenuOpen(false)}>Đăng ký</Link>
+            <Link href="/register" className="btn-signup" onClick={() => setMenuOpen(false)}>Đăng ký</Link>
           </div>
         </div>
       </nav>

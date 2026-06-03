@@ -4,9 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { auth, db } from '@/lib/firebase';
-import { onAuthStateChanged, User, signOut } from 'firebase/auth';
-import { doc, getDoc, collection, addDoc, onSnapshot, query, orderBy, updateDoc, arrayUnion, arrayRemove, where } from 'firebase/firestore';
+interface User {
+  uid: string;
+  photoURL?: string;
+}
 import { motion, AnimatePresence } from 'framer-motion';
 import ConnectModal from '@/components/ConnectModal';
 import Navbar from '@/components/Navbar';
@@ -70,68 +71,34 @@ export default function Dashboard() {
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-        if (userDoc.exists()) {
-          setUser(currentUser);
-          setProfile(userDoc.data() as UserProfile);
-          setLoading(false);
-        } else {
-          router.push('/onboarding');
-        }
-      } else {
-        router.push('/login');
-      }
-    });
-    return () => unsubscribe();
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+      const userData = JSON.parse(userStr);
+      setUser({ uid: userData.username });
+      setProfile({
+        name: userData.username,
+        email: '',
+        major: '',
+        role: 'mentee',
+        bio: '',
+        points: 0
+      });
+      setLoading(false);
+    } else {
+      router.push('/login');
+    }
   }, [router]);
 
   useEffect(() => {
-    if (!profile) return;
-    const oppositeRole = profile.role === 'mentor' ? 'mentee' : 'mentor';
-    const q = query(collection(db, 'users'), where('role', '==', oppositeRole));
-    
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      let candidates = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      candidates = candidates.map(c => {
-        let score = 0;
-        let matchReason = '';
-        if (c.major && profile.major && c.major === profile.major) {
-          score += 5;
-          matchReason = 'Cùng chuyên ngành';
-        }
-        if (c.goals && profile.goals) {
-          const commonGoals = c.goals.filter((g: string) => profile.goals?.includes(g));
-          if (commonGoals.length > 0) {
-            score += commonGoals.length * 2;
-            if (!matchReason) matchReason = `Cùng mục tiêu`;
-          }
-        }
-        if (!matchReason) matchReason = 'Gợi ý phù hợp';
-        return { ...c, score, matchReason };
-      });
-      candidates.sort((a, b) => b.score - a.score);
-      setSuggestions(candidates.slice(0, 5));
-    });
-    
-    return () => unsubscribe();
+    setSuggestions([]);
   }, [profile]);
 
   useEffect(() => {
-    const q = query(collection(db, 'posts'), orderBy('likes', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const postsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Post[];
-      setPosts(postsData);
-    });
-    return () => unsubscribe();
+    setPosts([]);
   }, []);
 
   const handleSignOut = async () => {
-    await signOut(auth);
+    localStorage.removeItem('currentUser');
     router.push('/');
   };
 
@@ -139,29 +106,23 @@ export default function Dashboard() {
     if (!postContent.trim() || !user || !profile || isPosting) return;
     setIsPosting(true);
     try {
-      const newPoints = (profile.points || 0) + 10;
-      await addDoc(collection(db, 'posts'), {
+      const newPost: Post = {
+        id: Date.now().toString(),
         content: postContent,
         uid: user.uid,
         authorName: profile.name,
-        authorBadge: getBadge(newPoints),
+        authorBadge: getBadge(0),
         isAnonymous,
         tag: postTag,
         likes: 0,
         likedBy: [],
         comments: [],
         createdAt: new Date().toISOString()
-      });
-      
-      await updateDoc(doc(db, 'users', user.uid), { points: newPoints });
-      setProfile({ ...profile, points: newPoints });
-      
+      };
+      setPosts([newPost, ...posts]);
       setPostContent('');
       setPostTag('Thảo luận');
       setIsAnonymous(false);
-    } catch (err) {
-      console.error("Lỗi đăng bài:", err);
-      alert("Không thể đăng bài. Vui lòng thử lại.");
     } finally {
       setIsPosting(false);
     }
@@ -169,41 +130,34 @@ export default function Dashboard() {
 
   const handleComment = async (postId: string) => {
     if (!user || !profile || !commentInputs[postId]?.trim()) return;
-    try {
-      const newComment: Comment = {
-        uid: user.uid,
-        authorName: profile.name,
-        content: commentInputs[postId].trim(),
-        createdAt: new Date().toISOString()
-      };
-      await updateDoc(doc(db, 'posts', postId), {
-        comments: arrayUnion(newComment)
-      });
-      setCommentInputs(prev => ({ ...prev, [postId]: '' }));
-    } catch (err) {
-      console.error("Lỗi cập nhật comment:", err);
-    }
+    const newComment: Comment = {
+      uid: user.uid,
+      authorName: profile.name,
+      content: commentInputs[postId].trim(),
+      createdAt: new Date().toISOString()
+    };
+    setPosts(prev => prev.map(p => {
+      if (p.id === postId) {
+        return { ...p, comments: [...(p.comments || []), newComment] };
+      }
+      return p;
+    }));
+    setCommentInputs(prev => ({ ...prev, [postId]: '' }));
   };
 
   const handleLike = async (postId: string, likedBy: string[], currentLikes: number) => {
     if (!user) return;
-    const postRef = doc(db, 'posts', postId);
     const hasLiked = likedBy.includes(user.uid);
-    try {
-      if (hasLiked) {
-        await updateDoc(postRef, {
-          likedBy: arrayRemove(user.uid),
-          likes: currentLikes - 1
-        });
-      } else {
-        await updateDoc(postRef, {
-          likedBy: arrayUnion(user.uid),
-          likes: currentLikes + 1
-        });
+    setPosts(prev => prev.map(p => {
+      if (p.id === postId) {
+        return {
+          ...p,
+          likedBy: hasLiked ? p.likedBy.filter(id => id !== user.uid) : [...p.likedBy, user.uid],
+          likes: hasLiked ? p.likes - 1 : p.likes + 1
+        };
       }
-    } catch (err) {
-      console.error("Lỗi cập nhật like:", err);
-    }
+      return p;
+    }));
   };
 
   if (loading) {
@@ -467,7 +421,7 @@ export default function Dashboard() {
               {posts.length === 0 && (
                 <div className="text-center py-20 bg-[#141414] sm:rounded-[14px] border border-[#1a1a1a] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
                   <div className="text-5xl mb-4">📝</div>
-                  <p className="text-[#999999] font-semibold text-[18px]">Chưa có bài viết nào.</p>
+                  <p className="text-[#999999] font-semibold text-[18px]">Chưa có bài đăng nào. Hãy là người đầu tiên lên tiếng!</p>
                 </div>
               )}
             </div>
