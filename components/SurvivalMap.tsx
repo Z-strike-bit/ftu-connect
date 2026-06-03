@@ -87,39 +87,85 @@ const formatTimeLeft = (expireAt: number) => {
   return `${minutes} phút`;
 };
 
-const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (marker: FoodMarker) => void }) => (
-  <div className="p-1 min-w-[200px]">
-    <h3 className="font-bold text-[17px] text-orange-600 mb-1 leading-tight">{data.restaurantName}</h3>
-    <p className="text-[13px] text-slate-600 mb-3 flex items-start gap-1">
-      <span className="shrink-0 mt-0.5">📍</span> {data.address}
-    </p>
-    
-    <div className="border-t border-slate-200 pt-3 flex items-center justify-between">
-      <div className="flex items-center gap-1 text-[13px] font-bold text-amber-500">
-        ⭐ {data.averageRating > 0 ? data.averageRating.toFixed(1) : 'Chưa có'}
+const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (marker: FoodMarker) => void }) => {
+  const [showReviews, setShowReviews] = useState(false);
+
+  return (
+    <div className="p-1 min-w-[220px] max-w-[280px]">
+      <h3 className="font-bold text-[17px] text-orange-600 mb-1 leading-tight">{data.restaurantName}</h3>
+      <p className="text-[13px] text-slate-600 mb-3 flex items-start gap-1">
+        <span className="shrink-0 mt-0.5">📍</span> {data.address}
+      </p>
+      
+      <div className="border-t border-slate-200 pt-3 flex items-center justify-between">
+        <div className="flex items-center gap-1 text-[13px] font-bold text-amber-500">
+          ⭐ {data.averageRating > 0 ? data.averageRating.toFixed(1) : 'Chưa có'} 
+          <span className="text-slate-400 font-normal ml-1">({data.reviews.length})</span>
+        </div>
+        <button 
+          onMouseDown={(e) => {
+            e.stopPropagation();
+            onReviewClick(data);
+          }}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            onReviewClick(data);
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onReviewClick(data);
+          }}
+          type="button"
+          className="text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors font-semibold z-50 relative cursor-pointer"
+        >
+          + Đánh giá
+        </button>
       </div>
-      <button 
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          onReviewClick(data);
-        }}
-        onTouchStart={(e) => {
-          e.stopPropagation();
-          onReviewClick(data);
-        }}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onReviewClick(data);
-        }}
-        type="button"
-        className="text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors font-semibold z-50 relative cursor-pointer"
-      >
-        + Đánh giá
-      </button>
+
+      {data.reviews.length > 0 && (
+        <div className="mt-3">
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowReviews(!showReviews);
+            }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            className="w-full text-center text-[12px] text-slate-500 hover:text-slate-700 font-medium py-1.5 bg-slate-50 rounded-lg flex justify-center items-center gap-1 transition-colors"
+          >
+            {showReviews ? 'Ẩn bình luận' : 'Xem bình luận'}
+            <svg className={`w-3 h-3 transition-transform ${showReviews ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+          </button>
+          
+          <AnimatePresence>
+            {showReviews && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-2 space-y-2 max-h-[150px] overflow-y-auto pr-1 custom-scrollbar">
+                  {data.reviews.map((rev, idx) => (
+                    <div key={idx} className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-bold text-[12px] text-slate-700">{rev.user}</span>
+                        <span className="text-[10px] text-amber-500 tracking-widest">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</span>
+                      </div>
+                      <p className="text-[12px] text-slate-600 leading-snug">{rev.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 const PassItemPopup = ({ data }: { data: PassItemMarker }) => (
   <div className="p-1 min-w-[200px]">
@@ -154,7 +200,10 @@ export default function SurvivalMap() {
       restaurantName: 'Quán quẩy nóng ngõ 119',
       address: 'Ngõ 119 Chùa Láng, Đống Đa, Hà Nội',
       averageRating: 4.5,
-      reviews: []
+      reviews: [
+        { user: 'Hải Sinh Viên', rating: 5, comment: 'Quẩy giòn rụm, nước chấm pha rất vừa miệng, mùa đông ăn thì hết sẩy!' },
+        { user: 'Mai Trúc', rating: 4, comment: 'Quán hơi đông nên phải đợi tí, nhưng đồ ăn ngon rẻ.' }
+      ]
     },
     {
       id: 'm2',
@@ -454,7 +503,22 @@ export default function SurvivalMap() {
               <div className="flex gap-3 mt-6">
                 <button 
                   onClick={() => {
-                    alert('Đã gửi đánh giá thành công!');
+                    if (reviewForm.comment.trim() === '') {
+                      alert('Vui lòng nhập nhận xét của bạn!');
+                      return;
+                    }
+                    
+                    const updatedMarkers = markers.map(m => {
+                      if (m.id === reviewMarker.id && m.type === 'food') {
+                        const newReview = { user: 'Bạn (Vừa xong)', rating: reviewForm.rating, comment: reviewForm.comment };
+                        const updatedReviews = [newReview, ...m.reviews];
+                        const newAverage = updatedReviews.reduce((acc, curr) => acc + curr.rating, 0) / updatedReviews.length;
+                        return { ...m, reviews: updatedReviews, averageRating: newAverage };
+                      }
+                      return m;
+                    });
+                    
+                    setMarkers(updatedMarkers);
                     setReviewMarker(null);
                     setReviewForm({ rating: 5, comment: '' });
                   }}
