@@ -52,7 +52,7 @@ const getIconByCategory = (category: string) => {
 };
 
 export default function SurvivalMap() {
-  const ftuPosition: [number, number] = [21.0227, 105.8019];
+  const ftuPosition: [number, number] = [21.0230, 105.8050];
 
   // Danh sách Markers
   const [markers, setMarkers] = useState([
