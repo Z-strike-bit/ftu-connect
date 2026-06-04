@@ -14,12 +14,13 @@ export default function ConnectPage() {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   
-  const [activeTab, setActiveTab] = useState<'suggestions' | 'requests' | 'friends'>('suggestions');
+  const [activeTab, setActiveTab] = useState<'suggestions' | 'requests' | 'friends' | 'sent'>('suggestions');
   const [isScanning, setIsScanning] = useState(true);
   const [sendingId, setSendingId] = useState<string | null>(null);
   
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
+  const [sentRequestsUsers, setSentRequestsUsers] = useState<any[]>([]);
   const [friends, setFriends] = useState<any[]>([]);
 
   useEffect(() => {
@@ -75,7 +76,10 @@ export default function ConnectPage() {
       // 2. Requests Tab (people who sent ME a request)
       setRequests(allUsers.filter(u => myPendingRequests.includes(u.id)));
 
-      // 3. Suggestions Tab
+      // 3. Sent Requests Tab (people I sent a request to)
+      setSentRequestsUsers(allUsers.filter(u => mySentRequests.includes(u.id)));
+
+      // 4. Suggestions Tab
       // Rules: Not me, not friend, not pending request (sent or received)
       let candidates = allUsers.filter(u => 
         u.id !== user.uid && 
@@ -137,8 +141,8 @@ export default function ConnectPage() {
       await updateDoc(doc(db, 'users', targetId), {
         pendingRequests: arrayUnion(user.uid)
       });
-      // Optionally show a success alert or let the snapshot auto-remove the card
-      // alert('Đã gửi lời mời thành công!');
+      // Force change to Sent tab after a brief delay so they see what happened
+      // setActiveTab('sent');
     } catch (err) {
       console.error(err);
       alert('Có lỗi xảy ra khi gửi lời mời: ' + (err as Error).message);
@@ -246,6 +250,15 @@ export default function ConnectPage() {
               <span className="text-[15px] uppercase tracking-wide">Radar Gợi ý</span>
             </button>
             <button 
+              onClick={() => setActiveTab('sent')}
+              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'sent' ? 'bg-gradient-to-r from-[#d44df0]/20 to-transparent border-l-4 border-[#d44df0] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
+            >
+              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </div>
+              <span className="text-[15px] uppercase tracking-wide">Đã gửi</span>
+            </button>
+            <button 
               onClick={() => setActiveTab('friends')}
               className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'friends' ? 'bg-gradient-to-r from-[#00ff88]/20 to-transparent border-l-4 border-[#00ff88] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
             >
@@ -264,6 +277,7 @@ export default function ConnectPage() {
               <h3 className="text-[28px] font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#8888a0] uppercase tracking-wider">
                 {activeTab === 'suggestions' && 'Matchmaking Radar'}
                 {activeTab === 'requests' && `Incoming Requests [${requests.length}]`}
+                {activeTab === 'sent' && `Sent Requests [${sentRequestsUsers.length}]`}
                 {activeTab === 'friends' && `My Squad [${friends.length}]`}
               </h3>
             </div>
@@ -381,6 +395,28 @@ export default function ConnectPage() {
                           Decline
                         </button>
                       </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* SENT REQUESTS */}
+                {activeTab === 'sent' && sentRequestsUsers.map((reqUser) => (
+                  <div key={reqUser.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] hover:border-[#d44df0]/50 transition-all duration-300 group">
+                    <div className="aspect-square w-full bg-[#11111a] overflow-hidden shrink-0 relative">
+                      <img 
+                        src={reqUser.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + reqUser.name} 
+                        className="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-500" 
+                        alt="Avatar"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/50 to-transparent"></div>
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#d44df0] bg-[#000000]/80 px-4 py-2 rounded-full border border-[#d44df0]/50 font-black text-[11px] tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(212,77,240,0.4)]">
+                        Đang chờ duyệt
+                      </div>
+                    </div>
+                    
+                    <div className="p-5 flex flex-col flex-1 relative z-10 -mt-8">
+                      <h4 className="font-bold text-[19px] text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{reqUser.name}</h4>
+                      <p className="text-[13px] text-[#8888a0] line-clamp-1 font-medium mb-5">{reqUser.major}</p>
                     </div>
                   </div>
                 ))}
