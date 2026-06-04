@@ -6,53 +6,58 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { auth, googleProvider, db } from '@/lib/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, query, where, getDocs, getDoc, doc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function Login() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     try {
-      const q = query(collection(db, 'users'), where('username', '==', username));
-      const querySnapshot = await getDocs(q);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
       
-      if (querySnapshot.empty) {
-        setError('Tên tài khoản hoặc mật khẩu không chính xác.');
-        return;
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        router.push('/dashboard');
+      } else {
+        router.push('/onboarding');
       }
-
-      const userDoc = querySnapshot.docs[0].data();
-      const email = userDoc.email;
-
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push('/dashboard');
     } catch (err: any) {
       console.error(err);
-      setError('Tên tài khoản hoặc mật khẩu không chính xác.');
+      setError('Tài khoản hoặc mật khẩu không chính xác.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleLogin = async () => {
     setError(null);
+    setLoading(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      if (result.user.email) {
-        const userDoc = await getDoc(doc(db, 'users', result.user.uid));
-        if (!userDoc.exists()) {
-          router.push('/register');
-        } else {
-          router.push('/dashboard');
-        }
+      
+      const docRef = doc(db, 'users', result.user.uid);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        router.push('/dashboard');
+      } else {
+        router.push('/onboarding');
       }
     } catch (err: any) {
       console.error(err);
       setError('Lỗi đăng nhập với Google.');
+      setLoading(false);
     }
   };
 
@@ -71,17 +76,17 @@ export default function Login() {
           </div>
         )}
 
-        {/* Phương thức 1: Username/Password */}
+        {/* Phương thức 1: Email/Password */}
         <form onSubmit={handleLogin} className="flex flex-col gap-4 text-left">
           <div>
-            <label className="block text-white text-sm font-semibold mb-2">Tên tài khoản</label>
+            <label className="block text-white text-sm font-semibold mb-2">Email (@ftu.edu.vn)</label>
             <input 
-              type="text" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
-              placeholder="Nhập tên tài khoản"
+              placeholder="Nhập email trường của bạn"
             />
           </div>
           <div>
@@ -97,9 +102,10 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300"
+            disabled={loading}
+            className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 disabled:opacity-50"
           >
-            Đăng nhập
+            {loading ? 'Đang kết nối...' : 'Đăng nhập'}
           </button>
         </form>
 
@@ -114,7 +120,8 @@ export default function Login() {
         <button
           onClick={handleGoogleLogin}
           type="button"
-          className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] border border-[#262626] text-white font-semibold py-[14px] px-6 rounded-[100px] hover:bg-[#262626] transition-all duration-300"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] border border-[#262626] text-white font-semibold py-[14px] px-6 rounded-[100px] hover:bg-[#262626] transition-all duration-300 disabled:opacity-50"
         >
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6 shrink-0" />
           <span className="text-[16px]">Đăng nhập bằng Google</span>

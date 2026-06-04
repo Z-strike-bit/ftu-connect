@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { auth, googleProvider, db } from '@/lib/firebase';
-import { signInWithPopup, signOut, getAdditionalUserInfo } from 'firebase/auth';
+import { signInWithPopup, signOut, getAdditionalUserInfo, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { FTU_MAJORS } from '@/lib/constants/ftuMajors';
 
@@ -29,6 +29,8 @@ export default function Register() {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
   const [googleUser, setGoogleUser] = useState<any>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -46,6 +48,33 @@ export default function Register() {
     goals: [] as string[],
     interests: ''
   });
+
+
+  const handleEmailRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (!email.endsWith('@ftu.edu.vn')) {
+      setError('Bắt buộc sử dụng email trường (@ftu.edu.vn)');
+      return;
+    }
+    setSaving(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      setGoogleUser(userCredential.user);
+      setStep(2);
+    } catch (err: any) {
+      console.error(err);
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Email này đã được đăng ký. Vui lòng đăng nhập.');
+      } else if (err.code === 'auth/weak-password') {
+        setError('Mật khẩu quá yếu, vui lòng chọn mật khẩu tối thiểu 6 ký tự.');
+      } else {
+        setError('Có lỗi xảy ra khi tạo tài khoản: ' + err.message);
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleGoogleLogin = async () => {
     setError(null);
@@ -136,15 +165,54 @@ export default function Register() {
         )}
 
         {step === 1 && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6 text-left">
+            <form onSubmit={handleEmailRegister} className="flex flex-col gap-4">
+              <div>
+                <label className="block text-white text-sm font-semibold mb-2">Email (@ftu.edu.vn)</label>
+                <input 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
+                  placeholder="Nhập email trường của bạn"
+                />
+              </div>
+              <div>
+                <label className="block text-white text-sm font-semibold mb-2">Mật khẩu</label>
+                <input 
+                  type="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
+                  placeholder="Tạo mật khẩu (ít nhất 6 ký tự)"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={saving}
+                className="w-full bg-white text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 mt-2"
+              >
+                {saving ? 'Đang xử lý...' : 'Tạo tài khoản'}
+              </button>
+            </form>
+
+            <div className="flex items-center my-2">
+              <div className="flex-1 border-t border-white/10"></div>
+              <span className="px-3 text-[#6a6a6a] text-[13px] font-medium">Hoặc</span>
+              <div className="flex-1 border-t border-white/10"></div>
+            </div>
+
             <button
+              type="button"
               onClick={handleGoogleLogin}
-              className="w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-300"
+              disabled={saving}
+              className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] border border-[#262626] text-white font-semibold py-[14px] px-6 rounded-[100px] hover:bg-[#262626] transition-all duration-300 disabled:opacity-50"
             >
               <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6 shrink-0" />
-              <span className="text-[16px]">Tiếp tục với Google</span>
+              <span className="text-[16px]">Đăng ký bằng Google</span>
             </button>
-            <p className="text-[13px] text-[#6a6a6a] mt-2">Bắt buộc sử dụng email trường (@ftu.edu.vn)</p>
           </div>
         )}
 
