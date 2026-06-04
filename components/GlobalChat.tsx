@@ -149,7 +149,7 @@ export default function GlobalChat() {
               
               {/* Profile Intro */}
               <div className="text-center py-6 flex flex-col items-center border-b border-white/5 mb-2 relative z-10">
-                <img src={targetUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${targetUser.name}`} className="w-20 h-20 rounded-full bg-white/5 mb-3 border-2 border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
+                <img src={targetUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${targetUser.name}`} className="w-20 h-20 rounded-full bg-white/5 mb-3 border-2 border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)] object-cover" />
                 <h4 className="font-extrabold text-[17px] text-white drop-shadow-sm">{targetUser.name}</h4>
                 <p className="text-[13px] text-[#a0a0b0] font-medium mt-1">{targetUser.major}</p>
                 <Link href={`/profile/${targetUser.id}`} className="mt-4 text-[13px] text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-1.5 rounded-full font-bold transition-all shadow-sm hover:shadow-[0_0_10px_rgba(255,255,255,0.1)]">
