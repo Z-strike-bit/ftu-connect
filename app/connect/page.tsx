@@ -15,6 +15,7 @@ export default function ConnectPage() {
   const [loading, setLoading] = useState(true);
   
   const [activeTab, setActiveTab] = useState<'suggestions' | 'requests' | 'friends'>('suggestions');
+  const [isScanning, setIsScanning] = useState(true);
   
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
@@ -30,6 +31,19 @@ export default function ConnectPage() {
     });
     return () => unsubscribe();
   }, [router]);
+
+  // Handle Radar Scanning State
+  useEffect(() => {
+    if (activeTab === 'suggestions') {
+      setIsScanning(true);
+      const timer = setTimeout(() => {
+        setIsScanning(false);
+      }, 2500);
+      return () => clearTimeout(timer);
+    } else {
+      setIsScanning(false);
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     if (!user) return;
@@ -108,7 +122,7 @@ export default function ConnectPage() {
       unsubscribeProfile();
       unsubscribeUsers();
     };
-  }, [user, profile?.id]); // Re-run users listener when profile id is set
+  }, [user, profile?.id]); 
 
   // ACTIONS
   const handleSendRequest = async (targetId: string) => {
@@ -173,188 +187,235 @@ export default function ConnectPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#141414]">
+      <div className="min-h-screen bg-[#050508]">
         <Navbar profileName="" onSignOut={() => {}} />
-        <div className="text-center py-20 text-[#999999] font-semibold">Đang tải...</div>
+        <div className="text-center py-20 text-[#0099ff] font-mono animate-pulse font-semibold">INITIALIZING LOBBY...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#141414] flex flex-col h-screen overflow-hidden selection:bg-[#fff0f2] selection:text-[#0099ff]">
+    <div className="min-h-screen bg-[#050508] flex flex-col h-screen overflow-hidden selection:bg-[#0099ff]/30 selection:text-[#00ff88]">
       <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={() => signOut(auth).then(() => router.push('/'))} />
 
-      <div className="flex flex-1 overflow-hidden w-full max-w-[1600px] mx-auto">
+      <div className="flex flex-1 overflow-hidden w-full max-w-[1600px] mx-auto relative">
+        {/* Background Gradients for eSports Vibe */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#0099ff]/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#d44df0]/10 rounded-full blur-[100px] pointer-events-none"></div>
         
         {/* Cột trái: Sidebar Quản lý */}
-        <div className="w-[360px] bg-[#141414] border-r border-[#1a1a1a] flex-shrink-0 flex flex-col h-full hidden lg:flex mt-4">
-          <div className="p-5 flex justify-between items-center">
-            <h2 className="text-[24px] font-bold text-white">Bạn bè</h2>
-            <button className="w-10 h-10 rounded-full bg-[#090909] flex items-center justify-center hover:bg-[#1c1c1c] transition-colors border border-[#262626]">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-            </button>
+        <div className="w-[360px] bg-[#0a0a14]/80 backdrop-blur-xl border-r border-[#1f1f33] flex-shrink-0 flex flex-col h-full hidden lg:flex mt-4 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+          <div className="p-6 flex justify-between items-center border-b border-[#1f1f33]">
+            <h2 className="text-[22px] font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <svg className="w-6 h-6 text-[#0099ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+              Lobby
+            </h2>
           </div>
-          <div className="px-5 pb-4 space-y-1">
+          <div className="px-5 py-6 space-y-3">
             <button 
               onClick={() => setActiveTab('requests')}
-              className={`w-full font-semibold rounded-[14px] p-3 flex items-center gap-4 transition-colors ${activeTab === 'requests' ? 'bg-[#1c1c1c] text-white' : 'hover:bg-[#090909] text-[#999999] hover:text-white'}`}
+              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'requests' ? 'bg-gradient-to-r from-[#ff0055]/20 to-transparent border-l-4 border-[#ff0055] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
             >
-              <div className="bg-[#222222] text-white p-2 rounded-full shadow-sm relative">
+              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm relative">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 {requests.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#ff385c] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-[#ff0055] text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-[0_0_10px_#ff0055]">
                     {requests.length}
                   </span>
                 )}
               </div>
-              <span className="text-[16px]">Lời mời kết bạn</span>
+              <span className="text-[15px] uppercase tracking-wide">Lời mời kết bạn</span>
             </button>
             <button 
               onClick={() => setActiveTab('suggestions')}
-              className={`w-full font-semibold rounded-[14px] p-3 flex items-center gap-4 transition-colors ${activeTab === 'suggestions' ? 'bg-[#1c1c1c] text-white' : 'hover:bg-[#090909] text-[#999999] hover:text-white'}`}
+              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'suggestions' ? 'bg-gradient-to-r from-[#0099ff]/20 to-transparent border-l-4 border-[#0099ff] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
             >
-              <div className="bg-[#1c1c1c] text-white p-2 rounded-full shadow-sm">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm relative">
+                {isScanning && activeTab === 'suggestions' && (
+                  <span className="absolute inset-0 border border-[#0099ff] rounded-lg animate-ping"></span>
+                )}
+                <svg className="w-5 h-5 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
               </div>
-              <span className="text-[16px]">Gợi ý (Mới)</span>
+              <span className="text-[15px] uppercase tracking-wide">Radar Gợi ý</span>
             </button>
             <button 
               onClick={() => setActiveTab('friends')}
-              className={`w-full font-semibold rounded-[14px] p-3 flex items-center gap-4 transition-colors ${activeTab === 'friends' ? 'bg-[#1c1c1c] text-white' : 'hover:bg-[#090909] text-[#999999] hover:text-white'}`}
+              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'friends' ? 'bg-gradient-to-r from-[#00ff88]/20 to-transparent border-l-4 border-[#00ff88] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
             >
-              <div className="bg-[#1c1c1c] text-white p-2 rounded-full shadow-sm">
+              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
               </div>
-              <span className="text-[16px]">Tất cả bạn bè</span>
+              <span className="text-[15px] uppercase tracking-wide">Tất cả bạn bè</span>
             </button>
           </div>
         </div>
 
-        {/* Cột Phải: Grid Card Gợi ý / Bạn bè */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 custom-scrollbar bg-[#090909] mt-4">
+        {/* Cột Phải: Radar / Grid Card */}
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10 custom-scrollbar mt-4 z-10">
           <div className="max-w-[1200px] mx-auto">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-[22px] font-bold text-white">
-                {activeTab === 'suggestions' && 'Những người bạn có thể biết'}
-                {activeTab === 'requests' && `Lời mời kết bạn (${requests.length})`}
-                {activeTab === 'friends' && `Tất cả bạn bè (${friends.length})`}
+            <div className="flex justify-between items-center mb-10 border-b border-[#1f1f33] pb-4">
+              <h3 className="text-[28px] font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#8888a0] uppercase tracking-wider">
+                {activeTab === 'suggestions' && 'Matchmaking Radar'}
+                {activeTab === 'requests' && `Incoming Requests [${requests.length}]`}
+                {activeTab === 'friends' && `My Squad [${friends.length}]`}
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {/* SUGGESTIONS */}
-              {activeTab === 'suggestions' && suggestions.map((suggestion) => (
-                <div key={suggestion.id} className="bg-[#141414] rounded-[14px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col border border-[#1a1a1a] hover:border-[#0099ff]/50 hover:shadow-[0_0_20px_rgba(0,153,255,0.1)] transition-all duration-300 group">
-                  <div className="aspect-square w-full bg-[#1c1c1c] overflow-hidden shrink-0 relative">
-                    <img 
-                      src={suggestion.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                      alt="Avatar"
-                    />
+            {isScanning && activeTab === 'suggestions' ? (
+              <div className="flex flex-col items-center justify-center py-32 h-[60vh]">
+                <div className="relative w-56 h-56 flex items-center justify-center">
+                  <div className="absolute w-full h-full border border-[#0099ff]/30 rounded-full animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+                  <div className="absolute w-3/4 h-3/4 border border-[#0099ff]/50 rounded-full animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite_0.8s]"></div>
+                  <div className="absolute w-1/2 h-1/2 border-2 border-[#0099ff]/80 rounded-full animate-pulse shadow-[0_0_30px_rgba(0,153,255,0.4)]"></div>
+                  <div className="absolute w-16 h-16 bg-[#0099ff] rounded-full shadow-[0_0_40px_#0099ff] animate-pulse flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                   </div>
-                  <div className="p-4 flex flex-col flex-1">
-                    <h4 className="font-semibold text-[18px] text-white line-clamp-1 mb-0.5">{suggestion.name}</h4>
-                    <p className="text-[15px] text-[#999999] line-clamp-1 mb-2">{suggestion.role === 'mentor' ? 'Mentor' : 'Mentee'} • {suggestion.major}</p>
-                    <div className="text-[14px] text-[#999999] mb-4 flex items-center gap-1.5 bg-[#090909] px-2.5 py-1.5 rounded-lg border border-[#1a1a1a] w-fit">
-                      <span className="truncate">{suggestion.matchReason}</span>
+                  <div className="absolute w-1/2 h-[2px] bg-gradient-to-r from-transparent via-[#00ff88] to-[#0099ff] top-1/2 left-1/2 origin-left animate-[spin_2s_linear_infinite] drop-shadow-[0_0_8px_#00ff88]"></div>
+                </div>
+                <p className="mt-12 text-[#0099ff] font-mono font-bold text-xl tracking-[0.2em] uppercase flex items-center shadow-black drop-shadow-md">
+                  Đang quét hệ thống
+                  <span className="flex ml-2 w-8">
+                    <span className="animate-[bounce_1.5s_infinite_0ms]">.</span>
+                    <span className="animate-[bounce_1.5s_infinite_200ms]">.</span>
+                    <span className="animate-[bounce_1.5s_infinite_400ms]">.</span>
+                  </span>
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {/* SUGGESTIONS */}
+                {activeTab === 'suggestions' && suggestions.map((suggestion) => (
+                  <div key={suggestion.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,153,255,0.3)] hover:border-[#0099ff]/60 transition-all duration-300 group">
+                    <div className="absolute top-3 right-3 z-20">
+                      <div className="bg-[#050508]/90 border border-[#00ff88]/40 text-[#00ff88] text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-full shadow-[0_0_12px_rgba(0,255,136,0.25)]">
+                        Match: {Math.min(95 + (suggestion.score || 0), 99)}%
+                      </div>
                     </div>
-                    
-                    <div className="mt-auto flex flex-col gap-2.5">
-                      <button 
-                        onClick={() => handleSendRequest(suggestion.id)}
-                        className="w-full py-2 bg-[#0099ff] text-white font-bold rounded-lg text-[15px] hover:bg-[#0077cc] transition-colors text-center shadow-sm"
-                      >
-                        Kết nối
-                      </button>
-                      <Link href={`/profile/${suggestion.id}`} className="w-full py-2 bg-[#090909] text-white font-semibold rounded-lg text-[15px] hover:bg-[#1c1c1c] transition-colors border border-transparent hover:border-[#262626] text-center">
-                        Xem hồ sơ
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              
-              {activeTab === 'suggestions' && suggestions.length === 0 && (
-                <div className="col-span-full py-20 text-center text-[#999999] font-semibold text-[16px]">
-                  Chưa tìm thấy người phù hợp lúc này. Hãy thử tìm kiếm qua thanh công cụ ở trên!
-                </div>
-              )}
 
-              {/* REQUESTS */}
-              {activeTab === 'requests' && requests.map((reqUser) => (
-                <div key={reqUser.id} className="bg-[#141414] rounded-[14px] overflow-hidden flex flex-col border border-[#1a1a1a] hover:border-[#ff385c]/50 transition-all duration-300 group">
-                  <div className="aspect-square w-full bg-[#1c1c1c] overflow-hidden shrink-0 relative">
-                    <img 
-                      src={reqUser.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + reqUser.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                      alt="Avatar"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col flex-1">
-                    <h4 className="font-semibold text-[18px] text-white line-clamp-1 mb-0.5">{reqUser.name}</h4>
-                    <p className="text-[15px] text-[#999999] line-clamp-1 mb-4">{reqUser.major}</p>
-                    
-                    <div className="mt-auto flex flex-col gap-2.5">
-                      <button 
-                        onClick={() => handleAcceptRequest(reqUser.id)}
-                        className="w-full py-2 bg-[#ff385c] text-white font-bold rounded-lg text-[15px] hover:bg-[#e02d4f] transition-colors text-center shadow-sm"
-                      >
-                        Chấp nhận
-                      </button>
-                      <button 
-                        onClick={() => handleDeclineRequest(reqUser.id)}
-                        className="w-full py-2 bg-[#090909] text-white font-semibold rounded-lg text-[15px] hover:bg-[#1c1c1c] transition-colors border border-transparent hover:border-[#262626] text-center"
-                      >
-                        Xóa lời mời
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {activeTab === 'requests' && requests.length === 0 && (
-                <div className="col-span-full py-20 text-center text-[#999999] font-semibold text-[16px]">
-                  Bạn không có lời mời kết bạn nào.
-                </div>
-              )}
-
-              {/* FRIENDS */}
-              {activeTab === 'friends' && friends.map((friend) => (
-                <div key={friend.id} className="bg-[#141414] rounded-[14px] overflow-hidden flex flex-col border border-[#1a1a1a] transition-all duration-300 group">
-                  <div className="p-4 flex gap-4 items-center border-b border-[#1a1a1a]">
-                    <div className="w-16 h-16 rounded-full overflow-hidden bg-[#1c1c1c] shrink-0 border border-[#262626]">
+                    <div className="aspect-square w-full bg-[#11111a] overflow-hidden shrink-0 relative">
                       <img 
-                        src={friend.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + friend.name} 
-                        className="w-full h-full object-cover" 
+                        src={suggestion.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100" 
                         alt="Avatar"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-transparent to-transparent opacity-90"></div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-[18px] text-white line-clamp-1">{friend.name}</h4>
-                      <p className="text-[14px] text-[#999999] line-clamp-1">{friend.role === 'mentor' ? 'Mentor' : 'Mentee'}</p>
+                    
+                    <div className="p-5 flex flex-col flex-1 relative z-10 -mt-8">
+                      <h4 className="font-bold text-[19px] text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{suggestion.name}</h4>
+                      
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className={`text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded shadow-[0_0_8px_currentColor] ${suggestion.role === 'mentor' ? 'bg-[#ff0055]/20 text-[#ff0055] border border-[#ff0055]/50' : 'bg-[#0099ff]/20 text-[#0099ff] border border-[#0099ff]/50'}`}>
+                          {suggestion.role === 'mentor' ? 'Mentor' : 'Mentee'}
+                        </span>
+                        <p className="text-[13px] text-[#8888a0] line-clamp-1 font-medium">{suggestion.major}</p>
+                      </div>
+
+                      <div className="text-[12px] text-[#0099ff] mb-5 flex items-center gap-1.5 bg-[#0099ff]/10 px-3 py-1.5 rounded-lg border border-[#0099ff]/20 w-fit font-bold">
+                        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <span className="truncate">{suggestion.matchReason || 'Gợi ý kết nối'}</span>
+                      </div>
+                      
+                      <div className="mt-auto flex flex-col gap-2.5">
+                        <button 
+                          onClick={() => handleSendRequest(suggestion.id)}
+                          className="relative w-full py-3 bg-[#0a0a14] text-white font-bold rounded-xl text-[13px] uppercase tracking-wider overflow-hidden group/btn border border-[#0099ff]/50"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#0099ff] to-[#d44df0] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10 drop-shadow-md group-hover/btn:text-white transition-colors">Kết nối ngay</span>
+                        </button>
+                        <Link href={`/profile/${suggestion.id}`} className="w-full py-2 bg-transparent text-[#8888a0] font-bold rounded-xl text-[12px] hover:text-white uppercase tracking-wider transition-colors text-center">
+                          Xem Profile
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                  <div className="p-4 mt-auto flex flex-col gap-2.5">
-                    <Link href={`/profile/${friend.id}`} className="w-full py-2 bg-white text-black font-bold rounded-lg text-[15px] hover:bg-gray-200 transition-colors text-center shadow-sm">
-                      Xem hồ sơ
-                    </Link>
-                    <button 
-                      onClick={() => handleUnfriend(friend.id)}
-                      className="w-full py-2 bg-[#090909] text-[#ff385c] font-semibold rounded-lg text-[15px] hover:bg-[#1a0f12] transition-colors border border-transparent hover:border-[#ff385c]/30 text-center"
-                    >
-                      Hủy kết bạn
-                    </button>
+                ))}
+                
+                {activeTab === 'suggestions' && suggestions.length === 0 && (
+                  <div className="col-span-full py-20 flex flex-col items-center">
+                    <div className="w-20 h-20 bg-[#1f1f33] rounded-full flex items-center justify-center border-2 border-[#2a2a40] mb-4">
+                      <svg className="w-8 h-8 text-[#8888a0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <p className="text-[#8888a0] font-mono uppercase tracking-widest text-sm">Lobby trống. Hãy tìm kiếm thủ công!</p>
                   </div>
-                </div>
-              ))}
+                )}
 
-              {activeTab === 'friends' && friends.length === 0 && (
-                <div className="col-span-full py-20 text-center text-[#999999] font-semibold text-[16px]">
-                  Bạn chưa có người bạn nào. Hãy kết nối thêm nhé!
-                </div>
-              )}
+                {/* REQUESTS */}
+                {activeTab === 'requests' && requests.map((reqUser) => (
+                  <div key={reqUser.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(255,0,85,0.2)] hover:border-[#ff0055]/50 transition-all duration-300 group">
+                    <div className="aspect-square w-full bg-[#11111a] overflow-hidden shrink-0 relative">
+                      <img 
+                        src={reqUser.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + reqUser.name} 
+                        className="w-full h-full object-cover opacity-90" 
+                        alt="Avatar"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-transparent to-transparent opacity-90"></div>
+                    </div>
+                    
+                    <div className="p-5 flex flex-col flex-1 relative z-10 -mt-8">
+                      <h4 className="font-bold text-[19px] text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{reqUser.name}</h4>
+                      <p className="text-[13px] text-[#8888a0] line-clamp-1 font-medium mb-5">{reqUser.major}</p>
+                      
+                      <div className="mt-auto flex gap-2">
+                        <button 
+                          onClick={() => handleAcceptRequest(reqUser.id)}
+                          className="flex-1 py-2.5 bg-[#ff0055] text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#ff3377] transition-colors shadow-[0_0_15px_rgba(255,0,85,0.3)]"
+                        >
+                          Accept
+                        </button>
+                        <button 
+                          onClick={() => handleDeclineRequest(reqUser.id)}
+                          className="flex-1 py-2.5 bg-[#1f1f33] text-[#8888a0] font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#2a2a40] hover:text-white transition-colors"
+                        >
+                          Decline
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
 
-            </div>
+                {/* FRIENDS */}
+                {activeTab === 'friends' && friends.map((friend) => (
+                  <div key={friend.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,255,136,0.2)] hover:border-[#00ff88]/50 transition-all duration-300 group">
+                    <div className="aspect-video w-full bg-[#11111a] overflow-hidden shrink-0 relative">
+                      <img 
+                        src={friend.coverPhotoUrl || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'} 
+                        className="w-full h-full object-cover opacity-50" 
+                        alt="Cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] to-transparent"></div>
+                      <div className="absolute -bottom-6 left-5">
+                        <div className="w-16 h-16 rounded-xl border-2 border-[#00ff88] overflow-hidden bg-[#1c1c1c] shadow-[0_0_15px_rgba(0,255,136,0.3)]">
+                          <img 
+                            src={friend.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + friend.name} 
+                            className="w-full h-full object-cover" 
+                            alt="Avatar"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-5 pt-8 flex flex-col flex-1 relative z-10">
+                      <h4 className="font-bold text-[18px] text-white line-clamp-1 font-sans">{friend.name}</h4>
+                      <p className="text-[12px] text-[#8888a0] line-clamp-1 uppercase tracking-wider font-bold mb-4">{friend.role === 'mentor' ? 'Mentor' : 'Mentee'}</p>
+                      
+                      <div className="mt-auto flex flex-col gap-2">
+                        <Link href={`/profile/${friend.id}`} className="w-full py-2.5 bg-[#1f1f33] text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#2a2a40] transition-colors text-center border border-[#2a2a40]">
+                          View Stats
+                        </Link>
+                        <button 
+                          onClick={() => handleUnfriend(friend.id)}
+                          className="w-full py-2 bg-transparent text-[#ff0055] font-bold rounded-xl text-[11px] uppercase tracking-wider hover:bg-[#ff0055]/10 transition-colors"
+                        >
+                          Unfriend
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
