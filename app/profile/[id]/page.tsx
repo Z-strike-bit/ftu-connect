@@ -128,56 +128,62 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!currentUser || !profileId || currentUser.uid === profileId) return;
 
-    const connId = [currentUser.uid, profileId].sort().join('_');
-    const connRef = doc(db, 'connections', connId);
-    
-    const unsubConn = onSnapshot(connRef, (docSnap) => {
+    const unsubUser = onSnapshot(doc(db, 'users', currentUser.uid), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        if (data.status === 'accepted') {
+        if (data.friends && data.friends.includes(profileId)) {
           setConnectionStatus('accepted');
-        } else if (data.status === 'pending') {
-          if (data.requesterId === currentUser.uid) {
-            setConnectionStatus('pending_sent');
-          } else {
-            setConnectionStatus('pending_received');
-          }
+        } else if (data.sentRequests && data.sentRequests.includes(profileId)) {
+          setConnectionStatus('pending_sent');
+        } else if (data.pendingRequests && data.pendingRequests.includes(profileId)) {
+          setConnectionStatus('pending_received');
+        } else {
+          setConnectionStatus('none');
         }
-      } else {
-        setConnectionStatus('none');
       }
     });
 
-    return () => unsubConn();
+    return () => unsubUser();
   }, [currentUser, profileId]);
 
   const handleConnectAction = async () => {
     if (!currentUser || !profileId || connectionLoading) return;
     setConnectionLoading(true);
     try {
-      const connId = [currentUser.uid, profileId].sort().join('_');
-      const connRef = doc(db, 'connections', connId);
-
       if (connectionStatus === 'none') {
-        await setDoc(connRef, {
-          requesterId: currentUser.uid,
-          receiverId: profileId,
-          status: 'pending',
-          createdAt: new Date().toISOString()
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          sentRequests: arrayUnion(profileId)
+        });
+        await updateDoc(doc(db, 'users', profileId), {
+          pendingRequests: arrayUnion(currentUser.uid)
         });
       } else if (connectionStatus === 'pending_sent') {
-        // Hủy yêu cầu
-        await deleteDoc(connRef);
+        // Hủy yêu cầu đã gửi
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          sentRequests: arrayRemove(profileId)
+        });
+        await updateDoc(doc(db, 'users', profileId), {
+          pendingRequests: arrayRemove(currentUser.uid)
+        });
       } else if (connectionStatus === 'pending_received') {
-        // Chấp nhận
-        await updateDoc(connRef, {
-          status: 'accepted',
-          updatedAt: new Date().toISOString()
+        // Chấp nhận lời mời
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          pendingRequests: arrayRemove(profileId),
+          friends: arrayUnion(profileId)
+        });
+        await updateDoc(doc(db, 'users', profileId), {
+          sentRequests: arrayRemove(currentUser.uid),
+          friends: arrayUnion(currentUser.uid)
         });
       } else if (connectionStatus === 'accepted') {
         // Hủy kết bạn
         if (confirm('Bạn có chắc muốn hủy kết bạn?')) {
-          await deleteDoc(connRef);
+          await updateDoc(doc(db, 'users', currentUser.uid), {
+            friends: arrayRemove(profileId)
+          });
+          await updateDoc(doc(db, 'users', profileId), {
+            friends: arrayRemove(currentUser.uid)
+          });
         }
       }
     } catch (error) {
