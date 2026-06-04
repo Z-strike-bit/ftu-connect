@@ -16,6 +16,7 @@ export default function ConnectPage() {
   
   const [activeTab, setActiveTab] = useState<'suggestions' | 'requests' | 'friends'>('suggestions');
   const [isScanning, setIsScanning] = useState(true);
+  const [sendingId, setSendingId] = useState<string | null>(null);
   
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
@@ -59,13 +60,14 @@ export default function ConnectPage() {
 
     // Listen to all users to filter into tabs
     const unsubscribeUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
-      if (!profile) return; // Wait for profile to load
-      
       const allUsers = snapshot.docs.map(d => ({ id: d.id, ...d.data() as any }));
       
-      const myFriends = profile.friends || [];
-      const myPendingRequests = profile.pendingRequests || [];
-      const mySentRequests = profile.sentRequests || [];
+      const currentUserData = allUsers.find(u => u.id === user.uid);
+      if (!currentUserData) return;
+      
+      const myFriends = currentUserData.friends || [];
+      const myPendingRequests = currentUserData.pendingRequests || [];
+      const mySentRequests = currentUserData.sentRequests || [];
 
       // 1. Friends Tab
       setFriends(allUsers.filter(u => myFriends.includes(u.id)));
@@ -88,20 +90,20 @@ export default function ConnectPage() {
         let matchReason = '';
         
         // Opposite role gets a boost
-        if (c.role && profile.role && c.role !== profile.role) {
+        if (c.role && currentUserData.role && c.role !== currentUserData.role) {
           score += 10;
           matchReason = c.role === 'mentor' ? 'Mentor phù hợp' : 'Mentee tiềm năng';
         }
 
         // Same major gets a boost
-        if (c.major && profile.major && c.major === profile.major) {
+        if (c.major && currentUserData.major && c.major === currentUserData.major) {
           score += 5;
           if (!matchReason) matchReason = 'Cùng chuyên ngành';
         }
         
         // Common goals
-        if (c.goals && profile.goals) {
-          const commonGoals = c.goals.filter((g: string) => profile.goals?.includes(g));
+        if (c.goals && currentUserData.goals) {
+          const commonGoals = c.goals.filter((g: string) => currentUserData.goals?.includes(g));
           if (commonGoals.length > 0) {
             score += commonGoals.length * 2;
             if (!matchReason) matchReason = `Chung mục tiêu`;
@@ -122,11 +124,12 @@ export default function ConnectPage() {
       unsubscribeProfile();
       unsubscribeUsers();
     };
-  }, [user, profile?.id]); 
+  }, [user]); 
 
   // ACTIONS
   const handleSendRequest = async (targetId: string) => {
     if (!user) return;
+    setSendingId(targetId);
     try {
       await updateDoc(doc(db, 'users', user.uid), {
         sentRequests: arrayUnion(targetId)
@@ -134,9 +137,13 @@ export default function ConnectPage() {
       await updateDoc(doc(db, 'users', targetId), {
         pendingRequests: arrayUnion(user.uid)
       });
+      // Optionally show a success alert or let the snapshot auto-remove the card
+      // alert('Đã gửi lời mời thành công!');
     } catch (err) {
       console.error(err);
-      alert('Có lỗi xảy ra khi gửi lời mời.');
+      alert('Có lỗi xảy ra khi gửi lời mời: ' + (err as Error).message);
+    } finally {
+      setSendingId(null);
     }
   };
 
@@ -319,10 +326,13 @@ export default function ConnectPage() {
                       <div className="mt-auto flex flex-col gap-2.5">
                         <button 
                           onClick={() => handleSendRequest(suggestion.id)}
-                          className="relative w-full py-3 bg-[#0a0a14] text-white font-bold rounded-xl text-[13px] uppercase tracking-wider overflow-hidden group/btn border border-[#0099ff]/50"
+                          disabled={sendingId === suggestion.id}
+                          className="relative w-full py-3 bg-[#0a0a14] text-white font-bold rounded-xl text-[13px] uppercase tracking-wider overflow-hidden group/btn border border-[#0099ff]/50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-[#0099ff] to-[#d44df0] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                          <span className="relative z-10 drop-shadow-md group-hover/btn:text-white transition-colors">Kết nối ngay</span>
+                          <span className="relative z-10 drop-shadow-md group-hover/btn:text-white transition-colors">
+                            {sendingId === suggestion.id ? 'Đang gửi...' : 'Kết nối ngay'}
+                          </span>
                         </button>
                         <Link href={`/profile/${suggestion.id}`} className="w-full py-2 bg-transparent text-[#8888a0] font-bold rounded-xl text-[12px] hover:text-white uppercase tracking-wider transition-colors text-center">
                           Xem Profile
