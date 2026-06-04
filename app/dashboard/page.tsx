@@ -216,7 +216,7 @@ export default function Dashboard() {
                   href={user ? `/profile/${user.uid}` : "#"}
                   className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 hover:backdrop-blur-md transition-all cursor-pointer group border border-transparent hover:border-white/10"
                 >
-                  <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-11 h-11 rounded-full bg-white/5 border border-white/20 group-hover:border-[#d44df0] transition-colors"/>
+                  <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-11 h-11 rounded-full bg-white/5 border border-white/20 object-cover group-hover:border-[#d44df0] transition-colors"/>
                   <span className="font-extrabold text-[16px] text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#c8a0e0] transition-all">{profile?.name}</span>
                 </Link>
                 
@@ -267,7 +267,7 @@ export default function Dashboard() {
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] via-[#d44df0] to-[#ff385c] opacity-50"></div>
                 <div className="flex gap-3 sm:gap-4 border-b border-white/10 pb-5">
                   <Link href={user ? `/profile/${user.uid}` : "#"}>
-                    <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-12 h-12 rounded-full border-2 border-white/20 shadow-sm shrink-0 cursor-pointer hover:border-white/50 transition-colors"/>
+                    <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-12 h-12 rounded-full border-2 border-white/20 shadow-sm shrink-0 object-cover cursor-pointer hover:border-white/50 transition-colors"/>
                   </Link>
                   <div className="flex-1 bg-black/40 hover:bg-black/60 transition-colors rounded-3xl px-5 flex items-center cursor-text border border-white/5 hover:border-white/10">
                     <textarea 
@@ -335,7 +335,7 @@ export default function Dashboard() {
                                   🕵️
                                 </div>
                               ) : (
-                                <img src={post.authorPhotoUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + post.authorName} alt="Avatar" className="h-12 w-12 rounded-full border-2 border-white/20 shadow-sm"/>
+                                <img src={post.authorPhotoUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + post.authorName} alt="Avatar" className="h-12 w-12 rounded-full border-2 border-white/20 object-cover shadow-sm"/>
                               )}
                             </Link>
                             <div>
@@ -417,7 +417,7 @@ export default function Dashboard() {
                                 {(post.comments || []).map((cmt, idx) => (
                                   <div key={idx} className="flex gap-4">
                                     <Link href={`/profile/${cmt.uid}`}>
-                                      <img src={cmt.authorPhotoUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + cmt.authorName} alt="Avatar" className="w-10 h-10 rounded-full border border-white/20 shrink-0 cursor-pointer hover:border-white/50 transition-colors"/>
+                                      <img src={cmt.authorPhotoUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + cmt.authorName} alt="Avatar" className="w-10 h-10 rounded-full border border-white/20 shrink-0 object-cover cursor-pointer hover:border-white/50 transition-colors"/>
                                     </Link>
                                     <div className="flex-1">
                                       <div className="bg-white/5 rounded-2xl px-5 py-3 text-[15px] border border-white/10 shadow-sm inline-block">
@@ -434,7 +434,7 @@ export default function Dashboard() {
                                 ))}
                                 
                                 <div className="flex gap-4 items-start mt-6 pt-2">
-                                  <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-10 h-10 rounded-full border border-white/20 shrink-0 mt-0.5 cursor-pointer"/>
+                                  <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-10 h-10 rounded-full border border-white/20 shrink-0 object-cover mt-0.5 cursor-pointer"/>
                                   <div className="flex-1 bg-black/40 rounded-full flex items-center px-5 py-2.5 border border-white/10 focus-within:border-[#00e5ff] focus-within:shadow-[0_0_10px_rgba(0,229,255,0.2)] transition-all">
                                     <input
                                       type="text"
@@ -528,7 +528,7 @@ export default function Dashboard() {
                         className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/10 transition-all cursor-pointer group border border-transparent hover:border-white/10"
                       >
                         <div className="relative shrink-0">
-                          <img src={suggestion.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} className="h-11 w-11 rounded-full border-2 border-white/20 group-hover:border-[#00e5ff] transition-colors" alt="Avatar"/>
+                          <img src={suggestion.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} className="h-11 w-11 rounded-full border-2 border-white/20 object-cover group-hover:border-[#00e5ff] transition-colors" alt="Avatar"/>
                           <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-[#00e676] border-2 border-[#141414] rounded-full group-hover:border-[#222] transition-colors shadow-[0_0_5px_#00e676]"></span>
                         </div>
                         <div className="flex-1 min-w-0">
