@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface NavbarProps {
   profileName?: string;
@@ -14,6 +14,15 @@ interface NavbarProps {
 
 export default function Navbar({ profileName, profileId, profilePhoto, onSignOut }: NavbarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   const navItems = [
     { name: 'Bảng tin', path: '/dashboard', icon: (
@@ -69,12 +78,18 @@ export default function Navbar({ profileName, profileId, profilePhoto, onSignOut
 
       {/* Right: Search Pill + User + Utils */}
       <div className="flex items-center justify-end gap-4 w-[35%]">
-        <div className="hidden lg:flex items-center bg-[#090909] border border-[#262626] rounded-full px-2 py-1.5 hover:border-[#0099ff] transition-colors cursor-text h-12 w-full max-w-[280px]">
-          <input type="text" placeholder="Tìm kiếm bất kỳ..." className="bg-transparent border-none outline-none text-[14px] font-medium w-full placeholder-[#999999] text-white px-3" />
-          <div className="bg-[#1c1c1c] rounded-full w-8 h-8 flex items-center justify-center shrink-0 border border-[#262626]">
+        <form onSubmit={handleSearch} className="hidden lg:flex items-center bg-[#090909] border border-[#262626] rounded-full px-2 py-1.5 focus-within:border-[#0099ff] hover:border-[#0099ff] transition-colors cursor-text h-12 w-full max-w-[280px]">
+          <input 
+            type="text" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Tìm theo tên, mã SV..." 
+            className="bg-transparent border-none outline-none text-[14px] font-medium w-full placeholder-[#999999] text-white px-3" 
+          />
+          <button type="submit" className="bg-[#1c1c1c] rounded-full w-8 h-8 flex items-center justify-center shrink-0 border border-[#262626] hover:bg-[#262626] transition-colors">
             <svg className="w-4 h-4 text-[#999999]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          </div>
-        </div>
+          </button>
+        </form>
 
         <div className="flex items-center gap-2 border border-[#262626] rounded-full p-1.5 transition-shadow bg-[#090909] ml-2">
           <button onClick={onSignOut} title="Menu" className="p-1 text-[#999999] hover:bg-[#1c1c1c] hover:text-white rounded-full">
