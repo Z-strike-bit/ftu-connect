@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { auth, googleProvider, db } from '@/lib/firebase';
-import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithPopup, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function Login() {
@@ -23,6 +23,13 @@ export default function Login() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      
+      if (!user.emailVerified) {
+        await signOut(auth);
+        setError('Tài khoản chưa được xác thực. Vui lòng kiểm tra email của bạn (bao gồm cả mục Spam) để kích hoạt!');
+        setLoading(false);
+        return;
+      }
       
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);

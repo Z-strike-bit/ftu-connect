@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { auth, googleProvider, db } from '@/lib/firebase';
-import { signInWithPopup, signOut, getAdditionalUserInfo, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithPopup, signOut, getAdditionalUserInfo, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { FTU_MAJORS } from '@/lib/constants/ftuMajors';
 
@@ -27,7 +27,7 @@ const DEFAULT_AVATARS = [
 
 export default function Register() {
   const router = useRouter();
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [googleUser, setGoogleUser] = useState<any>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,8 +60,9 @@ export default function Register() {
     setSaving(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      setGoogleUser(userCredential.user);
-      setStep(2);
+      await sendEmailVerification(userCredential.user);
+      await signOut(auth);
+      setStep(3);
     } catch (err: any) {
       console.error(err);
       if (err.code === 'auth/email-already-in-use') {
@@ -155,7 +156,9 @@ export default function Register() {
         
         <h1 className="text-3xl font-extrabold text-white mb-2 tracking-tight">Đăng ký</h1>
         <p className="text-[#999999] font-medium mb-8 text-[15px]">
-          {step === 1 ? 'Xác thực email sinh viên Ngoại Thương' : 'Hoàn thiện hồ sơ để hệ thống ghép cặp phù hợp nhất'}
+          {step === 1 && 'Xác thực email sinh viên Ngoại Thương'}
+          {step === 2 && 'Hoàn thiện hồ sơ để hệ thống ghép cặp phù hợp nhất'}
+          {step === 3 && 'Hoàn tất bước cuối cùng'}
         </p>
         
         {error && (
@@ -375,6 +378,25 @@ export default function Register() {
               {saving ? 'Đang lưu thông tin...' : 'Hoàn tất Đăng ký'}
             </button>
           </form>
+        )}
+
+        {step === 3 && (
+          <div className="flex flex-col gap-6 text-center">
+            <div className="w-20 h-20 bg-[#ff385c]/10 rounded-full flex items-center justify-center mx-auto shadow-inner border border-[#ff385c]/20">
+              <span className="text-4xl drop-shadow-md">✉️</span>
+            </div>
+            <div>
+              <h2 className="text-[22px] font-extrabold text-white mb-3">Kiểm tra hộp thư của bạn</h2>
+              <p className="text-[#999999] text-[15px] leading-relaxed">
+                Hệ thống đã gửi một email xác thực đến địa chỉ <strong className="text-white">{email}</strong>.
+                <br /><br />
+                Vui lòng kiểm tra hộp thư (bao gồm cả mục <span className="text-[#ff385c] font-bold">Spam/Thư rác</span>) và click vào link đính kèm để kích hoạt tài khoản. Sau đó hãy quay lại trang Đăng nhập nhé!
+              </p>
+            </div>
+            <Link href="/login" className="w-full bg-white text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 mt-2 shadow-[0_4px_15px_rgba(255,255,255,0.2)]">
+              Đến trang Đăng nhập
+            </Link>
+          </div>
         )}
         
         <p className="mt-8 text-[14px] text-[#999999] font-medium px-4">
