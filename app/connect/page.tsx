@@ -209,7 +209,7 @@ export default function ConnectPage() {
     <div className="min-h-screen bg-[#050508] flex flex-col h-screen overflow-hidden selection:bg-[#0099ff]/30 selection:text-[#00ff88]">
       <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={() => signOut(auth).then(() => router.push('/'))} />
 
-      <div className="flex flex-1 overflow-hidden w-full max-w-[1600px] mx-auto relative">
+      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden w-full max-w-[1600px] mx-auto relative">
         {/* Background Gradients for eSports Vibe */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#0099ff]/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#d44df0]/10 rounded-full blur-[100px] pointer-events-none"></div>
