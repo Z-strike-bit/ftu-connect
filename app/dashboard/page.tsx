@@ -197,7 +197,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#05050a] text-white font-sans selection:bg-[#ff385c]/30 selection:text-white relative overflow-hidden pb-16">
+    <div className="min-h-screen w-full bg-[#05050a] text-white font-sans selection:bg-[#ff385c]/30 selection:text-white relative overflow-hidden pb-28 lg:pb-16">
       {/* Ambient Orbs */}
       <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-600/15 blur-[150px] pointer-events-none z-0"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#ff385c]/10 blur-[120px] pointer-events-none z-0"></div>

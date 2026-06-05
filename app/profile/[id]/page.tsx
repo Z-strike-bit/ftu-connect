@@ -236,7 +236,7 @@ export default function ProfilePage() {
   const avatarPhoto = targetProfile.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${targetProfile.name}`;
 
   return (
-    <div className="min-h-screen bg-[#090909] font-sans pb-10 selection:bg-[#fff0f2] selection:text-[#0099ff]">
+    <div className="min-h-screen bg-[#090909] font-sans pb-28 lg:pb-10 selection:bg-[#fff0f2] selection:text-[#0099ff]">
       <Navbar profileName={currentUserProfile?.name} onSignOut={() => signOut(auth).then(() => router.push('/'))} profileId={currentUser?.uid} profilePhoto={currentUserProfile?.photoURL} />
 
       {/* HEADER: Cover + Avatar + Info */}
@@ -288,7 +288,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-2 sm:mb-4 w-full sm:w-auto px-4 sm:px-0">
+              <div className="flex flex-wrap gap-2 sm:mb-4 w-full sm:w-auto px-4 sm:px-0 justify-center sm:justify-start">
                 {isOwnProfile ? (
                   <>
                     <button onClick={() => setIsEditing(true)} className="flex-1 sm:flex-none bg-[#090909] hover:bg-[#1c1c1c] text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-[15px] border border-[#262626]">
@@ -335,7 +335,7 @@ export default function ProfilePage() {
             <div className="border-t border-[#1a1a1a] mt-2"></div>
 
             {/* Nav Tabs */}
-            <div className="flex mt-1">
+            <div className="flex mt-1 overflow-x-auto hide-scrollbar whitespace-nowrap">
               <button className="px-4 py-4 text-[15px] font-semibold text-white border-b-[3px] border-[#222222]">Bài viết</button>
               <button className="px-4 py-4 text-[15px] font-semibold text-[#999999] hover:bg-[#090909] rounded-md my-1 transition-colors">Giới thiệu</button>
               <button className="px-4 py-4 text-[15px] font-semibold text-[#999999] hover:bg-[#090909] rounded-md my-1 transition-colors">Bạn bè</button>
