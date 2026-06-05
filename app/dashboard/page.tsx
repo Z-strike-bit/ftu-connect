@@ -14,6 +14,7 @@ import Navbar from '@/components/Navbar';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, query, getDocs, doc, getDoc, addDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import TextareaAutosize from 'react-textarea-autosize';
 
 interface UserProfile {
   name: string;
@@ -42,6 +43,7 @@ interface Post {
   likedBy: string[];
   tag: string;
   comments: Comment[];
+  imageUrl?: string;
   createdAt: string;
 }
 
@@ -62,6 +64,12 @@ export default function Dashboard() {
   const [postContent, setPostContent] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
+  
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [showMentions, setShowMentions] = useState(false);
   
   const [postTag, setPostTag] = useState('Thảo luận');
   const [expandedComments, setExpandedComments] = useState<{[key: string]: boolean}>({});
@@ -131,9 +139,21 @@ export default function Dashboard() {
   };
 
   const handlePost = async () => {
-    if (!postContent.trim() || !user || !profile || isPosting) return;
+    if (!postContent.trim() && !imageFile) return;
+    if (!user || !profile || isPosting) return;
     setIsPosting(true);
     try {
+      let uploadedImageUrl = '';
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.secure_url) {
+          uploadedImageUrl = data.secure_url;
+        }
+      }
+
       await addDoc(collection(db, 'posts'), {
         content: postContent,
         uid: user.uid,
@@ -145,16 +165,44 @@ export default function Dashboard() {
         likes: 0,
         likedBy: [],
         comments: [],
+        imageUrl: uploadedImageUrl,
         createdAt: new Date().toISOString()
       });
       setPostContent('');
       setPostTag('Thảo luận');
       setIsAnonymous(false);
+      setImageFile(null);
+      setImagePreview(null);
+      setShowMentions(false);
     } catch (error) {
       console.error(error);
     } finally {
       setIsPosting(false);
     }
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setPostContent(val);
+    const lastAtPos = val.lastIndexOf('@');
+    if (lastAtPos !== -1 && (lastAtPos === 0 || val[lastAtPos - 1] === ' ' || val[lastAtPos - 1] === '\n')) {
+      const query = val.slice(lastAtPos + 1);
+      if (!query.includes(' ') && !query.includes('\n')) {
+        setMentionQuery(query.toLowerCase());
+        setShowMentions(true);
+        return;
+      }
+    }
+    setShowMentions(false);
+  };
+
+  const insertMention = (mentionName: string) => {
+    const lastAtPos = postContent.lastIndexOf('@');
+    if (lastAtPos !== -1) {
+      const newText = postContent.slice(0, lastAtPos) + `@${mentionName} ` + postContent.slice(lastAtPos + (mentionQuery?.length || 0) + 1);
+      setPostContent(newText);
+    }
+    setShowMentions(false);
   };
 
   const handleComment = async (postId: string) => {
@@ -269,19 +317,77 @@ export default function Dashboard() {
                   <Link href={user ? `/profile/${user.uid}` : "#"}>
                     <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-12 h-12 rounded-full border-2 border-white/20 shadow-sm shrink-0 object-cover cursor-pointer hover:border-white/50 transition-colors"/>
                   </Link>
-                  <div className="flex-1 bg-black/40 hover:bg-black/60 transition-colors rounded-3xl px-5 flex items-center cursor-text border border-white/5 hover:border-white/10">
-                    <textarea 
-                      rows={1}
-                      className="w-full bg-transparent border-none outline-none resize-none text-[16px] placeholder-[#8a8a9a] text-white font-medium py-3"
+                  <div className="flex-1 bg-black/40 hover:bg-black/60 transition-colors rounded-3xl px-5 flex flex-col justify-center cursor-text border border-white/5 hover:border-white/10 relative">
+                    <TextareaAutosize 
+                      minRows={1}
+                      maxRows={8}
+                      className="w-full bg-transparent border-none outline-none resize-none text-[16px] placeholder-[#8a8a9a] text-white font-medium py-3 custom-scrollbar"
                       placeholder={`Bạn đang nghĩ gì thế, ${profile?.name?.split(' ').pop()}?`}
                       value={postContent}
-                      onChange={(e) => {
-                        setPostContent(e.target.value);
-                        e.target.style.height = 'auto';
-                        e.target.style.height = (e.target.scrollHeight) + 'px';
-                      }}
+                      onChange={handleContentChange}
                     />
+                    
+                    {/* Mention Popup */}
+                    <AnimatePresence>
+                      {showMentions && (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          className="absolute left-0 top-full mt-2 w-[280px] bg-[#1a1a2e] border border-white/10 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden z-50"
+                        >
+                          <div className="p-2 text-[12px] font-bold text-[#a0a0b0] bg-white/5 uppercase tracking-wider">
+                            Gợi ý gắn thẻ
+                          </div>
+                          <div className="max-h-[200px] overflow-y-auto custom-scrollbar">
+                            {suggestions
+                              .filter(u => u.name.toLowerCase().includes(mentionQuery || ''))
+                              .map(u => (
+                                <div 
+                                  key={u.id}
+                                  onClick={() => insertMention(u.name)}
+                                  className="flex items-center gap-3 p-3 hover:bg-white/10 cursor-pointer transition-colors"
+                                >
+                                  <img src={u.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + u.name} className="w-8 h-8 rounded-full border border-white/20 object-cover" />
+                                  <div className="flex flex-col">
+                                    <span className="text-[14px] font-bold text-white">{u.name}</span>
+                                    <span className="text-[12px] text-[#a0a0b0]">{u.major || 'Sinh viên'}</span>
+                                  </div>
+                                </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
+                </div>
+
+                {/* Image Preview */}
+                <AnimatePresence>
+                  {imagePreview && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="relative mt-4 mb-2">
+                      <div className="relative inline-block border border-white/10 rounded-2xl overflow-hidden max-h-[300px]">
+                        <img src={imagePreview} className="max-h-[300px] w-auto object-contain" />
+                        <button onClick={() => { setImageFile(null); setImagePreview(null); }} className="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-colors">
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
+                {/* Format Toolbar */}
+                <div className="flex gap-2 mb-4 pt-2 border-b border-white/5 pb-4 px-2">
+                  <label className="flex items-center gap-2 text-[#a0a0b0] hover:text-[#00e5ff] bg-white/5 hover:bg-[#00e5ff]/10 px-4 py-2 rounded-xl cursor-pointer transition-colors font-bold text-[14px]">
+                    <span className="text-lg">📸</span> Ảnh/Video
+                    <input type="file" accept="image/*,video/*" className="hidden" onChange={handleImageChange} />
+                  </label>
+                  <button className="flex items-center gap-2 text-[#a0a0b0] hover:text-[#d44df0] bg-white/5 hover:bg-[#d44df0]/10 px-4 py-2 rounded-xl transition-colors font-bold text-[14px]">
+                    <span className="text-lg">📎</span> File
+                  </button>
+                  <button className="flex items-center gap-2 text-[#a0a0b0] hover:text-[#ff385c] bg-white/5 hover:bg-[#ff385c]/10 px-4 py-2 rounded-xl transition-colors font-bold text-[14px] hidden sm:flex">
+                    <span className="text-lg">😊</span> Cảm xúc
+                  </button>
                 </div>
                 
                 <div className="flex justify-between items-center pt-4 gap-2 flex-wrap px-2">
@@ -303,10 +409,10 @@ export default function Dashboard() {
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={handlePost}
-                    disabled={!postContent.trim() || isPosting}
+                    disabled={(!postContent.trim() && !imageFile) || isPosting}
                     className="relative overflow-hidden rounded-xl p-[2px] disabled:opacity-50 transition-all group"
                   >
-                    <div className={`absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_70%,#00e5ff,#d44df0,#ff385c)] ${postContent.trim() ? 'animate-[spin_2.5s_linear_infinite]' : 'opacity-0'} transition-opacity duration-300`}></div>
+                    <div className={`absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_70%,#00e5ff,#d44df0,#ff385c)] ${(postContent.trim() || imageFile) ? 'animate-[spin_2.5s_linear_infinite]' : 'opacity-0'} transition-opacity duration-300`}></div>
                     <div className="relative bg-gradient-to-r from-gray-100 to-gray-300 group-hover:from-white group-hover:to-white text-black rounded-[10px] px-6 py-2 text-[15px] font-extrabold h-full w-full flex items-center justify-center transition-all shadow-[0_4px_15px_rgba(255,255,255,0.15)]">
                       {isPosting ? 'Đang...' : 'Đăng bài'}
                     </div>
@@ -366,8 +472,20 @@ export default function Dashboard() {
                         
                         {/* Post Content */}
                         <div className="px-6 pb-4 text-[16px] text-[#e0e0e0] whitespace-pre-wrap leading-relaxed font-medium">
-                          {post.content}
+                          {post.content.split(/(@\S+|#\S+)/).map((part, i) => {
+                            if (part.startsWith('@') || part.startsWith('#')) {
+                              return <span key={i} className="text-[#00e5ff] hover:underline cursor-pointer font-bold">{part}</span>;
+                            }
+                            return part;
+                          })}
                         </div>
+
+                        {/* Post Image */}
+                        {post.imageUrl && (
+                          <div className="px-6 pb-4">
+                            <img src={post.imageUrl} className="rounded-2xl max-h-[500px] w-auto border border-white/10" alt="Post attachment" />
+                          </div>
+                        )}
                         
                         {/* Engagement Stats */}
                         <div className="px-6 py-3 flex items-center justify-between text-[14px] text-[#a0a0b0] border-b border-white/5">
