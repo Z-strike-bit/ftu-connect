@@ -341,16 +341,16 @@ export default function Dashboard() {
                           </div>
                           <div className="max-h-[200px] overflow-y-auto custom-scrollbar">
                             {suggestions
-                              .filter(u => u.name.toLowerCase().includes(mentionQuery || ''))
+                              .filter(u => (u.name || u.username || '').toLowerCase().includes(mentionQuery || ''))
                               .map(u => (
                                 <div 
                                   key={u.id}
-                                  onClick={() => insertMention(u.name)}
+                                  onClick={() => insertMention(u.name || u.username || 'User')}
                                   className="flex items-center gap-3 p-3 hover:bg-white/10 cursor-pointer transition-colors"
                                 >
-                                  <img src={u.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + u.name} className="w-8 h-8 rounded-full border border-white/20 object-cover" />
+                                  <img src={u.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + (u.name || u.username)} className="w-8 h-8 rounded-full border border-white/20 object-cover" />
                                   <div className="flex flex-col">
-                                    <span className="text-[14px] font-bold text-white">{u.name}</span>
+                                    <span className="text-[14px] font-bold text-white">{u.name || u.username || 'Người dùng'}</span>
                                     <span className="text-[12px] text-[#a0a0b0]">{u.major || 'Sinh viên'}</span>
                                   </div>
                                 </div>
@@ -472,7 +472,7 @@ export default function Dashboard() {
                         
                         {/* Post Content */}
                         <div className="px-6 pb-4 text-[16px] text-[#e0e0e0] whitespace-pre-wrap leading-relaxed font-medium">
-                          {post.content.split(/(@\S+|#\S+)/).map((part, i) => {
+                          {(post.content || '').split(/(@\S+|#\S+)/).map((part, i) => {
                             if (part.startsWith('@') || part.startsWith('#')) {
                               return <span key={i} className="text-[#00e5ff] hover:underline cursor-pointer font-bold">{part}</span>;
                             }
