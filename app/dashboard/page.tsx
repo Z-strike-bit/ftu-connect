@@ -527,7 +527,7 @@ export default function Dashboard() {
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute bottom-full mb-3 left-0 w-[320px] bg-[#1a1a2e] border border-white/10 rounded-2xl shadow-[0_10px_60px_rgba(0,0,0,0.9)] overflow-hidden z-50"
+                          className="absolute top-full mt-3 right-0 w-[320px] bg-[#1a1a2e] border border-white/10 rounded-2xl shadow-[0_10px_60px_rgba(0,0,0,0.9)] overflow-hidden z-50"
                         >
                           {/* Tabs: Emoji vs Feeling */}
                           <div className="flex border-b border-white/10">
