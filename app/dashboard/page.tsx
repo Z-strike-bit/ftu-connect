@@ -406,7 +406,7 @@ export default function Dashboard() {
             <div className="col-span-1 lg:col-span-6 xl:col-span-6 space-y-6 max-w-[680px] mx-auto w-full px-0 sm:px-4 lg:px-8">
               
               {/* Ô Tạo bài viết */}
-              <div className="bg-white/[0.03] backdrop-blur-3xl sm:rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/10 p-6 mb-8 relative group/postbox animate-breathing-glow">
+              <div className="bg-white/[0.03] backdrop-blur-3xl sm:rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/10 p-6 mb-8 relative z-20 group/postbox animate-breathing-glow">
                 <div className="absolute top-0 left-0 w-full h-[3px] overflow-hidden rounded-t-[24px]">
                   <div className="w-full h-full bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-80 animate-led-run shadow-[0_0_10px_rgba(212,77,240,0.5)] group-focus-within/postbox:animate-led-run-fast group-focus-within/postbox:shadow-[0_0_20px_rgba(212,77,240,0.8)] group-focus-within/postbox:opacity-100 transition-all duration-300"></div>
                 </div>
