@@ -62,7 +62,7 @@ export default function MapPage() {
       <div className="relative h-[calc(100vh-72px)] w-full">
         
         {/* Floating Card */}
-        <div className="absolute top-4 left-4 sm:left-6 z-[1000] bg-white/95 p-5 sm:p-6 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px]">
+        <motion.div drag dragMomentum={false} className="absolute top-4 left-4 sm:left-6 z-[1000] bg-white/95 p-5 sm:p-6 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px] cursor-move">
           <div className="flex justify-between items-start mb-2">
             <div>
               <h1 className="text-[20px] font-bold text-gray-900 flex items-center gap-2 leading-tight tracking-tight">
@@ -70,14 +70,14 @@ export default function MapPage() {
               </h1>
             </div>
           </div>
-          <p className="text-[15px] text-gray-600 mb-5 leading-relaxed">
+          <p className="text-[15px] text-gray-600 mb-5 leading-relaxed pointer-events-none">
             Khám phá góc ăn ngon, chỗ học tập và bí kíp sống sót quanh Ngoại Thương.
           </p>
-          <button className="w-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm">
+          <button className="w-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm cursor-pointer">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Ghim địa điểm mới
           </button>
-        </div>
+        </motion.div>
 
         {/* Map */}
         <div className="absolute inset-0 z-0 bg-black">
@@ -85,7 +85,7 @@ export default function MapPage() {
         </div>
 
         {/* Radar Filter (Bottom Right) */}
-        <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-[1000] flex flex-col items-end gap-3">
+        <motion.div drag dragMomentum={false} className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-[1000] flex flex-col items-end gap-3 cursor-move">
           <AnimatePresence>
             {isRadarOpen && (
               <motion.div
@@ -155,7 +155,7 @@ export default function MapPage() {
               </div>
             )}
           </button>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
