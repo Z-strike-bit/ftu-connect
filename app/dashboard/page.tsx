@@ -14,7 +14,9 @@ import Navbar from '@/components/Navbar';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, query, getDocs, doc, getDoc, addDoc, updateDoc, onSnapshot } from 'firebase/firestore';
-import TextareaAutosize from 'react-textarea-autosize';
+import dynamic from 'next/dynamic';
+
+const TextareaAutosize = dynamic(() => import('react-textarea-autosize'), { ssr: false });
 
 interface UserProfile {
   name: string;
@@ -322,7 +324,7 @@ export default function Dashboard() {
                       minRows={1}
                       maxRows={8}
                       className="w-full bg-transparent border-none outline-none resize-none text-[16px] placeholder-[#8a8a9a] text-white font-medium py-3 custom-scrollbar"
-                      placeholder={`Bạn đang nghĩ gì thế, ${profile?.name?.split(' ').pop()}?`}
+                      placeholder={`Bạn đang nghĩ gì thế, ${String(profile?.name || '').split(' ').pop()}?`}
                       value={postContent}
                       onChange={handleContentChange}
                     />
@@ -341,7 +343,7 @@ export default function Dashboard() {
                           </div>
                           <div className="max-h-[200px] overflow-y-auto custom-scrollbar">
                             {suggestions
-                              .filter(u => (u.name || u.username || '').toLowerCase().includes(mentionQuery || ''))
+                              .filter(u => String(u.name || u.username || '').toLowerCase().includes(mentionQuery || ''))
                               .map(u => (
                                 <div 
                                   key={u.id}
@@ -472,7 +474,7 @@ export default function Dashboard() {
                         
                         {/* Post Content */}
                         <div className="px-6 pb-4 text-[16px] text-[#e0e0e0] whitespace-pre-wrap leading-relaxed font-medium">
-                          {(post.content || '').split(/(@\S+|#\S+)/).map((part, i) => {
+                          {String(post.content || '').split(/(@\S+|#\S+)/).map((part, i) => {
                             if (part.startsWith('@') || part.startsWith('#')) {
                               return <span key={i} className="text-[#00e5ff] hover:underline cursor-pointer font-bold">{part}</span>;
                             }
