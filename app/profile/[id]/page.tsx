@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import { useRouter, useParams } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, where, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, where, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { FTU_MAJORS } from '@/lib/constants/ftuMajors';
