@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { auth, googleProvider, db } from '@/lib/firebase';
-import { signInWithPopup, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithPopup, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function Login() {
@@ -14,38 +14,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      
-      if (!user.emailVerified) {
-        await signOut(auth);
-        setError('Tài khoản chưa được xác thực. Vui lòng kiểm tra email của bạn (bao gồm cả mục Spam) để kích hoạt!');
-        setLoading(false);
-        return;
-      }
-      
-      const docRef = doc(db, 'users', user.uid);
-      const docSnap = await getDoc(docRef);
-      
-      if (docSnap.exists()) {
-        router.push('/dashboard');
-      } else {
-        router.push('/onboarding');
-      }
-    } catch (err: any) {
-      console.error(err);
-      setError('Tài khoản hoặc mật khẩu không chính xác.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleGoogleLogin = async () => {
     setError(null);
@@ -83,60 +51,16 @@ export default function Login() {
           </div>
         )}
 
-        {/* Phương thức 1: Email/Password */}
-        <form onSubmit={handleLogin} className="flex flex-col gap-4 text-left">
-          <div>
-            <label className="block text-white text-sm font-semibold mb-2">Email (@ftu.edu.vn)</label>
-            <input 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
-              placeholder="Nhập email trường của bạn"
-            />
-          </div>
-          <div>
-            <label className="block text-white text-sm font-semibold mb-2">Mật khẩu</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
-              placeholder="Nhập mật khẩu"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 disabled:opacity-50"
-          >
-            {loading ? 'Đang kết nối...' : 'Đăng nhập'}
-          </button>
-        </form>
-
-        {/* Dải phân cách */}
-        <div className="flex items-center my-6">
-          <div className="flex-1 border-t border-white/10"></div>
-          <span className="px-3 text-[#6a6a6a] text-[13px] font-medium">Hoặc</span>
-          <div className="flex-1 border-t border-white/10"></div>
-        </div>
-
-        {/* Phương thức 2: Google SSO */}
+        {/* Phương thức: Google SSO */}
         <button
           onClick={handleGoogleLogin}
           type="button"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] border border-[#262626] text-white font-semibold py-[14px] px-6 rounded-[100px] hover:bg-[#262626] transition-all duration-300 disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 mt-8 shadow-[0_4px_15px_rgba(255,255,255,0.15)]"
         >
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6 shrink-0" />
-          <span className="text-[16px]">Đăng nhập bằng Google</span>
+          <span className="text-[16px]">Đăng nhập bằng Email Sinh viên (@ftu.edu.vn)</span>
         </button>
-        
-        <p className="mt-8 text-[14px] text-[#999999] font-medium px-4">
-          Chưa có tài khoản? <Link href="/register" className="text-white hover:underline">Đăng ký ngay</Link>
-        </p>
       </div>
     </div>
   );
