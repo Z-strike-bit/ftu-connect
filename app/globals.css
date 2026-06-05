@@ -430,3 +430,20 @@ body {
   background-size: 200% auto;
   animation: led-run 2s linear infinite;
 }
+
+@keyframes led-run-fast {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.animate-led-run-fast {
+  background-size: 200% auto;
+  animation: led-run-fast 0.6s linear infinite;
+}
+
+@keyframes breathing-glow {
+  0%, 100% { box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 15px rgba(212, 77, 240, 0.1); }
+  50% { box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(212, 77, 240, 0.4); }
+}
+.animate-breathing-glow {
+  animation: breathing-glow 4s ease-in-out infinite;
+}

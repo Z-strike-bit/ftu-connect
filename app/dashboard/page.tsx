@@ -263,8 +263,8 @@ export default function Dashboard() {
             <div className="col-span-1 lg:col-span-6 xl:col-span-6 space-y-6 max-w-[680px] mx-auto w-full px-0 sm:px-4 lg:px-8">
               
               {/* Ô Tạo bài viết */}
-              <div className="bg-white/[0.03] backdrop-blur-3xl sm:rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/10 p-6 mb-8 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-[3px] bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-80 animate-led-run shadow-[0_0_10px_rgba(212,77,240,0.5)]"></div>
+              <div className="bg-white/[0.03] backdrop-blur-3xl sm:rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/10 p-6 mb-8 relative overflow-hidden group/postbox animate-breathing-glow">
+                <div className="absolute top-0 left-0 w-full h-[3px] bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-80 animate-led-run shadow-[0_0_10px_rgba(212,77,240,0.5)] group-focus-within/postbox:animate-led-run-fast group-focus-within/postbox:shadow-[0_0_20px_rgba(212,77,240,0.8)] group-focus-within/postbox:opacity-100 transition-all duration-300"></div>
                 <div className="flex gap-3 sm:gap-4 border-b border-white/10 pb-5">
                   <Link href={user ? `/profile/${user.uid}` : "#"}>
                     <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-12 h-12 rounded-full border-2 border-white/20 shadow-sm shrink-0 object-cover cursor-pointer hover:border-white/50 transition-colors"/>
@@ -304,9 +304,12 @@ export default function Dashboard() {
                     whileTap={{ scale: 0.95 }}
                     onClick={handlePost}
                     disabled={!postContent.trim() || isPosting}
-                    className="bg-gradient-to-r from-white to-gray-300 hover:from-white hover:to-white text-black rounded-xl px-6 py-2.5 text-[15px] font-extrabold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_15px_rgba(255,255,255,0.15)]"
+                    className="relative overflow-hidden rounded-xl p-[2px] disabled:opacity-50 transition-all group"
                   >
-                    {isPosting ? 'Đang...' : 'Đăng bài'}
+                    <div className={`absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_70%,#00e5ff,#d44df0,#ff385c)] ${postContent.trim() ? 'animate-[spin_2.5s_linear_infinite]' : 'opacity-0'} transition-opacity duration-300`}></div>
+                    <div className="relative bg-gradient-to-r from-gray-100 to-gray-300 group-hover:from-white group-hover:to-white text-black rounded-[10px] px-6 py-2 text-[15px] font-extrabold h-full w-full flex items-center justify-center transition-all shadow-[0_4px_15px_rgba(255,255,255,0.15)]">
+                      {isPosting ? 'Đang...' : 'Đăng bài'}
+                    </div>
                   </motion.button>
                 </div>
               </div>
