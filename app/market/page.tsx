@@ -147,7 +147,7 @@ export default function MarketPage() {
           {/* Sidebar */}
           <div className="w-full md:w-[320px] shrink-0">
             <div className="bg-white/[0.03] backdrop-blur-3xl rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/10 p-6 sticky top-[100px] overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] via-[#d44df0] to-[#ff385c] opacity-50"></div>
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-80 animate-led-run shadow-[0_0_10px_rgba(212,77,240,0.5)]"></div>
               
               <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#c8a0e0] tracking-tight mb-2 uppercase">Chợ Sinh Viên</h1>
               <p className="text-[#a0a0b0] text-[15px] font-medium mb-8">Mua bán, pass đồ dễ dàng trong khuôn viên FTU.</p>

@@ -264,7 +264,7 @@ export default function Dashboard() {
               
               {/* Ô Tạo bài viết */}
               <div className="bg-white/[0.03] backdrop-blur-3xl sm:rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/10 p-6 mb-8 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] via-[#d44df0] to-[#ff385c] opacity-50"></div>
+                <div className="absolute top-0 left-0 w-full h-[3px] bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-80 animate-led-run shadow-[0_0_10px_rgba(212,77,240,0.5)]"></div>
                 <div className="flex gap-3 sm:gap-4 border-b border-white/10 pb-5">
                   <Link href={user ? `/profile/${user.uid}` : "#"}>
                     <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-12 h-12 rounded-full border-2 border-white/20 shadow-sm shrink-0 object-cover cursor-pointer hover:border-white/50 transition-colors"/>

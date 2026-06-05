@@ -117,7 +117,7 @@ export default function Onboarding() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-3xl mx-auto bg-white/[0.03] backdrop-blur-3xl rounded-[32px] shadow-[0_8px_40px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden relative z-10"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] via-[#d44df0] to-[#ff385c] opacity-80"></div>
+        <div className="absolute top-0 left-0 w-full h-[3px] bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-80 animate-led-run shadow-[0_0_10px_rgba(212,77,240,0.5)]"></div>
         
         {/* Header */}
         <div className="pt-12 pb-8 px-8 text-center relative overflow-hidden border-b border-white/5">
