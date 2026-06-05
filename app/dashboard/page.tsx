@@ -46,8 +46,34 @@ interface Post {
   tag: string;
   comments: Comment[];
   imageUrl?: string;
+  fileUrl?: string;
+  fileName?: string;
+  feeling?: string;
   createdAt: string;
 }
+
+const EMOJI_CATEGORIES: { [key: string]: { label: string; emojis: string[] } } = {
+  smileys: { label: '😊 Mặt cười', emojis: ['😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😋','😎','😍','🥰','😘','😗','😙','😚','🙂','🤗','🤩','🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','🤐','😯','😪','😫','😴','😌','😛','😜','😝','🤤','😒','😓','😔','😕','🙃','🤑','😲','🤯','😬','😱','😨','😰','😢','😭','😤','😠','😡','🤬','😈','👿','💀','☠️','💩','🤡','👹'] },
+  gestures: { label: '👋 Cử chỉ', emojis: ['👋','🤚','🖐️','✋','🖖','👌','🤌','🤏','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','💪','🦾'] },
+  hearts: { label: '❤️ Trái tim', emojis: ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','❤️‍🩹','❣️','💕','💞','💓','💗','💖','💘','💝','💟'] },
+  objects: { label: '📚 Học tập', emojis: ['📚','📖','📝','✏️','📌','📎','🖇️','📐','📏','🎓','🏫','💻','⌨️','🖥️','📱','📊','📈','📉','🗂️','📁','📂','🗓️','📅','🔔','🔍','💡','🎯','🏆','🥇','🥈','🥉','🎖️','🏅'] },
+  food: { label: '🍕 Ăn uống', emojis: ['🍕','🍔','🍟','🌭','🍿','🧂','🥚','🍳','🧇','🥞','🧈','🍞','🥐','🥖','🫓','🥨','🧀','🥗','🥩','🍗','🍖','🦴','🌮','🌯','🫔','🥙','🧆','🥣','🥘','🫕','🍝','🍜','🍲','🍛','🍣','🍱','🥟','🍤','🍙','🍚','🍘','🍥','🥮','🍡','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍩','🍪','☕','🍵','🧋','🥤','🍶','🍺','🍻','🥂'] }
+};
+
+const FEELINGS = [
+  { emoji: '😊', label: 'vui vẻ' },
+  { emoji: '😢', label: 'buồn' },
+  { emoji: '😍', label: 'yêu đời' },
+  { emoji: '😤', label: 'bực bội' },
+  { emoji: '🤔', label: 'đang suy nghĩ' },
+  { emoji: '😴', label: 'buồn ngủ' },
+  { emoji: '📚', label: 'đang học bài' },
+  { emoji: '🎉', label: 'hào hứng' },
+  { emoji: '😎', label: 'tự tin' },
+  { emoji: '🥺', label: 'cần được thương' },
+  { emoji: '🔥', label: 'đầy năng lượng' },
+  { emoji: '☕', label: 'đang uống cafe' },
+];
 
 const getBadge = (points: number) => {
   if (points >= 200) return { icon: '👑', label: 'Top Mentor', color: 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-lg' };
@@ -70,8 +96,18 @@ export default function Dashboard() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   
+  const [attachedFile, setAttachedFile] = useState<File | null>(null);
+  const [attachedFileName, setAttachedFileName] = useState<string | null>(null);
+  
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [emojiTab, setEmojiTab] = useState('smileys');
+  const [showFeelingPicker, setShowFeelingPicker] = useState(false);
+  const [feeling, setFeeling] = useState<string | null>(null);
+  
   const [mentionQuery, setMentionQuery] = useState<string | null>(null);
   const [showMentions, setShowMentions] = useState(false);
+  
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   
   const [postTag, setPostTag] = useState('Thảo luận');
   const [expandedComments, setExpandedComments] = useState<{[key: string]: boolean}>({});
@@ -141,11 +177,14 @@ export default function Dashboard() {
   };
 
   const handlePost = async () => {
-    if (!postContent.trim() && !imageFile) return;
+    if (!postContent.trim() && !imageFile && !attachedFile) return;
     if (!user || !profile || isPosting) return;
     setIsPosting(true);
     try {
       let uploadedImageUrl = '';
+      let uploadedFileUrl = '';
+      let uploadedFileName = '';
+
       if (imageFile) {
         const formData = new FormData();
         formData.append('file', imageFile);
@@ -153,6 +192,17 @@ export default function Dashboard() {
         const data = await res.json();
         if (data.secure_url) {
           uploadedImageUrl = data.secure_url;
+        }
+      }
+
+      if (attachedFile) {
+        const formData = new FormData();
+        formData.append('file', attachedFile);
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.secure_url) {
+          uploadedFileUrl = data.secure_url;
+          uploadedFileName = attachedFileName || attachedFile.name;
         }
       }
 
@@ -168,14 +218,22 @@ export default function Dashboard() {
         likedBy: [],
         comments: [],
         imageUrl: uploadedImageUrl,
+        fileUrl: uploadedFileUrl,
+        fileName: uploadedFileName,
+        feeling: feeling || '',
         createdAt: new Date().toISOString()
       });
       setPostContent('');
-      setPostTag('Thảo luận');
+      setPostTag('Th\u1ea3o lu\u1eadn');
       setIsAnonymous(false);
       setImageFile(null);
       setImagePreview(null);
+      setAttachedFile(null);
+      setAttachedFileName(null);
+      setFeeling(null);
       setShowMentions(false);
+      setShowEmojiPicker(false);
+      setShowFeelingPicker(false);
     } catch (error) {
       console.error(error);
     } finally {
@@ -193,6 +251,29 @@ export default function Dashboard() {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAttachedFile(file);
+      setAttachedFileName(file.name);
+    }
+  };
+
+  const getFileIcon = (name: string) => {
+    const ext = name.split('.').pop()?.toLowerCase();
+    if (ext === 'pdf') return '📄';
+    if (['doc', 'docx'].includes(ext || '')) return '📝';
+    if (['ppt', 'pptx'].includes(ext || '')) return '📊';
+    if (['xls', 'xlsx'].includes(ext || '')) return '📈';
+    if (['zip', 'rar'].includes(ext || '')) return '📦';
+    return '📎';
+  };
+
+  const insertEmoji = (emoji: string) => {
+    setPostContent(prev => prev + emoji);
+    textareaRef.current?.focus();
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -389,19 +470,106 @@ export default function Dashboard() {
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+                {/* File Preview */}
+                <AnimatePresence>
+                  {attachedFileName && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-3 mb-2">
+                      <div className="flex items-center gap-3 bg-[#d44df0]/10 border border-[#d44df0]/30 rounded-2xl px-4 py-3">
+                        <span className="text-2xl">{getFileIcon(attachedFileName)}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[14px] font-bold text-white truncate">{attachedFileName}</p>
+                          <p className="text-[12px] text-[#a0a0b0]">{attachedFile ? (attachedFile.size / 1024).toFixed(1) + ' KB' : ''}</p>
+                        </div>
+                        <button onClick={() => { setAttachedFile(null); setAttachedFileName(null); }} className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+                          <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Feeling Preview */}
+                <AnimatePresence>
+                  {feeling && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-3 mb-2">
+                      <div className="flex items-center gap-2 bg-[#ff385c]/10 border border-[#ff385c]/30 rounded-2xl px-4 py-2">
+                        <span className="text-[14px] font-bold text-white">Đang cảm thấy {feeling}</span>
+                        <button onClick={() => setFeeling(null)} className="ml-auto w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+                          <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
                 
                 {/* Format Toolbar */}
-                <div className="flex gap-2 mb-4 pt-2 border-b border-white/5 pb-4 px-2">
+                <div className="flex gap-2 mb-4 pt-2 border-b border-white/5 pb-4 px-2 relative">
                   <label className="flex items-center gap-2 text-[#a0a0b0] hover:text-[#00e5ff] bg-white/5 hover:bg-[#00e5ff]/10 px-4 py-2 rounded-xl cursor-pointer transition-colors font-bold text-[14px]">
-                    <span className="text-lg">📸</span> Ảnh/Video
+                    <span className="text-lg">📸</span> <span className="hidden sm:inline">Ảnh/Video</span>
                     <input type="file" accept="image/*,video/*" className="hidden" onChange={handleImageChange} />
                   </label>
-                  <button className="flex items-center gap-2 text-[#a0a0b0] hover:text-[#d44df0] bg-white/5 hover:bg-[#d44df0]/10 px-4 py-2 rounded-xl transition-colors font-bold text-[14px]">
-                    <span className="text-lg">📎</span> File
-                  </button>
-                  <button className="flex items-center gap-2 text-[#a0a0b0] hover:text-[#ff385c] bg-white/5 hover:bg-[#ff385c]/10 px-4 py-2 rounded-xl transition-colors font-bold text-[14px] hidden sm:flex">
-                    <span className="text-lg">😊</span> Cảm xúc
-                  </button>
+                  <label className="flex items-center gap-2 text-[#a0a0b0] hover:text-[#d44df0] bg-white/5 hover:bg-[#d44df0]/10 px-4 py-2 rounded-xl cursor-pointer transition-colors font-bold text-[14px]">
+                    <span className="text-lg">📎</span> <span className="hidden sm:inline">File</span>
+                    <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar,.txt" className="hidden" onChange={handleFileChange} />
+                  </label>
+                  <div className="relative">
+                    <button onClick={() => { setShowEmojiPicker(!showEmojiPicker); setShowFeelingPicker(false); }} className={`flex items-center gap-2 bg-white/5 px-4 py-2 rounded-xl transition-colors font-bold text-[14px] ${showEmojiPicker ? 'text-[#ff385c] bg-[#ff385c]/10' : 'text-[#a0a0b0] hover:text-[#ff385c] hover:bg-[#ff385c]/10'}`}>
+                      <span className="text-lg">😊</span> <span className="hidden sm:inline">Cảm xúc</span>
+                    </button>
+
+                    {/* Emoji Picker Popup */}
+                    <AnimatePresence>
+                      {showEmojiPicker && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute bottom-full mb-3 left-0 w-[320px] bg-[#1a1a2e] border border-white/10 rounded-2xl shadow-[0_10px_60px_rgba(0,0,0,0.9)] overflow-hidden z-50"
+                        >
+                          {/* Tabs: Emoji vs Feeling */}
+                          <div className="flex border-b border-white/10">
+                            <button onClick={() => setShowFeelingPicker(false)} className={`flex-1 py-3 text-[13px] font-bold transition-colors ${!showFeelingPicker ? 'text-[#ff385c] border-b-2 border-[#ff385c] bg-[#ff385c]/5' : 'text-[#a0a0b0] hover:text-white'}`}>😊 Emoji</button>
+                            <button onClick={() => setShowFeelingPicker(true)} className={`flex-1 py-3 text-[13px] font-bold transition-colors ${showFeelingPicker ? 'text-[#ff385c] border-b-2 border-[#ff385c] bg-[#ff385c]/5' : 'text-[#a0a0b0] hover:text-white'}`}>💭 Cảm xúc</button>
+                          </div>
+
+                          {!showFeelingPicker ? (
+                            <>
+                              {/* Emoji Category Tabs */}
+                              <div className="flex overflow-x-auto hide-scrollbar border-b border-white/5 px-1">
+                                {Object.entries(EMOJI_CATEGORIES).map(([key, cat]) => (
+                                  <button key={key} onClick={() => setEmojiTab(key)} className={`shrink-0 px-3 py-2 text-[16px] transition-colors rounded-lg m-1 ${emojiTab === key ? 'bg-white/10' : 'hover:bg-white/5'}`} title={cat.label}>
+                                    {cat.emojis[0]}
+                                  </button>
+                                ))}
+                              </div>
+                              {/* Emoji Grid */}
+                              <div className="p-2 max-h-[200px] overflow-y-auto custom-scrollbar">
+                                <div className="grid grid-cols-8 gap-0.5">
+                                  {EMOJI_CATEGORIES[emojiTab]?.emojis.map((emoji, i) => (
+                                    <button key={i} onClick={() => insertEmoji(emoji)} className="w-9 h-9 flex items-center justify-center text-[20px] hover:bg-white/10 rounded-lg transition-colors hover:scale-125 transform duration-150">
+                                      {emoji}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            /* Feeling Grid */
+                            <div className="p-3 max-h-[250px] overflow-y-auto custom-scrollbar">
+                              <div className="grid grid-cols-2 gap-2">
+                                {FEELINGS.map((f, i) => (
+                                  <button key={i} onClick={() => { setFeeling(`${f.emoji} ${f.label}`); setShowEmojiPicker(false); }} className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] font-bold transition-all border ${feeling === `${f.emoji} ${f.label}` ? 'border-[#ff385c] bg-[#ff385c]/20 text-white' : 'border-white/5 bg-white/5 text-[#a0a0b0] hover:bg-white/10 hover:text-white hover:border-white/20'}`}>
+                                    <span className="text-[18px]">{f.emoji}</span> {f.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
                 
                 <div className="flex justify-between items-center pt-4 gap-2 flex-wrap px-2">
@@ -484,6 +652,13 @@ export default function Dashboard() {
                           </button>
                         </div>
                         
+                        {/* Feeling */}
+                        {post.feeling && (
+                          <div className="px-6 pb-2">
+                            <span className="text-[14px] text-[#a0a0b0] font-medium">— Đang cảm thấy {post.feeling}</span>
+                          </div>
+                        )}
+
                         {/* Post Content */}
                         <div className="px-6 pb-4 text-[16px] text-[#e0e0e0] whitespace-pre-wrap leading-relaxed font-medium">
                           {String(post.content || '').split(/(@\S+|#\S+)/).map((part, i) => {
@@ -498,6 +673,20 @@ export default function Dashboard() {
                         {post.imageUrl && (
                           <div className="px-6 pb-4">
                             <img src={post.imageUrl} className="rounded-2xl max-h-[500px] w-auto border border-white/10" alt="Post attachment" />
+                          </div>
+                        )}
+
+                        {/* Post File Attachment */}
+                        {post.fileUrl && post.fileName && (
+                          <div className="px-6 pb-4">
+                            <a href={post.fileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl px-5 py-4 transition-all group">
+                              <span className="text-3xl">{(() => { const ext = (post.fileName || '').split('.').pop()?.toLowerCase(); if (ext === 'pdf') return '📄'; if (['doc','docx'].includes(ext||'')) return '📝'; if (['ppt','pptx'].includes(ext||'')) return '📊'; return '📎'; })()}</span>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[15px] font-bold text-white truncate group-hover:text-[#00e5ff] transition-colors">{post.fileName}</p>
+                                <p className="text-[12px] text-[#a0a0b0]">Nhấn để tải xuống</p>
+                              </div>
+                              <svg className="w-5 h-5 text-[#a0a0b0] group-hover:text-[#00e5ff] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            </a>
                           </div>
                         )}
                         
