@@ -45,8 +45,6 @@ export default function Navbar({ profileName, profileId, profilePhoto, onSignOut
     )}
   ];
 
-  ];
-
   return (
     <>
       {/* Top Navbar */}
