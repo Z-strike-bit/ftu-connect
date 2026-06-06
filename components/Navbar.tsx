@@ -66,7 +66,7 @@ export default function Navbar({ profileName, profileId, profilePhoto, onSignOut
         {/* Left: Logo */}
         <div className="flex items-center w-auto sm:w-1/4">
           <Link href="/dashboard" className="shrink-0 flex items-center">
-            <Image src="/logo_ftu_don_gian.png" alt="FTU Connect" width={200} height={200} className="h-10 sm:h-14 w-auto object-contain cursor-pointer transition-transform hover:scale-105 dark:invert" style={{ filter: undefined }} />
+            <Image src="/logo_ftu_don_gian.png" alt="FTU Connect" width={200} height={200} className="h-10 sm:h-14 w-auto object-contain cursor-pointer transition-transform hover:scale-105 dark:brightness-0 dark:invert" />
           </Link>
         </div>
 
