@@ -9,7 +9,7 @@ interface SuggestionsSidebarProps {
 const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({ suggestions }) => {
   return (
     <div className="hidden lg:block lg:col-span-3 xl:col-span-3 pr-2 xl:pr-4">
-      <div className="sticky top-28 flex flex-col gap-8 pl-4">
+      <div className="sticky top-28 flex flex-col gap-8 pl-4 h-[calc(100vh-112px)] overflow-y-auto custom-scrollbar pb-8">
         
         {/* Sự kiện nổi bật */}
         <div className="relative rounded-[24px] p-[1.5px] bg-gradient-to-br from-gray-200 to-gray-100 dark:from-[#00e5ff] dark:via-[#d44df0] dark:to-[#ff385c] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_10px_40px_rgba(212,77,240,0.2)] group hover:shadow-[0_10px_50px_rgba(0,229,255,0.4)] transition-all duration-500 overflow-hidden">

@@ -10,7 +10,7 @@ interface SidebarShortcutsProps {
 const SidebarShortcuts: React.FC<SidebarShortcutsProps> = ({ user, profile }) => {
   return (
     <div className="hidden lg:block lg:col-span-3 xl:col-span-3 pl-2 xl:pl-4">
-      <div className="sticky top-28 flex flex-col gap-3 pr-4">
+      <div className="sticky top-28 flex flex-col gap-3 pr-4 h-[calc(100vh-112px)] overflow-y-auto custom-scrollbar pb-8">
         <Link 
           href={user ? `/profile/${user.uid}` : "#"}
           className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10"
