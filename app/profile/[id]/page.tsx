@@ -201,7 +201,7 @@ export default function ProfilePage() {
       await updateDoc(doc(db, 'users', currentUser.uid), {
         ...editFormData
       });
-      setTargetProfile(prev => ({
+      setTargetProfile((prev: any) => ({
         ...prev,
         ...editFormData
       }));

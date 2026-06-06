@@ -146,7 +146,7 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER TEXT */}
-      <div className="brands relative z-10" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', letterSpacing: '0.05em' }}>
+      <div className="brands relative z-10" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', letterSpacing: '0.05em' }}>
         2514410250.k64.FTU.Đặng Quang Trung
       </div>
     </div>

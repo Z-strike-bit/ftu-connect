@@ -25,6 +25,7 @@ interface UserProfile {
   role: string;
   bio: string;
   points?: number;
+  photoURL?: string;
 }
 
 interface Comment {
@@ -32,6 +33,7 @@ interface Comment {
   authorName: string;
   content: string;
   createdAt: string;
+  authorPhotoUrl?: string;
 }
 
 interface Post {
@@ -40,6 +42,7 @@ interface Post {
   uid: string;
   authorName: string;
   authorBadge?: any;
+  authorPhotoUrl?: string;
   isAnonymous: boolean;
   likes: number;
   likedBy: string[];

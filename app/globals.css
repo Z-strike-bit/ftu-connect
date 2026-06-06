@@ -10,6 +10,16 @@
 }
 
 :root {
+  --bg: #FAFBFC;
+  --surface: #FFFFFF;
+  --text: #1F2937;
+  --text-muted: #6B7280;
+  --accent: #B91C1C;
+  --accent-pink: #EF4444;
+  --border: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
   --bg: #0a0a0f;
   --surface: #111118;
   --text: #f0f0f5;
