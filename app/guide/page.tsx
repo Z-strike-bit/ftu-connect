@@ -235,9 +235,9 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-[#05050a] text-gray-900 dark:text-white font-sans pb-16 selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.15),transparent_70%)] pointer-events-none rounded-full blur-3xl z-0"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.1),transparent_70%)] pointer-events-none rounded-full blur-3xl z-0"></div>
+      {/* Decorative Background Elements (Optimized: No CSS blur to prevent lag) */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.15),transparent_70%)] pointer-events-none rounded-full z-0"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.1),transparent_70%)] pointer-events-none rounded-full z-0"></div>
 
       <div className="relative z-10">
         <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
@@ -262,7 +262,7 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="lg:col-span-4"
             >
-              <div className="bg-white/80 dark:bg-[#111118]/80 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white dark:border-white/10 overflow-hidden sticky top-28 ring-1 ring-black/5 dark:ring-0">
+              <div className="bg-white/95 dark:bg-[#111118]/95 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white dark:border-white/10 overflow-hidden sticky top-28 ring-1 ring-black/5 dark:ring-0">
                 
                 <div className="p-6 border-b border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
                   <h2 className="text-xl font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
@@ -400,7 +400,7 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="lg:col-span-8"
             >
-              <div className="bg-white/60 dark:bg-[#111118]/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white dark:border-white/10 p-8 ring-1 ring-black/5 dark:ring-0">
+              <div className="bg-white/90 dark:bg-[#111118]/90 rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white dark:border-white/10 p-8 ring-1 ring-black/5 dark:ring-0">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                   <div>
                     <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">Thư viện Wiki</h2>
@@ -418,7 +418,7 @@ export default function GuidePage() {
                       key={course.id}
                       onMouseMove={handleMouseMove}
                       onMouseLeave={handleMouseLeave}
-                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/30 shadow-[0_8px_20px_rgba(255,56,92,0.08)] dark:border-[#ff385c]/50 dark:shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-white dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-black/5 dark:ring-0'} rounded-[1.5rem] p-6 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(212,77,240,0.1)] dark:hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-white/80 dark:bg-black/40 backdrop-blur-md flex flex-col h-full relative overflow-hidden transition-all duration-300`}
+                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/30 shadow-[0_8px_20px_rgba(255,56,92,0.08)] dark:border-[#ff385c]/50 dark:shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-white dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-black/5 dark:ring-0'} rounded-[1.5rem] p-6 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(212,77,240,0.1)] dark:hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-white/95 dark:bg-[#1a1a24] flex flex-col h-full relative overflow-hidden transition-all duration-300`}
                     >
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#ff385c] to-[#d44df0] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       
