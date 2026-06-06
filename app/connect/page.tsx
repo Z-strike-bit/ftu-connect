@@ -225,47 +225,62 @@ export default function ConnectPage() {
           <div className="px-5 py-6 space-y-3">
             <button 
               onClick={() => setActiveTab('requests')}
-              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'requests' ? 'bg-gradient-to-r from-[#ff0055]/20 to-transparent border-l-4 border-[#ff0055] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'requests' ? 'bg-[#ff385c]/10 border-[#ff385c]/30 text-[#ff385c] translate-x-1 shadow-[0_0_20px_rgba(255,56,92,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
             >
-              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm relative">
+              {activeTab === 'requests' && <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/20 to-transparent opacity-50"></div>}
+              {activeTab === 'requests' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#ff385c] rounded-r-full shadow-[0_0_10px_#ff385c]"></div>}
+              
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'requests' ? 'bg-[#ff385c] text-white shadow-[0_0_15px_rgba(255,56,92,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 {requests.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[#ff0055] text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-[0_0_10px_#ff0055]">
+                  <span className={`absolute -top-2 -right-2 text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md ${activeTab === 'requests' ? 'bg-white text-[#ff385c]' : 'bg-[#ff385c] text-white shadow-[0_0_10px_#ff385c]'}`}>
                     {requests.length}
                   </span>
                 )}
               </div>
-              <span className="text-[15px] uppercase tracking-wide">Lời mời kết bạn</span>
+              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'requests' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Lời mời kết bạn</span>
             </button>
+
             <button 
               onClick={() => setActiveTab('suggestions')}
-              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'suggestions' ? 'bg-gradient-to-r from-[#0099ff]/20 to-transparent border-l-4 border-[#0099ff] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'suggestions' ? 'bg-[#00e5ff]/10 border-[#00e5ff]/30 text-[#00e5ff] translate-x-1 shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
             >
-              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm relative">
+              {activeTab === 'suggestions' && <div className="absolute inset-0 bg-gradient-to-r from-[#00e5ff]/20 to-transparent opacity-50"></div>}
+              {activeTab === 'suggestions' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#00e5ff] rounded-r-full shadow-[0_0_10px_#00e5ff]"></div>}
+              
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'suggestions' ? 'bg-[#00e5ff] text-black shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
                 {isScanning && activeTab === 'suggestions' && (
-                  <span className="absolute inset-0 border border-[#0099ff] rounded-lg animate-ping"></span>
+                  <span className="absolute inset-0 border border-black rounded-xl animate-ping"></span>
                 )}
                 <svg className="w-5 h-5 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
               </div>
-              <span className="text-[15px] uppercase tracking-wide">Radar Gợi ý</span>
+              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'suggestions' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Radar Gợi ý</span>
             </button>
+
             <button 
               onClick={() => setActiveTab('sent')}
-              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'sent' ? 'bg-gradient-to-r from-[#d44df0]/20 to-transparent border-l-4 border-[#d44df0] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'sent' ? 'bg-[#d44df0]/10 border-[#d44df0]/30 text-[#d44df0] translate-x-1 shadow-[0_0_20px_rgba(212,77,240,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
             >
-              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm">
+              {activeTab === 'sent' && <div className="absolute inset-0 bg-gradient-to-r from-[#d44df0]/20 to-transparent opacity-50"></div>}
+              {activeTab === 'sent' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#d44df0] rounded-r-full shadow-[0_0_10px_#d44df0]"></div>}
+              
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'sent' ? 'bg-[#d44df0] text-white shadow-[0_0_15px_rgba(212,77,240,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
               </div>
-              <span className="text-[15px] uppercase tracking-wide">Đã gửi</span>
+              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'sent' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Đã gửi</span>
             </button>
+
             <button 
               onClick={() => setActiveTab('friends')}
-              className={`w-full font-bold rounded-xl p-3.5 flex items-center gap-4 transition-all duration-300 ${activeTab === 'friends' ? 'bg-gradient-to-r from-[#00ff88]/20 to-transparent border-l-4 border-[#00ff88] text-white' : 'hover:bg-[#1a1a2e] text-[#8888a0] hover:text-white border-l-4 border-transparent'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'friends' ? 'bg-[#00ff88]/10 border-[#00ff88]/30 text-[#00ff88] translate-x-1 shadow-[0_0_20px_rgba(0,255,136,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
             >
-              <div className="bg-[#1f1f33] text-white p-2 rounded-lg shadow-sm">
+              {activeTab === 'friends' && <div className="absolute inset-0 bg-gradient-to-r from-[#00ff88]/20 to-transparent opacity-50"></div>}
+              {activeTab === 'friends' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#00ff88] rounded-r-full shadow-[0_0_10px_#00ff88]"></div>}
+              
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'friends' ? 'bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
               </div>
-              <span className="text-[15px] uppercase tracking-wide">Tất cả bạn bè</span>
+              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'friends' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Tất cả bạn bè</span>
             </button>
           </div>
         </div>
