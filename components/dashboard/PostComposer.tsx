@@ -376,7 +376,7 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions,
           disabled={(!postContent.trim() && !imageFile && !attachedFile) || isPosting}
           className="relative overflow-hidden rounded-xl p-[2px] disabled:opacity-50 transition-all group"
         >
-          <div className={`absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_70%,#B91C1C,#DC2626,#EF4444)] dark:bg-[conic-gradient(from_0deg,transparent_70%,#00e5ff,#d44df0,#ff385c)] ${(!isPosting && (postContent.trim() || imageFile)) ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}></div>
+          <div className={`absolute inset-[-100%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_70%,#B91C1C,#DC2626,#EF4444)] dark:bg-[conic-gradient(from_0deg,transparent_70%,#00e5ff,#d44df0,#ff385c)] ${(!isPosting && (postContent.trim() || imageFile || attachedFile)) ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}></div>
           <div className="relative bg-gradient-to-r from-gray-100 to-gray-300 group-hover:from-white group-hover:to-white text-black rounded-[10px] px-6 py-2 text-[15px] font-extrabold h-full w-full flex items-center justify-center transition-all shadow-sm dark:shadow-[0_4px_15px_rgba(255,255,255,0.15)]">
             {isPosting ? 'Đang...' : 'Đăng bài'}
           </div>
