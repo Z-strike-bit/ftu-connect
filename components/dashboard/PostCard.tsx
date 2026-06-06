@@ -28,7 +28,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, user, profile, onLike, onComm
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/95 dark:bg-black/40 backdrop-blur-sm sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] border-x-0 sm:border border-white/60 dark:border-white/10 overflow-hidden group"
+      className="bg-white/95 dark:bg-[#12121A] sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] border-x-0 sm:border border-white/60 dark:border-white/5 overflow-hidden group transition-colors"
     >
       {/* Post Header */}
       <div className="p-6 flex items-start justify-between">
@@ -172,7 +172,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, user, profile, onLike, onComm
               
               <div className="flex gap-4 items-start mt-6 pt-2">
                 <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-10 h-10 rounded-full border border-gray-200 dark:border-white/20 shrink-0 object-cover mt-0.5 cursor-pointer"/>
-                <div className="flex-1 bg-gray-100 dark:bg-black/40 rounded-full flex items-center px-5 py-2.5 border border-gray-200 dark:border-white/10 focus-within:border-ftu-red-700 dark:focus-within:border-[#00e5ff] focus-within:shadow-sm dark:focus-within:shadow-[0_0_10px_rgba(0,229,255,0.2)] transition-all">
+                <div className="flex-1 bg-gray-100 dark:bg-[#08080C] rounded-full flex items-center px-5 py-2.5 border border-gray-200 dark:border-white/5 focus-within:border-ftu-red-700 dark:focus-within:border-[#00e5ff] focus-within:shadow-sm dark:focus-within:shadow-[0_0_10px_rgba(0,229,255,0.2)] transition-all">
                   <input
                     type="text"
                     placeholder="Viết bình luận công khai..."

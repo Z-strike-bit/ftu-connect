@@ -188,7 +188,7 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions 
   };
 
   return (
-    <div className="bg-white dark:bg-[#0c0c14] sm:rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-gray-100 dark:border-white/10 p-6 mb-8 relative z-20 group/postbox">
+    <div className="bg-white dark:bg-[#12121A] sm:rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] border-x-0 sm:border border-gray-100 dark:border-white/5 p-6 mb-8 relative z-20 group/postbox transition-colors">
       {/* Decorative LED Strip */}
       <div className="absolute inset-0 sm:rounded-[24px] overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-[3px]">
@@ -199,7 +199,7 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions 
         <Link href={user ? `/profile/${user.uid}` : "#"}>
           <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-white/20 shadow-sm shrink-0 object-cover cursor-pointer hover:border-gray-400 dark:hover:border-white/50 transition-colors"/>
         </Link>
-        <div className="flex-1 bg-gray-50/50 shadow-inner border border-gray-100 hover:bg-gray-50 dark:bg-black/40 dark:hover:bg-black/60 transition-colors rounded-3xl px-5 flex flex-col justify-center cursor-text dark:border-white/5 dark:hover:border-white/10 relative">
+        <div className="flex-1 bg-gray-50/50 shadow-inner border border-gray-100 hover:bg-gray-50 dark:bg-[#08080C] dark:hover:bg-[#0B0B10] transition-colors rounded-3xl px-5 flex flex-col justify-center cursor-text dark:border-white/5 dark:hover:border-white/10 relative">
           <TextareaAutosize 
             minRows={1}
             maxRows={8}
@@ -215,7 +215,7 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute left-0 top-full mt-2 w-[280px] bg-white dark:bg-[#1a1a2e] border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden z-50"
+                className="absolute left-0 top-full mt-2 w-[280px] bg-white dark:bg-[#1A1A24] border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden z-50"
               >
                 <div className="p-2 text-[12px] font-bold text-gray-400 dark:text-[#a0a0b0] bg-gray-50 dark:bg-white/5 uppercase tracking-wider">
                   Gợi ý gắn thẻ

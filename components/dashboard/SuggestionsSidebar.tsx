@@ -12,7 +12,7 @@ const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({ suggestions }) 
       <div className="sticky top-28 flex flex-col gap-8 pl-4">
         
         {/* Sự kiện nổi bật */}
-        <div className="relative bg-white dark:bg-[#111118] p-8 rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgba(106,76,245,0.3)] border border-gray-100 dark:border-white/20 overflow-hidden group">
+        <div className="relative bg-white dark:bg-[#12121A] p-8 rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] border border-gray-100 dark:border-white/5 overflow-hidden group transition-colors">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:hidden"></div>
           <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/5 to-transparent dark:from-white/10 rounded-full pointer-events-none"></div>
           <div className="flex justify-between items-center mb-8 relative z-10">
@@ -47,7 +47,7 @@ const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({ suggestions }) 
         </div>
 
         {/* Gợi ý kết nối / Người liên hệ */}
-        <div className="bg-white dark:bg-[#0c0c14] rounded-[24px] p-6 border border-gray-100 dark:border-white/10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+        <div className="bg-white dark:bg-[#12121A] rounded-[24px] p-6 border border-gray-100 dark:border-white/5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-colors">
           <div className="flex justify-between items-center mb-6">
             <h3 className="font-extrabold text-[18px] text-gray-900 dark:text-white">Gợi ý kết nối</h3>
             <div className="flex gap-1">
