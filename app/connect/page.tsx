@@ -216,22 +216,24 @@ export default function ConnectPage() {
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-gold/10 dark:from-[#d44df0]/10 to-transparent pointer-events-none z-0"></div>
         
         {/* Cột trái: Sidebar Quản lý */}
-        <div className="w-[360px] bg-white dark:bg-[#0a0a14]/80 backdrop-blur-md dark:backdrop-blur-xl border-r border-gray-200 dark:border-[#1f1f33] flex-shrink-0 flex flex-col h-full hidden lg:flex mt-4 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.05)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
-          <div className="p-6 flex justify-between items-center border-b border-gray-200 dark:border-[#1f1f33]">
-            <h2 className="text-[22px] font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-              <svg className="w-6 h-6 text-ftu-red-600 dark:text-[#0099ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        <div className="w-[320px] bg-white/95 dark:bg-[#0c0c14]/90 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[32px] ml-6 my-6 flex-shrink-0 flex flex-col h-[calc(100%-3rem)] hidden lg:flex z-10 shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden">
+          <div className="p-6 flex justify-between items-center border-b border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.01]">
+            <h2 className="text-[22px] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-[#c8a0e0] uppercase tracking-wider flex items-center gap-3">
+              <div className="bg-gradient-to-br from-ftu-red-500 to-ftu-red-700 dark:from-[#00e5ff] dark:to-[#d44df0] p-2 rounded-xl text-white shadow-lg">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+              </div>
               Lobby
             </h2>
           </div>
           <div className="px-5 py-6 space-y-3">
             <button 
               onClick={() => setActiveTab('requests')}
-              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'requests' ? 'bg-[#ff385c]/10 border-[#ff385c]/30 text-[#ff385c] translate-x-1 shadow-[0_0_20px_rgba(255,56,92,0.15)]' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/5 dark:hover:text-white hover:translate-x-1'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'requests' ? 'bg-[#ff385c]/5 border-[#ff385c]/20 text-[#ff385c] translate-x-1 shadow-sm dark:bg-white/[0.03] dark:border-white/10' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/[0.02] dark:hover:text-white hover:translate-x-1'}`}
             >
-              {activeTab === 'requests' && <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/20 to-transparent opacity-50"></div>}
-              {activeTab === 'requests' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#ff385c] rounded-r-full shadow-[0_0_10px_#ff385c]"></div>}
+              {activeTab === 'requests' && <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/10 to-transparent opacity-50"></div>}
+              {activeTab === 'requests' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#ff385c] rounded-r-full shadow-[0_0_8px_#ff385c]"></div>}
               
-              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'requests' ? 'bg-[#ff385c] text-white shadow-[0_0_15px_rgba(255,56,92,0.4)]' : 'bg-gray-100 dark:bg-black/40 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border-gray-200 dark:border-white/5'}`}>
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'requests' ? 'bg-[#ff385c] text-white shadow-[0_4px_10px_rgba(255,56,92,0.3)]' : 'bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border border-gray-200 dark:border-white/5'}`}>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 {requests.length > 0 && (
                   <span className={`absolute -top-2 -right-2 text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md ${activeTab === 'requests' ? 'bg-white text-[#ff385c]' : 'bg-[#ff385c] text-white shadow-[0_0_10px_#ff385c]'}`}>
@@ -244,12 +246,12 @@ export default function ConnectPage() {
 
             <button 
               onClick={() => setActiveTab('suggestions')}
-              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'suggestions' ? 'bg-ftu-red-50 border-ftu-red-200 text-ftu-red-700 dark:bg-[#00e5ff]/10 dark:border-[#00e5ff]/30 dark:text-[#00e5ff] translate-x-1 shadow-[0_0_20px_rgba(185,28,28,0.15)] dark:shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/5 dark:hover:text-white hover:translate-x-1'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'suggestions' ? 'bg-ftu-red-50/50 border-ftu-red-200 text-ftu-red-700 dark:bg-white/[0.03] dark:border-white/10 dark:text-[#00e5ff] translate-x-1 shadow-sm' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/[0.02] dark:hover:text-white hover:translate-x-1'}`}
             >
-              {activeTab === 'suggestions' && <div className="absolute inset-0 bg-gradient-to-r from-ftu-red-600/10 dark:from-[#00e5ff]/20 to-transparent opacity-50"></div>}
-              {activeTab === 'suggestions' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-ftu-red-600 dark:bg-[#00e5ff] rounded-r-full shadow-[0_0_10px_rgba(185,28,28,0.5)] dark:shadow-[0_0_10px_#00e5ff]"></div>}
+              {activeTab === 'suggestions' && <div className="absolute inset-0 bg-gradient-to-r from-ftu-red-600/5 dark:from-[#00e5ff]/10 to-transparent opacity-50"></div>}
+              {activeTab === 'suggestions' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-ftu-red-600 dark:bg-[#00e5ff] rounded-r-full shadow-[0_0_8px_rgba(185,28,28,0.4)] dark:shadow-[0_0_8px_#00e5ff]"></div>}
               
-              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'suggestions' ? 'bg-ftu-red-600 text-white shadow-[0_0_15px_rgba(185,28,28,0.4)] dark:bg-[#00e5ff] dark:text-black dark:shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'bg-gray-100 dark:bg-black/40 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border-gray-200 dark:border-white/5'}`}>
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'suggestions' ? 'bg-ftu-red-600 text-white shadow-[0_4px_10px_rgba(185,28,28,0.3)] dark:bg-[#00e5ff] dark:text-black dark:shadow-[0_4px_10px_rgba(0,229,255,0.3)]' : 'bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border border-gray-200 dark:border-white/5'}`}>
                 {isScanning && activeTab === 'suggestions' && (
                   <span className="absolute inset-0 border border-black rounded-xl animate-ping"></span>
                 )}
@@ -260,12 +262,12 @@ export default function ConnectPage() {
 
             <button 
               onClick={() => setActiveTab('sent')}
-              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'sent' ? 'bg-[#d44df0]/10 border-[#d44df0]/30 text-[#d44df0] translate-x-1 shadow-[0_0_20px_rgba(212,77,240,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'sent' ? 'bg-[#d44df0]/5 border-[#d44df0]/20 text-[#d44df0] translate-x-1 shadow-sm dark:bg-white/[0.03] dark:border-white/10' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/[0.02] dark:hover:text-white hover:translate-x-1'}`}
             >
-              {activeTab === 'sent' && <div className="absolute inset-0 bg-gradient-to-r from-[#d44df0]/20 to-transparent opacity-50"></div>}
-              {activeTab === 'sent' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#d44df0] rounded-r-full shadow-[0_0_10px_#d44df0]"></div>}
+              {activeTab === 'sent' && <div className="absolute inset-0 bg-gradient-to-r from-[#d44df0]/10 to-transparent opacity-50"></div>}
+              {activeTab === 'sent' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#d44df0] rounded-r-full shadow-[0_0_8px_#d44df0]"></div>}
               
-              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'sent' ? 'bg-[#d44df0] text-white shadow-[0_0_15px_rgba(212,77,240,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'sent' ? 'bg-[#d44df0] text-white shadow-[0_4px_10px_rgba(212,77,240,0.3)]' : 'bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border border-gray-200 dark:border-white/5'}`}>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
               </div>
               <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'sent' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Đã gửi</span>
@@ -273,12 +275,12 @@ export default function ConnectPage() {
 
             <button 
               onClick={() => setActiveTab('friends')}
-              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'friends' ? 'bg-[#00ff88]/10 border-[#00ff88]/30 text-[#00ff88] translate-x-1 shadow-[0_0_20px_rgba(0,255,136,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'friends' ? 'bg-[#00ff88]/5 border-[#00ff88]/20 text-green-600 dark:text-[#00ff88] translate-x-1 shadow-sm dark:bg-white/[0.03] dark:border-white/10' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/[0.02] dark:hover:text-white hover:translate-x-1'}`}
             >
-              {activeTab === 'friends' && <div className="absolute inset-0 bg-gradient-to-r from-[#00ff88]/20 to-transparent opacity-50"></div>}
-              {activeTab === 'friends' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#00ff88] rounded-r-full shadow-[0_0_10px_#00ff88]"></div>}
+              {activeTab === 'friends' && <div className="absolute inset-0 bg-gradient-to-r from-[#00ff88]/10 to-transparent opacity-50"></div>}
+              {activeTab === 'friends' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-green-500 dark:bg-[#00ff88] rounded-r-full shadow-[0_0_8px_rgba(0,255,136,0.5)]"></div>}
               
-              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'friends' ? 'bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'friends' ? 'bg-green-500 dark:bg-[#00ff88] text-white dark:text-black shadow-[0_4px_10px_rgba(0,255,136,0.3)]' : 'bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border border-gray-200 dark:border-white/5'}`}>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
               </div>
               <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'friends' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Tất cả bạn bè</span>
