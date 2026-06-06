@@ -62,7 +62,7 @@ export default function MapPage() {
       <div className="relative h-[calc(100vh-72px)] w-full">
         
         {/* Floating Card */}
-        <motion.div drag dragMomentum={false} className="absolute top-4 left-4 sm:left-6 z-[1000] bg-white/95 p-5 sm:p-6 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px] cursor-move">
+        <motion.div className="absolute top-4 left-4 sm:left-6 z-[1000] bg-white/95 p-5 sm:p-6 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px]">
           <div className="flex justify-between items-start mb-2">
             <div>
               <h1 className="text-[20px] font-bold text-gray-900 flex items-center gap-2 leading-tight tracking-tight">
@@ -85,7 +85,7 @@ export default function MapPage() {
         </div>
 
         {/* Radar Filter (Bottom Right) */}
-        <motion.div drag dragMomentum={false} className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-[1000] flex flex-col items-end gap-3 cursor-move">
+        <motion.div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-[1000] flex flex-col items-end gap-3">
           <AnimatePresence>
             {isRadarOpen && (
               <motion.div
@@ -97,25 +97,25 @@ export default function MapPage() {
               >
                 <button 
                   onClick={() => { setActiveFilter('all'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'all' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Tất cả 🌍
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('food'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'food' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Ăn uống 🍜
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('pass'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'pass' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Pass đồ 📚
                 </button>
                 <button 
                   onClick={() => { setActiveFilter('event'); setIsRadarOpen(false); }}
-                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md backdrop-blur-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
+                  className={`px-5 py-3 rounded-full text-[15px] font-semibold transition-all border shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-end gap-2 ${activeFilter === 'event' ? 'border-gray-300 bg-white text-gray-900 scale-105 shadow-md' : 'border-transparent bg-white/90 text-gray-600 hover:bg-white hover:text-gray-900 hover:scale-105'}`}
                 >
                   Sự kiện 🌟
                 </button>

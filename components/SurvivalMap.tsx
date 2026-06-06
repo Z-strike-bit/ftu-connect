@@ -240,6 +240,15 @@ const EventPopup = ({ data }: { data: EventMarker }) => (
 );
 
 
+const MapEvents = ({ setTempPos }: { setTempPos: (pos: [number, number]) => void }) => {
+  useMapEvents({
+    click(e) {
+      setTempPos([e.latlng.lat, e.latlng.lng]);
+    }
+  });
+  return null;
+};
+
 export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: string }) {
   const ftuPosition: [number, number] = [21.0230, 105.8050];
   const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
@@ -253,7 +262,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
         setUserLocation([position.coords.latitude, position.coords.longitude]);
       },
       (error) => console.warn('Lỗi lấy vị trí:', error.message),
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 }
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
@@ -327,16 +336,6 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
   // State cho Modal đánh giá
   const [reviewMarker, setReviewMarker] = useState<FoodMarker | null>(null);
   const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
-
-  // Component lắng nghe sự kiện click trên bản đồ
-  const MapEvents = () => {
-    useMapEvents({
-      click(e) {
-        setTempPos([e.latlng.lat, e.latlng.lng]);
-      }
-    });
-    return null;
-  };
 
   const handleCloseModal = () => {
     setTempPos(null);
@@ -415,7 +414,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        <MapEvents />
+        <MapEvents setTempPos={setTempPos} />
 
         {/* Điểm FTU Main */}
         <Marker position={ftuPosition} icon={ftuIcon}>

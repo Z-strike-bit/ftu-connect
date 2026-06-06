@@ -153,9 +153,10 @@ export default function GuidePage() {
   const currentGPA = sumCredits > 0 ? (curPoints / sumCredits) : 0;
   
   // Ticker Animation for GPA
-  const [animatedGPA, setAnimatedGPA] = useState(0);
+  const gpaRef = useRef<HTMLSpanElement>(null);
+  const animatedGpaVal = useRef(0);
   useEffect(() => {
-    let start = animatedGPA;
+    let start = animatedGpaVal.current;
     let end = currentGPA;
     let duration = 1000;
     let startTime: number | null = null;
@@ -165,7 +166,13 @@ export default function GuidePage() {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       const easeOut = 1 - Math.pow(1 - progress, 3);
-      setAnimatedGPA(start + (end - start) * easeOut);
+      const currentVal = start + (end - start) * easeOut;
+      animatedGpaVal.current = currentVal;
+      
+      if (gpaRef.current) {
+        gpaRef.current.textContent = currentVal.toFixed(2);
+      }
+      
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(animate);
       }
@@ -194,6 +201,8 @@ export default function GuidePage() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
+    if (card.dataset.ticking === 'true') return;
+
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -204,10 +213,12 @@ export default function GuidePage() {
     const rotateX = ((y - centerY) / centerY) * -10;
     const rotateY = ((x - centerX) / centerX) * 10;
     
+    card.dataset.ticking = 'true';
     requestAnimationFrame(() => {
       card.style.setProperty('--mouse-x', `${x}px`);
       card.style.setProperty('--mouse-y', `${y}px`);
       card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      card.dataset.ticking = 'false';
     });
   };
 
@@ -224,10 +235,7 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 dark:bg-[#05050a] text-gray-900 dark:text-white font-sans pb-16 selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden">
-      {/* Ambient Orbs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-600/20 blur-[150px] pointer-events-none z-0"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#ff385c]/15 blur-[120px] pointer-events-none z-0"></div>
-      <div className="absolute top-[40%] left-[40%] w-[30vw] h-[30vw] rounded-full bg-blue-500/10 blur-[100px] pointer-events-none z-0"></div>
+      {/* Background is solid to optimize performance */}
 
       <div className="relative z-10">
         <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
@@ -252,7 +260,7 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="lg:col-span-4"
             >
-              <div className="bg-white dark:bg-white/[0.03] backdrop-blur-3xl rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 overflow-hidden sticky top-28">
+              <div className="bg-white/95 dark:bg-[#111118]/90 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 overflow-hidden sticky top-28">
                 
                 <div className="p-6 border-b border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
                   <h2 className="text-xl font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
@@ -314,7 +322,7 @@ export default function GuidePage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="font-medium text-gray-600 dark:text-white/80">GPA Hiện tại:</span>
-                        <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#ff385c] to-[#d44df0] text-base">{animatedGPA.toFixed(2)}</span>
+                        <span ref={gpaRef} className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#ff385c] to-[#d44df0] text-base">0.00</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="font-medium text-gray-600 dark:text-white/80">Xếp loại:</span>
@@ -340,21 +348,21 @@ export default function GuidePage() {
                 <div className="p-6 bg-gray-50/50 dark:bg-white/[0.02] border-t border-gray-200 dark:border-white/5 min-h-[160px] overflow-hidden relative">
                   <AnimatePresence mode="wait">
                     {sumCredits > total ? (
-                      <motion.div key="error" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/30 shadow-[0_0_20px_rgba(255,56,92,0.1)] w-full backdrop-blur-md">
+                      <motion.div key="error" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/30 shadow-[0_0_20px_rgba(255,56,92,0.1)] w-full">
                         <p className="text-[#ff385c] font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
                         <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
                           Tổng số tín chỉ bạn đã nhập ({sumCredits}) lớn hơn cả tổng tín chỉ toàn khóa ({total}). Vui lòng kiểm tra lại!
                         </p>
                       </motion.div>
                     ) : remCredits <= 0 ? (
-                      <motion.div key="done" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] w-full backdrop-blur-md">
+                      <motion.div key="done" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] w-full">
                         <p className="text-green-400 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
                         <p className="text-green-400 text-sm font-medium leading-relaxed">
                           Bạn đã hoàn thành đủ số tín chỉ ra trường. GPA chung cuộc của bạn là <span className="font-extrabold">{currentGPA.toFixed(2)}</span> ({rank}).
                         </p>
                       </motion.div>
                     ) : neededA > remCredits ? (
-                      <motion.div key="impossible" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/30 shadow-[0_0_20px_rgba(255,56,92,0.1)] flex flex-col items-center w-full backdrop-blur-md">
+                      <motion.div key="impossible" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/30 shadow-[0_0_20px_rgba(255,56,92,0.1)] flex flex-col items-center w-full">
                         <Image src="/assets/badges/badge-newbie.png" alt="Newbie Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(255,56,92,0.5)]" />
                         <p className="text-[#ff385c] font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
                         <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
@@ -362,7 +370,7 @@ export default function GuidePage() {
                         </p>
                       </motion.div>
                     ) : neededA > 0 ? (
-                      <motion.div key="safe" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#d44df0]/10 rounded-xl border border-[#d44df0]/30 shadow-[0_0_20px_rgba(212,77,240,0.1)] flex flex-col items-center w-full backdrop-blur-md">
+                      <motion.div key="safe" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#d44df0]/10 rounded-xl border border-[#d44df0]/30 shadow-[0_0_20px_rgba(212,77,240,0.1)] flex flex-col items-center w-full">
                         <Image src="/assets/badges/badge-veteran.png" alt="Veteran Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(212,77,240,0.4)]" />
                         <p className="text-[#d44df0] font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
                         <p className="text-[#e290f5] text-sm font-medium leading-relaxed">
@@ -370,7 +378,7 @@ export default function GuidePage() {
                         </p>
                       </motion.div>
                     ) : (
-                      <motion.div key="easy" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#00e5ff]/10 rounded-xl border border-[#00e5ff]/30 shadow-[0_0_20px_rgba(0,229,255,0.1)] flex flex-col items-center w-full backdrop-blur-md">
+                      <motion.div key="easy" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#00e5ff]/10 rounded-xl border border-[#00e5ff]/30 shadow-[0_0_20px_rgba(0,229,255,0.1)] flex flex-col items-center w-full">
                         <Image src="/assets/badges/badge-gold.png" alt="Gold Badge" width={80} height={80} className="mb-3 animate-bounce drop-shadow-[0_0_15px_rgba(0,229,255,0.5)]" />
                         <p className="text-[#00e5ff] font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
                         <p className="text-[#8cf5ff] text-sm font-medium leading-relaxed">
@@ -390,7 +398,7 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="lg:col-span-8"
             >
-              <div className="bg-white dark:bg-white/[0.03] backdrop-blur-3xl rounded-[2rem] shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 p-8">
+              <div className="bg-white/95 dark:bg-[#111118]/90 rounded-[2rem] shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                   <div>
                     <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">Thư viện Wiki</h2>
@@ -408,7 +416,7 @@ export default function GuidePage() {
                       key={course.id}
                       onMouseMove={handleMouseMove}
                       onMouseLeave={handleMouseLeave}
-                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/50 animate-pulse-glow shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-gray-200 dark:border-white/10'} rounded-[1.5rem] p-6 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-gray-50 dark:bg-white/[0.02] backdrop-blur-md flex flex-col h-full relative overflow-hidden`}
+                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/50 shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-gray-200 dark:border-white/10'} rounded-[1.5rem] p-6 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-gray-50 dark:bg-black/40 flex flex-col h-full relative overflow-hidden`}
                     >
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#ff385c] to-[#d44df0] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       
@@ -450,10 +458,7 @@ export default function GuidePage() {
                   ))}
                 </div>
                 
-                <div className="mt-10 text-center p-8 bg-gray-50 dark:bg-black/20 rounded-[1.5rem] relative overflow-hidden marching-ants-box cursor-pointer transition-all border border-transparent backdrop-blur-sm">
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none marching-ants-svg">
-                    <rect width="100%" height="100%" rx="24" fill="none" stroke="currentColor" className="text-gray-300 dark:text-white/20" strokeWidth="2" />
-                  </svg>
+                <div className="mt-10 text-center p-8 bg-gray-50 dark:bg-black/40 rounded-[1.5rem] relative overflow-hidden cursor-pointer transition-all border border-dashed border-gray-300 dark:border-white/20 hover:bg-[#ff385c]/5 hover:border-[#ff385c]/50">
                   <p className="text-gray-600 dark:text-[#a0a0b0] font-bold text-sm relative z-10 transition-colors group-hover:text-gray-900 dark:group-hover:text-white">Chưa tìm thấy môn học bạn cần?</p>
                   <button className="mt-3 text-[#d44df0] font-extrabold text-sm uppercase tracking-widest relative z-10 transition-colors group-hover:text-[#ff385c]">Đóng góp môn học mới</button>
                 </div>

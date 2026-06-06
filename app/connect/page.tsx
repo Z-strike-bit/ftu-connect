@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc, collection, onSnapshot, query, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection, query, getDocs, doc, getDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
 import Link from 'next/link';
 
 export default function ConnectPage() {
@@ -22,6 +22,7 @@ export default function ConnectPage() {
   const [requests, setRequests] = useState<any[]>([]);
   const [sentRequestsUsers, setSentRequestsUsers] = useState<any[]>([]);
   const [friends, setFriends] = useState<any[]>([]);
+  const [allUsersCache, setAllUsersCache] = useState<any[]>([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -48,87 +49,87 @@ export default function ConnectPage() {
   }, [activeTab]);
 
   useEffect(() => {
-    if (!user) return;
+    // One-time fetch for all users to avoid massive read operations and memory leaks
+    getDocs(collection(db, 'users')).then(snapshot => {
+      const users = snapshot.docs.map(d => ({ id: d.id, ...d.data() as any }));
+      setAllUsersCache(users);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!user || allUsersCache.length === 0) return;
 
     // Listen to current user's profile to get their connections
     const unsubscribeProfile = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
       if (docSnap.exists()) {
-        setProfile({ id: docSnap.id, ...docSnap.data() });
+        const currentUserData = { id: docSnap.id, ...docSnap.data() as any };
+        setProfile(currentUserData);
+        
+        const myFriends = currentUserData.friends || [];
+        const myPendingRequests = currentUserData.pendingRequests || [];
+        const mySentRequests = currentUserData.sentRequests || [];
+
+        // 1. Friends Tab
+        setFriends(allUsersCache.filter(u => myFriends.includes(u.id)));
+        
+        // 2. Requests Tab (people who sent ME a request)
+        setRequests(allUsersCache.filter(u => myPendingRequests.includes(u.id)));
+
+        // 3. Sent Requests Tab (people I sent a request to)
+        setSentRequestsUsers(allUsersCache.filter(u => mySentRequests.includes(u.id)));
+
+        // 4. Suggestions Tab
+        // Rules: Not me, not friend, not pending request (sent or received)
+        let candidates = allUsersCache.filter(u => 
+          u.id !== user.uid && 
+          !myFriends.includes(u.id) && 
+          !myPendingRequests.includes(u.id) &&
+          !mySentRequests.includes(u.id)
+        );
+
+        // Score suggestions
+        candidates = candidates.map(c => {
+          let score = 0;
+          let matchReason = '';
+          
+          // Opposite role gets a boost
+          if (c.role && currentUserData.role && c.role !== currentUserData.role) {
+            score += 10;
+            matchReason = c.role === 'mentor' ? 'Mentor phù hợp' : 'Mentee tiềm năng';
+          }
+
+          // Same major gets a boost
+          if (c.major && currentUserData.major && c.major === currentUserData.major) {
+            score += 5;
+            if (!matchReason) matchReason = 'Cùng chuyên ngành';
+          }
+          
+          // Common goals
+          if (c.goals && currentUserData.goals) {
+            const commonGoals = c.goals.filter((g: string) => currentUserData.goals?.includes(g));
+            if (commonGoals.length > 0) {
+              score += commonGoals.length * 2;
+              if (!matchReason) matchReason = `Chung mục tiêu`;
+            }
+          }
+          
+          if (!matchReason) matchReason = 'Gợi ý kết nối';
+          return { ...c, score, matchReason };
+        });
+
+        // Sort by score
+        candidates.sort((a, b) => b.score - a.score);
+        setSuggestions(candidates);
+        setLoading(false);
       } else {
         router.push('/onboarding');
       }
     });
-
-    // Listen to all users to filter into tabs
-    const unsubscribeUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
-      const allUsers = snapshot.docs.map(d => ({ id: d.id, ...d.data() as any }));
-      
-      const currentUserData = allUsers.find(u => u.id === user.uid);
-      if (!currentUserData) return;
-      
-      const myFriends = currentUserData.friends || [];
-      const myPendingRequests = currentUserData.pendingRequests || [];
-      const mySentRequests = currentUserData.sentRequests || [];
-
-      // 1. Friends Tab
-      setFriends(allUsers.filter(u => myFriends.includes(u.id)));
-      
-      // 2. Requests Tab (people who sent ME a request)
-      setRequests(allUsers.filter(u => myPendingRequests.includes(u.id)));
-
-      // 3. Sent Requests Tab (people I sent a request to)
-      setSentRequestsUsers(allUsers.filter(u => mySentRequests.includes(u.id)));
-
-      // 4. Suggestions Tab
-      // Rules: Not me, not friend, not pending request (sent or received)
-      let candidates = allUsers.filter(u => 
-        u.id !== user.uid && 
-        !myFriends.includes(u.id) && 
-        !myPendingRequests.includes(u.id) &&
-        !mySentRequests.includes(u.id)
-      );
-
-      // Score suggestions
-      candidates = candidates.map(c => {
-        let score = 0;
-        let matchReason = '';
-        
-        // Opposite role gets a boost
-        if (c.role && currentUserData.role && c.role !== currentUserData.role) {
-          score += 10;
-          matchReason = c.role === 'mentor' ? 'Mentor phù hợp' : 'Mentee tiềm năng';
-        }
-
-        // Same major gets a boost
-        if (c.major && currentUserData.major && c.major === currentUserData.major) {
-          score += 5;
-          if (!matchReason) matchReason = 'Cùng chuyên ngành';
-        }
-        
-        // Common goals
-        if (c.goals && currentUserData.goals) {
-          const commonGoals = c.goals.filter((g: string) => currentUserData.goals?.includes(g));
-          if (commonGoals.length > 0) {
-            score += commonGoals.length * 2;
-            if (!matchReason) matchReason = `Chung mục tiêu`;
-          }
-        }
-        
-        if (!matchReason) matchReason = 'Gợi ý kết nối';
-        return { ...c, score, matchReason };
-      });
-
-      // Sort by score
-      candidates.sort((a, b) => b.score - a.score);
-      setSuggestions(candidates);
-      setLoading(false);
-    });
     
     return () => {
       unsubscribeProfile();
-      unsubscribeUsers();
     };
-  }, [user]); 
+  }, [user, allUsersCache, router]); 
 
   // ACTIONS
   const handleSendRequest = async (targetId: string) => {

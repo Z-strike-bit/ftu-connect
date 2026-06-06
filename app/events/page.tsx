@@ -107,6 +107,8 @@ export default function EventsPage() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
+    if (card.dataset.ticking === 'true') return;
+
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -117,10 +119,12 @@ export default function EventsPage() {
     const rotateX = ((y - centerY) / centerY) * -10;
     const rotateY = ((x - centerX) / centerX) * 10;
     
+    card.dataset.ticking = 'true';
     requestAnimationFrame(() => {
       card.style.setProperty('--mouse-x', `${x}px`);
       card.style.setProperty('--mouse-y', `${y}px`);
       card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      card.dataset.ticking = 'false';
     });
   };
 
@@ -137,9 +141,7 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 dark:bg-[#05050a] text-gray-900 dark:text-white font-sans pb-16 selection:bg-ftu-red-700/20 dark:selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden">
-      {/* Ambient Background Orbs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/10 dark:from-[#0099ff]/15 to-transparent pointer-events-none z-0"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-gold/10 dark:from-[#d44df0]/15 to-transparent pointer-events-none z-0"></div>
+      {/* Background is solid to optimize performance */}
 
       <div className="relative z-10">
         <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />

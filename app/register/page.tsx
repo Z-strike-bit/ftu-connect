@@ -149,7 +149,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#090909] p-4 font-sans relative overflow-hidden selection:bg-ftu-red-100 dark:selection:bg-[#fff0f2] selection:text-ftu-red-700 dark:selection:text-[#0099ff]">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-br from-ftu-red-400 dark:from-[#6a4cf5] to-ftu-red-500 dark:to-[#d44df0] rounded-[100%] blur-[120px] opacity-20 pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-400/20 dark:from-[#6a4cf5]/20 to-transparent rounded-[100%] pointer-events-none"></div>
 
       <div className={`w-full bg-white dark:bg-[#141414] backdrop-blur-2xl rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-10 text-center border border-gray-200 dark:border-[#1a1a1a] relative z-10 transition-all duration-500 ${step === 2 ? 'max-w-2xl' : 'max-w-md'}`}>
         <Image src="/logo_ftu_don_gian.png" alt="FTU Connect" width={200} height={50} className="mx-auto mb-8 h-14 w-auto object-contain drop-shadow-md dark:brightness-0 dark:invert" priority />

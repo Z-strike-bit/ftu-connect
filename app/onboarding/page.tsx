@@ -107,9 +107,10 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#05050a] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#ff385c]/30 selection:text-white relative overflow-hidden flex items-center justify-center">
-      {/* Ambient Orbs */}
-      <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-600/20 blur-[150px] pointer-events-none z-0"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#ff385c]/15 blur-[120px] pointer-events-none z-0"></div>
+      {/* Ambient Background Orbs */}
+      <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-600/20 to-transparent pointer-events-none z-0"></div>
+      <div className="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ff385c]/15 to-transparent pointer-events-none z-0"></div>
+      <div className="fixed top-[40%] left-[40%] w-[30vw] h-[30vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 to-transparent pointer-events-none z-0"></div>
 
       <motion.div 
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
