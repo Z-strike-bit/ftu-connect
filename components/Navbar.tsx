@@ -62,7 +62,7 @@ export default function Navbar({ profileName, profileId, profilePhoto, onSignOut
   return (
     <>
       {/* Top Navbar */}
-      <nav className="bg-white dark:bg-[#141414] border-b border-gray-200 dark:border-[#1a1a1a] sticky top-0 z-50 h-16 sm:h-20 flex items-center justify-between px-4 sm:px-10 shadow-sm dark:shadow-none transition-colors duration-300">
+      <nav className="bg-white/80 dark:bg-[#141414]/80 backdrop-blur-2xl border-b border-white/60 dark:border-[#1a1a1a] sticky top-0 z-50 h-16 sm:h-20 flex items-center justify-between px-4 sm:px-10 shadow-[0_4px_30px_rgb(0,0,0,0.03)] dark:shadow-none transition-colors duration-300">
         {/* Left: Logo */}
         <div className="flex items-center w-auto sm:w-1/4">
           <Link href="/dashboard" className="shrink-0 flex items-center">
