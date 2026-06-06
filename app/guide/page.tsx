@@ -234,8 +234,10 @@ export default function GuidePage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 dark:bg-[#05050a] text-gray-900 dark:text-white font-sans pb-16 selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden">
-      {/* Background is solid to optimize performance */}
+    <div className="min-h-screen w-full bg-slate-50 dark:bg-[#05050a] text-gray-900 dark:text-white font-sans pb-16 selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.15),transparent_70%)] pointer-events-none rounded-full blur-3xl z-0"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.1),transparent_70%)] pointer-events-none rounded-full blur-3xl z-0"></div>
 
       <div className="relative z-10">
         <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
@@ -247,7 +249,7 @@ export default function GuidePage() {
             transition={{ duration: 0.5 }}
             className="mb-10 border-b border-gray-200 dark:border-white/10 pb-8"
           >
-            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-[#c8a0e0] tracking-tight uppercase">Cẩm nang <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff385c] to-[#d44df0]">Tân sinh viên</span></h1>
+            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-[#c8a0e0] tracking-tight uppercase drop-shadow-sm dark:drop-shadow-none">Cẩm nang <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff385c] to-[#d44df0] drop-shadow-sm dark:drop-shadow-[0_0_10px_rgba(255,56,92,0.4)]">Tân sinh viên</span></h1>
             <p className="text-gray-600 dark:text-[#a0a0b0] mt-2 text-lg font-medium">Bí kíp sinh tồn và chinh phục 4 năm rực rỡ tại Ngoại Thương.</p>
           </motion.div>
 
@@ -260,7 +262,7 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="lg:col-span-4"
             >
-              <div className="bg-white/95 dark:bg-[#111118]/90 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 overflow-hidden sticky top-28">
+              <div className="bg-white/80 dark:bg-[#111118]/80 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white dark:border-white/10 overflow-hidden sticky top-28 ring-1 ring-black/5 dark:ring-0">
                 
                 <div className="p-6 border-b border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
                   <h2 className="text-xl font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
@@ -282,7 +284,7 @@ export default function GuidePage() {
                       placeholder="VD: 130"
                       value={totalCredits}
                       onChange={(e) => handleTotalChange(e.target.value)}
-                      className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-[#ff385c] bg-[#ff385c]/10 focus:ring-[#ff385c]/40' : 'border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-black/40 focus:border-[#b04090] focus:ring-[#b04090]/30'} outline-none focus:ring-2 transition-all text-[15px] font-bold text-gray-900 dark:text-white`}
+                      className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-[#ff385c] bg-[#ff385c]/10 focus:ring-[#ff385c]/40' : 'border-gray-200 dark:border-white/10 bg-white/50 dark:bg-black/40 focus:border-[#b04090] focus:ring-[#b04090]/30 shadow-inner'} outline-none focus:ring-2 transition-all text-[15px] font-bold text-gray-900 dark:text-white`}
                     />
                     {totalError && <p className="text-[#ff385c] text-xs font-bold mt-1.5">{totalError}</p>}
                   </div>
@@ -292,23 +294,23 @@ export default function GuidePage() {
                     <div className="grid grid-cols-5 gap-2">
                       <div className="flex flex-col items-center">
                         <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm A</span>
-                        <input type="number" value={creditsA} onChange={(e) => setCreditsA(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
+                        <input type="number" value={creditsA} onChange={(e) => setCreditsA(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-white/50 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-inner focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
                         <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm B</span>
-                        <input type="number" value={creditsB} onChange={(e) => setCreditsB(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
+                        <input type="number" value={creditsB} onChange={(e) => setCreditsB(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-white/50 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-inner focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
                         <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm C</span>
-                        <input type="number" value={creditsC} onChange={(e) => setCreditsC(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
+                        <input type="number" value={creditsC} onChange={(e) => setCreditsC(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-white/50 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-inner focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
                         <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm D</span>
-                        <input type="number" value={creditsD} onChange={(e) => setCreditsD(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
+                        <input type="number" value={creditsD} onChange={(e) => setCreditsD(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-white/50 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-inner focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
                         <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm F</span>
-                        <input type="number" value={creditsF} onChange={(e) => setCreditsF(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
+                        <input type="number" value={creditsF} onChange={(e) => setCreditsF(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-white/50 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-inner focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                     </div>
                   </div>
@@ -398,7 +400,7 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="lg:col-span-8"
             >
-              <div className="bg-white/95 dark:bg-[#111118]/90 rounded-[2rem] shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 p-8">
+              <div className="bg-white/60 dark:bg-[#111118]/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white dark:border-white/10 p-8 ring-1 ring-black/5 dark:ring-0">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                   <div>
                     <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">Thư viện Wiki</h2>
@@ -416,7 +418,7 @@ export default function GuidePage() {
                       key={course.id}
                       onMouseMove={handleMouseMove}
                       onMouseLeave={handleMouseLeave}
-                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/50 shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-gray-200 dark:border-white/10'} rounded-[1.5rem] p-6 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-gray-50 dark:bg-black/40 flex flex-col h-full relative overflow-hidden`}
+                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/30 shadow-[0_8px_20px_rgba(255,56,92,0.08)] dark:border-[#ff385c]/50 dark:shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-white dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-black/5 dark:ring-0'} rounded-[1.5rem] p-6 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(212,77,240,0.1)] dark:hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-white/80 dark:bg-black/40 backdrop-blur-md flex flex-col h-full relative overflow-hidden transition-all duration-300`}
                     >
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#ff385c] to-[#d44df0] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       
