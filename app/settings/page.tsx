@@ -120,7 +120,7 @@ export default function SettingsPage() {
                   >
                     {/* Selected indicator */}
                     {isSelected && (
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute top-3 right-3 z-10">
                         <div className="w-6 h-6 rounded-full bg-ftu-red-700 dark:bg-[#0099ff] flex items-center justify-center shadow-md">
                           <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
                         </div>
