@@ -198,39 +198,39 @@ export default function ConnectPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050508]">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#050508]">
         <Navbar profileName="" onSignOut={() => {}} />
-        <div className="text-center py-20 text-[#0099ff] font-mono animate-pulse font-semibold">INITIALIZING LOBBY...</div>
+        <div className="text-center py-20 text-ftu-red-600 dark:text-[#0099ff] font-mono animate-pulse font-semibold">INITIALIZING LOBBY...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050508] flex flex-col h-screen overflow-hidden selection:bg-[#0099ff]/30 selection:text-[#00ff88]">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#050508] flex flex-col h-screen overflow-hidden selection:bg-ftu-red-700/20 dark:selection:bg-[#0099ff]/30 selection:text-gray-900 dark:selection:text-[#00ff88]">
       <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={() => signOut(auth).then(() => router.push('/'))} />
 
       <div className="flex flex-col lg:flex-row flex-1 overflow-hidden w-full max-w-[1600px] mx-auto relative">
         {/* Background Gradients for eSports Vibe */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#0099ff]/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#d44df0]/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/10 dark:from-[#0099ff]/10 to-transparent pointer-events-none z-0"></div>
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-gold/10 dark:from-[#d44df0]/10 to-transparent pointer-events-none z-0"></div>
         
         {/* Cột trái: Sidebar Quản lý */}
-        <div className="w-[360px] bg-[#0a0a14]/80 backdrop-blur-xl border-r border-[#1f1f33] flex-shrink-0 flex flex-col h-full hidden lg:flex mt-4 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
-          <div className="p-6 flex justify-between items-center border-b border-[#1f1f33]">
-            <h2 className="text-[22px] font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <svg className="w-6 h-6 text-[#0099ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        <div className="w-[360px] bg-white dark:bg-[#0a0a14]/80 backdrop-blur-md dark:backdrop-blur-xl border-r border-gray-200 dark:border-[#1f1f33] flex-shrink-0 flex flex-col h-full hidden lg:flex mt-4 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.05)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+          <div className="p-6 flex justify-between items-center border-b border-gray-200 dark:border-[#1f1f33]">
+            <h2 className="text-[22px] font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+              <svg className="w-6 h-6 text-ftu-red-600 dark:text-[#0099ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
               Lobby
             </h2>
           </div>
           <div className="px-5 py-6 space-y-3">
             <button 
               onClick={() => setActiveTab('requests')}
-              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'requests' ? 'bg-[#ff385c]/10 border-[#ff385c]/30 text-[#ff385c] translate-x-1 shadow-[0_0_20px_rgba(255,56,92,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'requests' ? 'bg-[#ff385c]/10 border-[#ff385c]/30 text-[#ff385c] translate-x-1 shadow-[0_0_20px_rgba(255,56,92,0.15)]' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/5 dark:hover:text-white hover:translate-x-1'}`}
             >
               {activeTab === 'requests' && <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c]/20 to-transparent opacity-50"></div>}
               {activeTab === 'requests' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#ff385c] rounded-r-full shadow-[0_0_10px_#ff385c]"></div>}
               
-              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'requests' ? 'bg-[#ff385c] text-white shadow-[0_0_15px_rgba(255,56,92,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'requests' ? 'bg-[#ff385c] text-white shadow-[0_0_15px_rgba(255,56,92,0.4)]' : 'bg-gray-100 dark:bg-black/40 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border-gray-200 dark:border-white/5'}`}>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 {requests.length > 0 && (
                   <span className={`absolute -top-2 -right-2 text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md ${activeTab === 'requests' ? 'bg-white text-[#ff385c]' : 'bg-[#ff385c] text-white shadow-[0_0_10px_#ff385c]'}`}>
@@ -243,7 +243,7 @@ export default function ConnectPage() {
 
             <button 
               onClick={() => setActiveTab('suggestions')}
-              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'suggestions' ? 'bg-[#00e5ff]/10 border-[#00e5ff]/30 text-[#00e5ff] translate-x-1 shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'bg-transparent border-transparent text-[#8888a0] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'suggestions' ? 'bg-[#00e5ff]/10 border-[#00e5ff]/30 text-[#00e5ff] translate-x-1 shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/5 dark:hover:text-white hover:translate-x-1'}`}
             >
               {activeTab === 'suggestions' && <div className="absolute inset-0 bg-gradient-to-r from-[#00e5ff]/20 to-transparent opacity-50"></div>}
               {activeTab === 'suggestions' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#00e5ff] rounded-r-full shadow-[0_0_10px_#00e5ff]"></div>}
@@ -286,28 +286,28 @@ export default function ConnectPage() {
         </div>
 
         {/* Horizontal Tab Switcher (Mobile Only) */}
-        <div className="lg:hidden flex overflow-x-auto hide-scrollbar gap-2 px-4 pt-4 pb-2 shrink-0 border-b border-[#1f1f33] sticky top-0 z-20 bg-[#050508]/90 backdrop-blur-md">
+        <div className="lg:hidden flex overflow-x-auto hide-scrollbar gap-2 px-4 pt-4 pb-2 shrink-0 border-b border-gray-200 dark:border-[#1f1f33] sticky top-0 z-20 bg-white/90 dark:bg-[#050508]/90 backdrop-blur-md">
           <button 
             onClick={() => setActiveTab('suggestions')}
-            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'suggestions' ? 'bg-[#0099ff] text-white shadow-[0_0_15px_rgba(0,153,255,0.4)]' : 'bg-[#1f1f33] text-[#8888a0]'}`}
+            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'suggestions' ? 'bg-[#0099ff] text-white shadow-[0_0_15px_rgba(0,153,255,0.4)]' : 'bg-gray-100 dark:bg-[#1f1f33] text-gray-500 dark:text-[#8888a0]'}`}
           >
             Radar Gợi ý
           </button>
           <button 
             onClick={() => setActiveTab('requests')}
-            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'requests' ? 'bg-[#ff0055] text-white shadow-[0_0_15px_rgba(255,0,85,0.4)]' : 'bg-[#1f1f33] text-[#8888a0]'}`}
+            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'requests' ? 'bg-[#ff0055] text-white shadow-[0_0_15px_rgba(255,0,85,0.4)]' : 'bg-gray-100 dark:bg-[#1f1f33] text-gray-500 dark:text-[#8888a0]'}`}
           >
             Lời mời {requests.length > 0 && `(${requests.length})`}
           </button>
           <button 
             onClick={() => setActiveTab('sent')}
-            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'sent' ? 'bg-[#d44df0] text-white shadow-[0_0_15px_rgba(212,77,240,0.4)]' : 'bg-[#1f1f33] text-[#8888a0]'}`}
+            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'sent' ? 'bg-[#d44df0] text-white shadow-[0_0_15px_rgba(212,77,240,0.4)]' : 'bg-gray-100 dark:bg-[#1f1f33] text-gray-500 dark:text-[#8888a0]'}`}
           >
             Đã gửi
           </button>
           <button 
             onClick={() => setActiveTab('friends')}
-            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'friends' ? 'bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.4)]' : 'bg-[#1f1f33] text-[#8888a0]'}`}
+            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'friends' ? 'bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.4)]' : 'bg-gray-100 dark:bg-[#1f1f33] text-gray-500 dark:text-[#8888a0]'}`}
           >
             Bạn bè
           </button>
@@ -317,7 +317,7 @@ export default function ConnectPage() {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 custom-scrollbar lg:mt-4 z-10 pb-28">
           <div className="max-w-[1200px] mx-auto">
             <div className="flex justify-between items-center mb-6 lg:mb-10 border-b border-[#1f1f33] pb-4">
-              <h3 className="text-[28px] font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#8888a0] uppercase tracking-wider">
+              <h3 className="text-[28px] font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-[#8888a0] uppercase tracking-wider">
                 {activeTab === 'suggestions' && 'Matchmaking Radar'}
                 {activeTab === 'requests' && `Incoming Requests [${requests.length}]`}
                 {activeTab === 'sent' && `Sent Requests [${sentRequestsUsers.length}]`}
@@ -349,30 +349,30 @@ export default function ConnectPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {/* SUGGESTIONS */}
                 {activeTab === 'suggestions' && suggestions.map((suggestion) => (
-                  <div key={suggestion.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,153,255,0.3)] hover:border-[#0099ff]/60 transition-all duration-300 group">
+                  <div key={suggestion.id} className="relative bg-white dark:bg-[#0a0a14]/60 backdrop-blur-sm dark:backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-xl overflow-hidden flex flex-col border border-gray-200 dark:border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,153,255,0.3)] hover:border-[#0099ff]/60 transition-all duration-300 group">
                     <div className="absolute top-3 right-3 z-20">
-                      <div className="bg-[#050508]/90 border border-[#00ff88]/40 text-[#00ff88] text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-full shadow-[0_0_12px_rgba(0,255,136,0.25)]">
+                      <div className="bg-white/90 dark:bg-[#050508]/90 border border-[#00ff88]/40 text-[#00ff88] text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-full shadow-[0_0_12px_rgba(0,255,136,0.25)]">
                         Match: {Math.min(95 + (suggestion.score || 0), 99)}%
                       </div>
                     </div>
 
-                    <div className="aspect-square w-full bg-[#11111a] overflow-hidden shrink-0 relative">
+                    <div className="aspect-square w-full bg-gray-100 dark:bg-[#11111a] overflow-hidden shrink-0 relative">
                       <img 
                         src={suggestion.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + suggestion.name} 
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100" 
                         alt="Avatar"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-transparent to-transparent opacity-90"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#0a0a14] via-transparent to-transparent opacity-90"></div>
                     </div>
                     
                     <div className="p-5 flex flex-col flex-1 relative z-10 -mt-8">
-                      <h4 className="font-bold text-[19px] text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{suggestion.name}</h4>
+                      <h4 className="font-bold text-[19px] text-gray-900 dark:text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{suggestion.name}</h4>
                       
                       <div className="flex items-center gap-2 mb-3">
                         <span className={`text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded shadow-[0_0_8px_currentColor] ${suggestion.role === 'mentor' ? 'bg-[#ff0055]/20 text-[#ff0055] border border-[#ff0055]/50' : 'bg-[#0099ff]/20 text-[#0099ff] border border-[#0099ff]/50'}`}>
                           {suggestion.role === 'mentor' ? 'Mentor' : 'Mentee'}
                         </span>
-                        <p className="text-[13px] text-[#8888a0] line-clamp-1 font-medium">{suggestion.major}</p>
+                        <p className="text-[13px] text-gray-500 dark:text-[#8888a0] line-clamp-1 font-medium">{suggestion.major}</p>
                       </div>
 
                       <div className="text-[12px] text-[#0099ff] mb-5 flex items-center gap-1.5 bg-[#0099ff]/10 px-3 py-1.5 rounded-lg border border-[#0099ff]/20 w-fit font-bold">
@@ -384,14 +384,14 @@ export default function ConnectPage() {
                         <button 
                           onClick={() => handleSendRequest(suggestion.id)}
                           disabled={sendingId === suggestion.id}
-                          className="relative w-full py-3 bg-[#0a0a14] text-white font-bold rounded-xl text-[13px] uppercase tracking-wider overflow-hidden group/btn border border-[#0099ff]/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="relative w-full py-3 bg-[#0a0a14] text-gray-900 dark:text-white font-bold rounded-xl text-[13px] uppercase tracking-wider overflow-hidden group/btn border border-[#0099ff]/50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-[#0099ff] to-[#d44df0] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                          <span className="relative z-10 drop-shadow-md group-hover/btn:text-white transition-colors">
+                          <span className="relative z-10 drop-shadow-md group-hover/btn:text-gray-900 dark:text-white transition-colors">
                             {sendingId === suggestion.id ? 'Đang gửi...' : 'Kết nối ngay'}
                           </span>
                         </button>
-                        <Link href={`/profile/${suggestion.id}`} className="w-full py-2 bg-transparent text-[#8888a0] font-bold rounded-xl text-[12px] hover:text-white uppercase tracking-wider transition-colors text-center">
+                        <Link href={`/profile/${suggestion.id}`} className="w-full py-2 bg-transparent text-gray-500 dark:text-[#8888a0] font-bold rounded-xl text-[12px] hover:text-gray-900 dark:text-white uppercase tracking-wider transition-colors text-center">
                           Xem Profile
                         </Link>
                       </div>
@@ -402,38 +402,38 @@ export default function ConnectPage() {
                 {activeTab === 'suggestions' && suggestions.length === 0 && (
                   <div className="col-span-full py-20 flex flex-col items-center">
                     <div className="w-20 h-20 bg-[#1f1f33] rounded-full flex items-center justify-center border-2 border-[#2a2a40] mb-4">
-                      <svg className="w-8 h-8 text-[#8888a0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      <svg className="w-8 h-8 text-gray-500 dark:text-[#8888a0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <p className="text-[#8888a0] font-mono uppercase tracking-widest text-sm">Lobby trống. Hãy tìm kiếm thủ công!</p>
+                    <p className="text-gray-500 dark:text-[#8888a0] font-mono uppercase tracking-widest text-sm">Lobby trống. Hãy tìm kiếm thủ công!</p>
                   </div>
                 )}
 
                 {/* REQUESTS */}
                 {activeTab === 'requests' && requests.map((reqUser) => (
-                  <div key={reqUser.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(255,0,85,0.2)] hover:border-[#ff0055]/50 transition-all duration-300 group">
-                    <div className="aspect-square w-full bg-[#11111a] overflow-hidden shrink-0 relative">
+                  <div key={reqUser.id} className="relative bg-white dark:bg-[#0a0a14]/60 backdrop-blur-sm dark:backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-xl overflow-hidden flex flex-col border border-gray-200 dark:border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(255,0,85,0.2)] hover:border-[#ff0055]/50 transition-all duration-300 group">
+                    <div className="aspect-square w-full bg-gray-100 dark:bg-[#11111a] overflow-hidden shrink-0 relative">
                       <img 
                         src={reqUser.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + reqUser.name} 
                         className="w-full h-full object-cover opacity-90" 
                         alt="Avatar"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-transparent to-transparent opacity-90"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#0a0a14] via-transparent to-transparent opacity-90"></div>
                     </div>
                     
                     <div className="p-5 flex flex-col flex-1 relative z-10 -mt-8">
-                      <h4 className="font-bold text-[19px] text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{reqUser.name}</h4>
-                      <p className="text-[13px] text-[#8888a0] line-clamp-1 font-medium mb-5">{reqUser.major}</p>
+                      <h4 className="font-bold text-[19px] text-gray-900 dark:text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{reqUser.name}</h4>
+                      <p className="text-[13px] text-gray-500 dark:text-[#8888a0] line-clamp-1 font-medium mb-5">{reqUser.major}</p>
                       
                       <div className="mt-auto flex gap-2">
                         <button 
                           onClick={() => handleAcceptRequest(reqUser.id)}
-                          className="flex-1 py-2.5 bg-[#ff0055] text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#ff3377] transition-colors shadow-[0_0_15px_rgba(255,0,85,0.3)]"
+                          className="flex-1 py-2.5 bg-[#ff0055] text-gray-900 dark:text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#ff3377] transition-colors shadow-[0_0_15px_rgba(255,0,85,0.3)]"
                         >
                           Accept
                         </button>
                         <button 
                           onClick={() => handleDeclineRequest(reqUser.id)}
-                          className="flex-1 py-2.5 bg-[#1f1f33] text-[#8888a0] font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#2a2a40] hover:text-white transition-colors"
+                          className="flex-1 py-2.5 bg-[#1f1f33] text-gray-500 dark:text-[#8888a0] font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#2a2a40] hover:text-gray-900 dark:text-white transition-colors"
                         >
                           Decline
                         </button>
@@ -444,38 +444,38 @@ export default function ConnectPage() {
 
                 {/* SENT REQUESTS */}
                 {activeTab === 'sent' && sentRequestsUsers.map((reqUser) => (
-                  <div key={reqUser.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] hover:border-[#d44df0]/50 transition-all duration-300 group">
-                    <div className="aspect-square w-full bg-[#11111a] overflow-hidden shrink-0 relative">
+                  <div key={reqUser.id} className="relative bg-white dark:bg-[#0a0a14]/60 backdrop-blur-sm dark:backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-xl overflow-hidden flex flex-col border border-gray-200 dark:border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] hover:border-[#d44df0]/50 transition-all duration-300 group">
+                    <div className="aspect-square w-full bg-gray-100 dark:bg-[#11111a] overflow-hidden shrink-0 relative">
                       <img 
                         src={reqUser.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + reqUser.name} 
                         className="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-500" 
                         alt="Avatar"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/50 to-transparent"></div>
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#d44df0] bg-[#000000]/80 px-4 py-2 rounded-full border border-[#d44df0]/50 font-black text-[11px] tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(212,77,240,0.4)]">
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 dark:from-[#0a0a14] dark:via-[#0a0a14]/50 to-transparent"></div>
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#d44df0] bg-white/90 dark:bg-[#000000]/80 px-4 py-2 rounded-full border border-[#d44df0]/50 font-black text-[11px] tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(212,77,240,0.4)]">
                         Đang chờ duyệt
                       </div>
                     </div>
                     
                     <div className="p-5 flex flex-col flex-1 relative z-10 -mt-8">
-                      <h4 className="font-bold text-[19px] text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{reqUser.name}</h4>
-                      <p className="text-[13px] text-[#8888a0] line-clamp-1 font-medium mb-5">{reqUser.major}</p>
+                      <h4 className="font-bold text-[19px] text-gray-900 dark:text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{reqUser.name}</h4>
+                      <p className="text-[13px] text-gray-500 dark:text-[#8888a0] line-clamp-1 font-medium mb-5">{reqUser.major}</p>
                     </div>
                   </div>
                 ))}
 
                 {/* FRIENDS */}
                 {activeTab === 'friends' && friends.map((friend) => (
-                  <div key={friend.id} className="relative bg-[#0a0a14]/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,255,136,0.2)] hover:border-[#00ff88]/50 transition-all duration-300 group">
-                    <div className="aspect-video w-full bg-[#11111a] overflow-hidden shrink-0 relative">
+                  <div key={friend.id} className="relative bg-white dark:bg-[#0a0a14]/60 backdrop-blur-sm dark:backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-xl overflow-hidden flex flex-col border border-gray-200 dark:border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,255,136,0.2)] hover:border-[#00ff88]/50 transition-all duration-300 group">
+                    <div className="aspect-video w-full bg-gray-100 dark:bg-[#11111a] overflow-hidden shrink-0 relative">
                       <img 
                         src={friend.coverPhotoUrl || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'} 
                         className="w-full h-full object-cover opacity-50" 
                         alt="Cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#0a0a14] to-transparent"></div>
                       <div className="absolute -bottom-6 left-5">
-                        <div className="w-16 h-16 rounded-xl border-2 border-[#00ff88] overflow-hidden bg-[#1c1c1c] shadow-[0_0_15px_rgba(0,255,136,0.3)]">
+                        <div className="w-16 h-16 rounded-xl border-2 border-[#00ff88] overflow-hidden bg-gray-100 dark:bg-[#1c1c1c] shadow-[0_0_15px_rgba(0,255,136,0.3)]">
                           <img 
                             src={friend.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + friend.name} 
                             className="w-full h-full object-cover" 
@@ -486,11 +486,11 @@ export default function ConnectPage() {
                     </div>
                     
                     <div className="p-5 pt-8 flex flex-col flex-1 relative z-10">
-                      <h4 className="font-bold text-[18px] text-white line-clamp-1 font-sans">{friend.name}</h4>
-                      <p className="text-[12px] text-[#8888a0] line-clamp-1 uppercase tracking-wider font-bold mb-4">{friend.role === 'mentor' ? 'Mentor' : 'Mentee'}</p>
+                      <h4 className="font-bold text-[18px] text-gray-900 dark:text-white line-clamp-1 font-sans">{friend.name}</h4>
+                      <p className="text-[12px] text-gray-500 dark:text-[#8888a0] line-clamp-1 uppercase tracking-wider font-bold mb-4">{friend.role === 'mentor' ? 'Mentor' : 'Mentee'}</p>
                       
                       <div className="mt-auto flex flex-col gap-2">
-                        <Link href={`/profile/${friend.id}`} className="w-full py-2.5 bg-[#1f1f33] text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#2a2a40] transition-colors text-center border border-[#2a2a40]">
+                        <Link href={`/profile/${friend.id}`} className="w-full py-2.5 bg-gray-100 dark:bg-[#1f1f33] text-gray-900 dark:text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-gray-200 dark:hover:bg-[#2a2a40] transition-colors text-center border border-gray-200 dark:border-[#2a2a40]">
                           View Stats
                         </Link>
                         <button 
