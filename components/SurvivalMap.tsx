@@ -249,30 +249,41 @@ const MapEvents = ({ setTempPos }: { setTempPos: (pos: [number, number]) => void
   return null;
 };
 
+// Tách UserLocationMarker ra để khi GPS update không làm lag toàn bộ Map
+const UserLocationMarker = () => {
+  const [position, setPosition] = useState<[number, number] | null>(null);
+  
+  const map = useMapEvents({
+    locationfound(e) {
+      setPosition([e.latlng.lat, e.latlng.lng]);
+    },
+  });
+
+  useEffect(() => {
+    map.locate({ watch: true, enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 });
+    return () => {
+      map.stopLocate();
+    };
+  }, [map]);
+
+  if (!position) return null;
+  return (
+    <Marker position={position} icon={userIcon}>
+      <Tooltip permanent direction="top" className="font-bold text-blue-600 bg-white px-2 py-1 rounded shadow-[0_4px_10px_rgba(0,0,0,0.1)] border-none">
+        Bạn đang ở đây
+      </Tooltip>
+    </Marker>
+  );
+};
+
 export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: string }) {
   const ftuPosition: [number, number] = [21.0230, 105.8050];
   const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-
-  useEffect(() => {
-    if (!navigator.geolocation) return;
-
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        setUserLocation([position.coords.latitude, position.coords.longitude]);
-      },
-      (error) => console.warn('Lỗi lấy vị trí:', error.message),
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 }
-    );
-
-    return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  // (Vị trí người dùng đã được chuyển sang UserLocationMarker để tránh re-render toàn bộ bản đồ)
 
   const flyToUser = () => {
-    if (mapInstance && userLocation) {
-      mapInstance.flyTo(userLocation, 17, { animate: true });
-    } else {
-      alert("Chưa lấy được vị trí hoặc bạn chưa cấp quyền truy cập vị trí!");
+    if (mapInstance) {
+      mapInstance.locate({ setView: true, maxZoom: 17 });
     }
   };
 
@@ -314,7 +325,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
   ]);
 
   // Bộ lọc hiển thị (Radar + Tự Hủy)
-  const visibleMarkers = markers.filter(m => {
+  const visibleMarkers = React.useMemo(() => markers.filter(m => {
     // Lọc theo Radar
     if (activeFilter !== 'all' && m.type !== activeFilter) return false;
     
@@ -322,7 +333,7 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
     if (m.type === 'pass' && m.expireAt < Date.now()) return false;
 
     return true;
-  });
+  }), [markers, activeFilter]);
 
   // State cho Modal thả ghim
   const [tempPos, setTempPos] = useState<[number, number] | null>(null);
@@ -433,14 +444,8 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
             </Popup>
           </Marker>
         ))}
-        {/* Marker vị trí người dùng */}
-        {userLocation && (
-          <Marker position={userLocation} icon={userIcon}>
-            <Tooltip permanent direction="top" className="font-bold text-blue-600 bg-white px-2 py-1 rounded shadow-md border-none">
-              Bạn đang ở đây
-            </Tooltip>
-          </Marker>
-        )}
+        {/* Marker vị trí người dùng (Đã tách component để tối ưu hiệu năng) */}
+        <UserLocationMarker />
       </MapContainer>
 
       {/* Nút Định vị tôi (Locate Me) */}
