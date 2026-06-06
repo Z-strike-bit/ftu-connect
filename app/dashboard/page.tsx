@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import ConnectModal from '@/components/ConnectModal';
 import Navbar from '@/components/Navbar';
 import { auth, db } from '@/lib/firebase';
