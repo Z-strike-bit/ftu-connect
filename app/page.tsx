@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Playfair_Display } from 'next/font/google';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const playfair = Playfair_Display({ subsets: ['vietnamese'], weight: ['700', '900'] });
 
@@ -38,6 +39,7 @@ export default function HomePage() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           <Link href="/login" className="px-6 py-2.5 text-sm font-bold text-gray-600 dark:text-gray-300 hover:text-ftu-red-700 dark:hover:text-white transition-colors">
             Đăng nhập
           </Link>
@@ -50,6 +52,9 @@ export default function HomePage() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden fixed inset-0 z-40 bg-white/95 dark:bg-[#05050a]/95 backdrop-blur-md pt-24 px-6 flex flex-col items-center gap-6 animate-fade-in">
+          <div className="absolute top-6 right-20">
+            <ThemeToggle />
+          </div>
           <Link href="/login" className="w-full py-4 text-center text-lg font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-white/5 rounded-2xl" onClick={() => setMenuOpen(false)}>
             Đăng nhập
           </Link>
