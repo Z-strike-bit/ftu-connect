@@ -61,19 +61,9 @@ export default function MapPage() {
       {/* Full-screen Map Container (Trừ đi Navbar h-[72px]) */}
       <div className="relative h-[calc(100vh-72px)] w-full">
         
-        {/* Floating Card */}
-        <motion.div className="absolute top-4 left-4 sm:left-6 z-[1000] bg-white/95 p-5 sm:p-6 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.05)] w-[calc(100%-32px)] sm:w-full sm:max-w-[360px]">
-          <div className="flex justify-between items-start mb-2">
-            <div>
-              <h1 className="text-[20px] font-bold text-gray-900 flex items-center gap-2 leading-tight tracking-tight">
-                <span className="text-2xl">🗺️</span> Bản Đồ Sinh Tồn
-              </h1>
-            </div>
-          </div>
-          <p className="text-[15px] text-gray-600 mb-5 leading-relaxed pointer-events-none">
-            Khám phá góc ăn ngon, chỗ học tập và bí kíp sống sót quanh Ngoại Thương.
-          </p>
-          <button className="w-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-lg font-semibold text-[15px] flex justify-center items-center gap-2 transition-colors shadow-sm cursor-pointer">
+        {/* Floating Button */}
+        <motion.div className="absolute top-4 left-4 sm:left-6 z-[1000]">
+          <button className="bg-white dark:bg-[#111118] border border-gray-200/50 dark:border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.12)] hover:bg-gray-50 dark:hover:bg-[#1a1a24] text-gray-900 dark:text-white px-6 py-3.5 rounded-full font-semibold text-[15px] flex justify-center items-center gap-2 transition-all cursor-pointer">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Ghim địa điểm mới
           </button>
