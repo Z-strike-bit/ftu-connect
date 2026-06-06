@@ -360,27 +360,27 @@ export default function Dashboard() {
               <div className="sticky top-28 flex flex-col gap-3 pr-4">
                 <Link 
                   href={user ? `/profile/${user.uid}` : "#"}
-                  className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 hover:backdrop-blur-md transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10"
+                  className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10"
                 >
                   <img src={profile?.photoURL || user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + profile?.name} alt="Avatar" className="w-11 h-11 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/20 object-cover group-hover:border-ftu-red-700 dark:group-hover:border-[#d44df0] transition-colors"/>
                   <span className="font-extrabold text-[16px] text-gray-900 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-transparent dark:group-hover:bg-clip-text dark:group-hover:bg-gradient-to-r dark:group-hover:from-white dark:group-hover:to-[#c8a0e0] transition-all">{profile?.name}</span>
                 </Link>
                 
-                <Link href="/connect" className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 hover:backdrop-blur-md transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
+                <Link href="/connect" className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
                   <div className="w-11 h-11 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center shrink-0 border border-gray-200 dark:border-white/10 group-hover:border-ftu-red-700 dark:group-hover:border-[#00e5ff] shadow-inner transition-colors">
                     <svg className="w-5 h-5 text-gray-500 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-[#00e5ff] transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                   </div>
                   <span className="font-semibold text-[16px] text-gray-500 dark:text-[#e0e0e0] group-hover:text-gray-900 dark:group-hover:text-white transition-colors">Bạn bè / Kết nối</span>
                 </Link>
                 
-                <Link href="/events" className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 hover:backdrop-blur-md transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
+                <Link href="/events" className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
                   <div className="w-11 h-11 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center shrink-0 border border-gray-200 dark:border-white/10 group-hover:border-ftu-red-700 dark:group-hover:border-[#d44df0] shadow-inner transition-colors">
                     <svg className="w-5 h-5 text-gray-500 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-[#d44df0] transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
                   </div>
                   <span className="font-semibold text-[16px] text-gray-500 dark:text-[#e0e0e0] group-hover:text-gray-900 dark:group-hover:text-white transition-colors">Sự kiện độc quyền</span>
                 </Link>
                 
-                <Link href="/guide" className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 hover:backdrop-blur-md transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
+                <Link href="/guide" className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
                   <div className="w-11 h-11 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center shrink-0 border border-gray-200 dark:border-white/10 group-hover:border-ftu-red-700 dark:group-hover:border-[#ff385c] shadow-inner transition-colors">
                     <svg className="w-5 h-5 text-gray-500 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-[#ff385c] transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
                   </div>
@@ -392,11 +392,11 @@ export default function Dashboard() {
                 <div className="p-3">
                   <h3 className="text-[14px] font-extrabold text-gray-400 dark:text-[#a0a0b0] uppercase tracking-widest mb-4">Lối tắt của bạn</h3>
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 hover:backdrop-blur-md transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
+                    <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
                       <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm group-hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all">KT</span>
                       <span className="font-semibold text-[15px] text-gray-700 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-[#c8a0e0] transition-colors">Kinh tế quốc tế K64</span>
                     </div>
-                    <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 hover:backdrop-blur-md transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
+                    <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
                       <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500/20 to-pink-500/20 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm group-hover:shadow-[0_0_15px_rgba(255,56,92,0.4)] transition-all">CLB</span>
                       <span className="font-semibold text-[15px] text-gray-700 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-[#ff385c] transition-colors">TEC FTU</span>
                     </div>
@@ -409,7 +409,7 @@ export default function Dashboard() {
             <div className="col-span-1 lg:col-span-6 xl:col-span-6 space-y-6 max-w-[680px] mx-auto w-full px-0 sm:px-4 lg:px-8">
               
               {/* Ô Tạo bài viết */}
-              <div className="bg-white/90 dark:bg-black/40 backdrop-blur-md sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/60 dark:border-white/10 p-6 mb-8 relative z-20 group/postbox">
+              <div className="bg-white dark:bg-[#0c0c14] sm:rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-gray-100 dark:border-white/10 p-6 mb-8 relative z-20 group/postbox">
                 <div className="absolute top-0 left-0 w-full h-[3px] overflow-hidden rounded-t-[24px]">
                   <div className="w-full h-full bg-gradient-to-r from-ftu-red-600 via-ftu-red-700 to-ftu-red-600 dark:bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-60 dark:opacity-80 animate-led-run shadow-none dark:shadow-[0_0_10px_rgba(212,77,240,0.5)] group-focus-within/postbox:animate-led-run-fast dark:group-focus-within/postbox:shadow-[0_0_20px_rgba(212,77,240,0.8)] group-focus-within/postbox:opacity-100 transition-all duration-300"></div>
                 </div>
@@ -792,7 +792,7 @@ export default function Dashboard() {
                 </AnimatePresence>
                 
                 {posts.length === 0 && (
-                  <div className="text-center py-20 bg-white/90 dark:bg-black/40 backdrop-blur-md sm:rounded-[24px] border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                  <div className="text-center py-20 bg-white dark:bg-[#0c0c14] sm:rounded-[24px] border border-gray-100 dark:border-white/10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                     <div className="text-6xl mb-6 drop-shadow-none dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] animate-pulse">📝</div>
                     <p className="text-gray-400 dark:text-[#a0a0b0] font-extrabold text-[20px] max-w-sm mx-auto">Chưa có bài đăng nào. Hãy là người đầu tiên lên tiếng!</p>
                   </div>
@@ -805,7 +805,7 @@ export default function Dashboard() {
               <div className="sticky top-28 flex flex-col gap-8 pl-4">
                 
                 {/* Sự kiện nổi bật */}
-                <div className="relative bg-white/90 dark:bg-gradient-to-br dark:from-[#6a4cf5]/60 dark:to-[#d44df0]/60 backdrop-blur-md p-8 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(106,76,245,0.3)] border border-white/60 dark:border-white/20 overflow-hidden group">
+                <div className="relative bg-white dark:bg-[#111118] p-8 rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgba(106,76,245,0.3)] border border-gray-100 dark:border-white/20 overflow-hidden group">
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:hidden"></div>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/5 to-transparent dark:from-white/10 rounded-full pointer-events-none"></div>
                   <div className="flex justify-between items-center mb-8 relative z-10">
@@ -840,7 +840,7 @@ export default function Dashboard() {
                 </div>
   
                 {/* Gợi ý kết nối / Người liên hệ */}
-                <div className="bg-white/90 dark:bg-black/40 backdrop-blur-md rounded-[24px] p-6 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                <div className="bg-white dark:bg-[#0c0c14] rounded-[24px] p-6 border border-gray-100 dark:border-white/10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="font-extrabold text-[18px] text-gray-900 dark:text-white">Gợi ý kết nối</h3>
                     <div className="flex gap-1">
