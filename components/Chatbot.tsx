@@ -57,7 +57,7 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
             exit={{ opacity: 0, y: 20, scale: 0.9, x: -20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute bottom-20 left-0 w-[360px] bg-[#141414]/80 backdrop-blur-3xl rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden flex flex-col mb-4"
+            className="absolute bottom-20 left-0 w-[360px] bg-white/90 dark:bg-[#141414]/80 backdrop-blur-3xl rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-gray-200 dark:border-white/10 overflow-hidden flex flex-col mb-4"
             style={{ height: '500px' }}
           >
             {/* Header */}
@@ -85,7 +85,7 @@ export default function Chatbot() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff385c]/5 to-transparent pointer-events-none"></div>
               
               {messages.length === 0 && (
-                <div className="text-center text-[#999999] text-sm mt-10 relative z-10 flex flex-col items-center">
+                <div className="text-center text-gray-500 dark:text-[#999999] text-sm mt-10 relative z-10 flex flex-col items-center">
                   <motion.div 
                     animate={{ rotate: [0, 14, -8, 14, -4, 10, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
@@ -93,7 +93,7 @@ export default function Chatbot() {
                   >
                     👋
                   </motion.div>
-                  <p className="font-medium px-4 leading-relaxed">Chào ẻm, chị là Dino Ngoại Thương đây. Cần hỏi gì cứ nhắn chị nhé!</p>
+                  <p className="font-medium px-4 leading-relaxed text-gray-700 dark:text-gray-300">Chào ẻm, chị là Dino Ngoại Thương đây. Cần hỏi gì cứ nhắn chị nhé!</p>
                 </div>
               )}
               {messages.map((msg, idx) => (
@@ -103,17 +103,17 @@ export default function Chatbot() {
                   key={idx} 
                   className={`flex relative z-10 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[14px] font-medium leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-[#ff385c] to-[#d44df0] text-white rounded-br-sm shadow-[0_2px_15px_rgba(255,56,92,0.3)]' : 'bg-[#262626]/80 backdrop-blur-md border border-white/5 text-white rounded-bl-sm'}`}>
+                  <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[14px] font-medium leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c] dark:to-[#d44df0] text-white rounded-br-sm shadow-[0_2px_15px_rgba(185,28,28,0.2)] dark:shadow-[0_2px_15px_rgba(255,56,92,0.3)]' : 'bg-gray-100 dark:bg-[#262626]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 text-gray-900 dark:text-white rounded-bl-sm'}`}>
                     {msg.text}
                   </div>
                 </motion.div>
               ))}
               {isLoading && (
                 <div className="flex justify-start relative z-10">
-                  <div className="max-w-[80%] rounded-2xl px-5 py-3 bg-[#262626]/80 backdrop-blur-md border border-white/5 text-white rounded-bl-sm shadow-sm flex items-center gap-1.5">
-                    <span className="w-2 h-2 bg-[#ff385c] rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-[#d44df0] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="w-2 h-2 bg-[#0099ff] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+                  <div className="max-w-[80%] rounded-2xl px-5 py-3 bg-gray-100 dark:bg-[#262626]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 text-gray-900 dark:text-white rounded-bl-sm shadow-sm flex items-center gap-1.5">
+                    <span className="w-2 h-2 bg-ftu-red-600 dark:bg-[#ff385c] rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-ftu-red-500 dark:bg-[#d44df0] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="w-2 h-2 bg-blue-500 dark:bg-[#0099ff] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
                   </div>
                 </div>
               )}
@@ -121,19 +121,19 @@ export default function Chatbot() {
             </div>
 
             {/* Input */}
-            <div className="p-3 bg-[#1a1a1a]/90 backdrop-blur-lg border-t border-white/10 shrink-0">
+            <div className="p-3 bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-lg border-t border-gray-200 dark:border-white/10 shrink-0">
               <form onSubmit={handleSend} className="flex gap-2">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Hỏi gì Dino trả lời..."
-                  className="flex-1 bg-[#090909] border border-white/10 rounded-full px-5 py-2.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#ff385c]/50 focus:border-[#ff385c] transition-all text-white placeholder-[#6a6a6a]"
+                  className="flex-1 bg-gray-50 dark:bg-[#090909] border border-gray-200 dark:border-white/10 rounded-full px-5 py-2.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-ftu-red-500/50 dark:focus:ring-[#ff385c]/50 focus:border-ftu-red-500 dark:focus:border-[#ff385c] transition-all text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#6a6a6a]"
                 />
                 <button 
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="w-11 h-11 rounded-full bg-gradient-to-r from-[#ff385c] to-[#d44df0] text-white flex items-center justify-center hover:shadow-[0_0_15px_rgba(255,56,92,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 hover:scale-105"
+                  className="w-11 h-11 rounded-full bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c] dark:to-[#d44df0] text-white flex items-center justify-center hover:shadow-[0_0_15px_rgba(185,28,28,0.4)] dark:hover:shadow-[0_0_15px_rgba(255,56,92,0.6)] disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 hover:scale-105"
                 >
                   <svg className="w-5 h-5 translate-x-[-1px] translate-y-[1px]" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                 </button>
@@ -145,11 +145,11 @@ export default function Chatbot() {
 
       <div className="relative group">
         {/* Pulsing glow ring behind the button */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#ff385c] to-[#d44df0] rounded-full blur-md opacity-60 group-hover:opacity-100 group-hover:blur-lg animate-pulse transition-all duration-500"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c] dark:to-[#d44df0] rounded-full blur-md opacity-60 group-hover:opacity-100 group-hover:blur-lg animate-pulse transition-all duration-500"></div>
         
         <button 
           onClick={() => setIsOpen(!isOpen)}
-          className="relative w-16 h-16 rounded-full bg-gradient-to-br from-[#ff385c] to-[#d44df0] text-white shadow-[0_8px_20px_rgba(255,56,92,0.4)] flex items-center justify-center hover:scale-110 transition-transform duration-300 z-10 border border-white/20"
+          className="relative w-16 h-16 rounded-full bg-gradient-to-br from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c] dark:to-[#d44df0] text-white shadow-[0_8px_20px_rgba(185,28,28,0.3)] dark:shadow-[0_8px_20px_rgba(255,56,92,0.4)] flex items-center justify-center hover:scale-110 transition-transform duration-300 z-10 border border-white/20"
         >
           {isOpen ? (
             <motion.svg 

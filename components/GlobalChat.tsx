@@ -100,7 +100,7 @@ export default function GlobalChat() {
         animate={{ y: 0, opacity: 1, scale: 1 }}
         exit={{ y: 50, opacity: 0, scale: 0.95 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className={`fixed z-[999] bg-[#141414]/90 backdrop-blur-3xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col 
+        className={`fixed z-[999] bg-white/95 dark:bg-[#141414]/90 backdrop-blur-3xl border border-gray-200 dark:border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col 
           transition-all duration-300
           ${isMinimized ? 'w-[320px] h-[52px] rounded-t-2xl bottom-0 right-4 sm:right-24' : 
             'bottom-0 right-0 w-full h-full sm:w-[350px] sm:h-[480px] sm:right-24 sm:rounded-t-2xl sm:bottom-0'}
@@ -148,11 +148,11 @@ export default function GlobalChat() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff385c]/5 to-transparent pointer-events-none"></div>
               
               {/* Profile Intro */}
-              <div className="text-center py-6 flex flex-col items-center border-b border-white/5 mb-2 relative z-10">
-                <img src={targetUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${targetUser.name}`} className="w-20 h-20 rounded-full bg-white/5 mb-3 border-2 border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)] object-cover" />
-                <h4 className="font-extrabold text-[17px] text-white drop-shadow-sm">{targetUser.name}</h4>
-                <p className="text-[13px] text-[#a0a0b0] font-medium mt-1">{targetUser.major}</p>
-                <Link href={`/profile/${targetUser.id}`} className="mt-4 text-[13px] text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-1.5 rounded-full font-bold transition-all shadow-sm hover:shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+              <div className="text-center py-6 flex flex-col items-center border-b border-gray-100 dark:border-white/5 mb-2 relative z-10">
+                <img src={targetUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${targetUser.name}`} className="w-20 h-20 rounded-full bg-gray-100 dark:bg-white/5 mb-3 border-2 border-gray-200 dark:border-white/10 shadow-sm dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] object-cover" />
+                <h4 className="font-extrabold text-[17px] text-gray-900 dark:text-white drop-shadow-sm">{targetUser.name}</h4>
+                <p className="text-[13px] text-gray-500 dark:text-[#a0a0b0] font-medium mt-1">{targetUser.major}</p>
+                <Link href={`/profile/${targetUser.id}`} className="mt-4 text-[13px] text-gray-900 dark:text-white bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200 dark:border-white/20 px-4 py-1.5 rounded-full font-bold transition-all shadow-sm hover:shadow-md dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.1)]">
                   Xem trang cá nhân
                 </Link>
               </div>
@@ -166,7 +166,7 @@ export default function GlobalChat() {
                     key={msg.id} 
                     className={`flex relative z-10 ${isMe ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div className={`max-w-[80%] px-4 py-2.5 text-[14px] font-medium leading-relaxed shadow-sm ${isMe ? 'bg-gradient-to-r from-[#ff385c] to-[#d44df0] text-white rounded-2xl rounded-br-sm shadow-[0_2px_15px_rgba(255,56,92,0.3)]' : 'bg-[#262626]/80 backdrop-blur-md text-white border border-white/5 rounded-2xl rounded-bl-sm'}`}>
+                    <div className={`max-w-[80%] px-4 py-2.5 text-[14px] font-medium leading-relaxed shadow-sm ${isMe ? 'bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c] dark:to-[#d44df0] text-white rounded-2xl rounded-br-sm shadow-[0_2px_15px_rgba(185,28,28,0.2)] dark:shadow-[0_2px_15px_rgba(255,56,92,0.3)]' : 'bg-gray-100 dark:bg-[#262626]/80 backdrop-blur-md text-gray-900 dark:text-white border border-gray-200 dark:border-white/5 rounded-2xl rounded-bl-sm'}`}>
                       {msg.text}
                     </div>
                   </motion.div>
@@ -176,8 +176,8 @@ export default function GlobalChat() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSendMessage} className="p-3 bg-[#1a1a1a]/90 backdrop-blur-lg border-t border-white/10 flex items-end gap-2 shrink-0 pb-[calc(12px+env(safe-area-inset-bottom))]">
-              <div className="flex-1 bg-[#090909] border border-white/10 rounded-2xl flex items-end px-4 py-2 min-h-[44px] focus-within:border-[#ff385c] focus-within:shadow-[0_0_10px_rgba(255,56,92,0.2)] transition-all">
+            <form onSubmit={handleSendMessage} className="p-3 bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-lg border-t border-gray-200 dark:border-white/10 flex items-end gap-2 shrink-0 pb-[calc(12px+env(safe-area-inset-bottom))]">
+              <div className="flex-1 bg-gray-50 dark:bg-[#090909] border border-gray-200 dark:border-white/10 rounded-2xl flex items-end px-4 py-2 min-h-[44px] focus-within:border-ftu-red-500 dark:focus-within:border-[#ff385c] focus-within:shadow-[0_0_10px_rgba(185,28,28,0.1)] dark:focus-within:shadow-[0_0_10px_rgba(255,56,92,0.2)] transition-all">
                 <textarea 
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
@@ -188,14 +188,14 @@ export default function GlobalChat() {
                     }
                   }}
                   placeholder="Aa"
-                  className="w-full bg-transparent outline-none resize-none text-[15px] max-h-24 custom-scrollbar text-white placeholder-[#6a6a6a] font-medium py-0.5"
+                  className="w-full bg-transparent outline-none resize-none text-[15px] max-h-24 custom-scrollbar text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#6a6a6a] font-medium py-0.5"
                   rows={1}
                 />
               </div>
               <button 
                 type="submit"
                 disabled={!newMessage.trim()}
-                className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-r from-[#ff385c] to-[#d44df0] text-white hover:shadow-[0_0_15px_rgba(255,56,92,0.6)] hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100 disabled:shadow-none shrink-0"
+                className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c] dark:to-[#d44df0] text-white hover:shadow-[0_0_15px_rgba(185,28,28,0.4)] dark:hover:shadow-[0_0_15px_rgba(255,56,92,0.6)] hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100 disabled:shadow-none shrink-0"
               >
                 <svg className="w-5 h-5 translate-x-[-1px] translate-y-[1px]" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
               </button>
