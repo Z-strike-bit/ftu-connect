@@ -60,9 +60,10 @@ interface PostComposerProps {
   user: any;
   profile: any;
   suggestions: any[];
+  onPostCreated?: () => void;
 }
 
-const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions }) => {
+const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions, onPostCreated }) => {
   const [postContent, setPostContent] = useState('');
   const [postTag, setPostTag] = useState('Thảo luận');
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -180,6 +181,10 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions 
       setAttachedFileName(null);
       setFeeling(null);
       setShowEmojiPicker(false);
+      
+      if (onPostCreated) {
+        onPostCreated();
+      }
     } catch (error) {
       console.error("Error adding post: ", error);
     } finally {
