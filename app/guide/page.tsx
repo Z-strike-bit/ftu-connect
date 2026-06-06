@@ -353,39 +353,39 @@ export default function GuidePage() {
                   <AnimatePresence mode="wait">
                     {sumCredits > total ? (
                       <motion.div key="error" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/30 shadow-[0_0_20px_rgba(255,56,92,0.1)] w-full">
-                        <p className="text-[#ff385c] font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
-                        <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
+                        <p className="text-[#d62847] dark:text-[#ff385c] font-extrabold text-lg mb-2">⚠️ Lỗi dữ liệu!</p>
+                        <p className="text-[#d62847] dark:text-[#ff385c] text-sm font-medium leading-relaxed">
                           Tổng số tín chỉ bạn đã nhập ({sumCredits}) lớn hơn cả tổng tín chỉ toàn khóa ({total}). Vui lòng kiểm tra lại!
                         </p>
                       </motion.div>
                     ) : remCredits <= 0 ? (
                       <motion.div key="done" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-green-500/10 rounded-xl border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] w-full">
-                        <p className="text-green-400 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
-                        <p className="text-green-400 text-sm font-medium leading-relaxed">
+                        <p className="text-green-600 dark:text-green-400 font-extrabold text-lg mb-2">🎓 Đã hoàn thành!</p>
+                        <p className="text-green-600 dark:text-green-400 text-sm font-medium leading-relaxed">
                           Bạn đã hoàn thành đủ số tín chỉ ra trường. GPA chung cuộc của bạn là <span className="font-extrabold">{currentGPA.toFixed(2)}</span> ({rank}).
                         </p>
                       </motion.div>
                     ) : neededA > remCredits ? (
                       <motion.div key="impossible" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/30 shadow-[0_0_20px_rgba(255,56,92,0.1)] flex flex-col items-center w-full">
                         <Image src="/assets/badges/badge-newbie.png" alt="Newbie Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(255,56,92,0.5)]" />
-                        <p className="text-[#ff385c] font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
-                        <p className="text-[#ff385c] text-sm font-medium leading-relaxed">
+                        <p className="text-[#d62847] dark:text-[#ff385c] font-extrabold text-lg mb-2">❌ Bất khả thi!</p>
+                        <p className="text-[#d62847] dark:text-[#ff385c] text-sm font-medium leading-relaxed">
                           Đời còn dài, FTU-er còn nhiều việc phải làm! Quỹ tín chỉ của bạn đã hết room để kéo điểm lên mức này, dù có full A. Hãy cân nhắc hạ mục tiêu xuống một chút.
                         </p>
                       </motion.div>
                     ) : neededA > 0 ? (
                       <motion.div key="safe" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#d44df0]/10 rounded-xl border border-[#d44df0]/30 shadow-[0_0_20px_rgba(212,77,240,0.1)] flex flex-col items-center w-full">
                         <Image src="/assets/badges/badge-veteran.png" alt="Veteran Badge" width={80} height={80} className="mb-3 hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(212,77,240,0.4)]" />
-                        <p className="text-[#d44df0] font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
-                        <p className="text-[#e290f5] text-sm font-medium leading-relaxed">
-                          Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-black/50 px-2 py-0.5 rounded-md shadow-sm border border-[#d44df0]/50 text-white">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold text-white">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
+                        <p className="text-[#b030c8] dark:text-[#d44df0] font-extrabold text-lg mb-2">🔥 Kịch bản an toàn</p>
+                        <p className="text-[#9020a5] dark:text-[#e290f5] text-sm font-medium leading-relaxed">
+                          Kịch bản an toàn: Bạn cần gánh ít nhất <span className="font-extrabold text-lg bg-black/5 dark:bg-black/50 px-2 py-0.5 rounded-md shadow-sm border border-[#b030c8]/30 dark:border-[#d44df0]/50 text-[#b030c8] dark:text-white">{neededA}</span> tín chỉ điểm A, phần còn lại (<span className="font-extrabold text-[#b030c8] dark:text-white">{remCredits - neededA}</span> tín chỉ) chỉ cần giữ mức điểm B là sẽ chạm mốc {targetGPA.toFixed(2)}!
                         </p>
                       </motion.div>
                     ) : (
                       <motion.div key="easy" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#00e5ff]/10 rounded-xl border border-[#00e5ff]/30 shadow-[0_0_20px_rgba(0,229,255,0.1)] flex flex-col items-center w-full">
                         <Image src="/assets/badges/badge-gold.png" alt="Gold Badge" width={80} height={80} className="mb-3 animate-bounce drop-shadow-[0_0_15px_rgba(0,229,255,0.5)]" />
-                        <p className="text-[#00e5ff] font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
-                        <p className="text-[#8cf5ff] text-sm font-medium leading-relaxed">
+                        <p className="text-[#009fb3] dark:text-[#00e5ff] font-extrabold text-lg mb-2">🎉 Quá dễ thở!</p>
+                        <p className="text-[#008191] dark:text-[#8cf5ff] text-sm font-medium leading-relaxed">
                           Quỹ điểm của bạn đang rất dư dả. Chặng đường còn lại thậm chí không cần điểm A, chỉ cần đều đều điểm B (hoặc C) là vẫn thừa sức đạt mục tiêu!
                         </p>
                       </motion.div>
