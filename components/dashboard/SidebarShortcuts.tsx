@@ -45,13 +45,13 @@ const SidebarShortcuts: React.FC<SidebarShortcutsProps> = ({ user, profile }) =>
         <div className="p-3">
           <h3 className="text-[14px] font-extrabold text-gray-400 dark:text-[#a0a0b0] uppercase tracking-widest mb-4">Lối tắt của bạn</h3>
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
-              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm group-hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all">KT</span>
-              <span className="font-semibold text-[15px] text-gray-700 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-[#c8a0e0] transition-colors">Kinh tế quốc tế K64</span>
+            <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10 dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-[#00e5ff]/20 dark:to-[#d44df0]/20 border border-gray-200 dark:border-white/5 text-gray-700 dark:text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm group-hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] dark:group-hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-all">KT</span>
+              <span className="font-semibold text-[15px] text-gray-700 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-transparent dark:group-hover:bg-clip-text dark:group-hover:bg-gradient-to-r dark:group-hover:from-[#00e5ff] dark:group-hover:to-[#d44df0] transition-colors">Kinh tế quốc tế K64</span>
             </div>
-            <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10">
-              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500/20 to-pink-500/20 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm group-hover:shadow-[0_0_15px_rgba(255,56,92,0.4)] transition-all">CLB</span>
-              <span className="font-semibold text-[15px] text-gray-700 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-[#ff385c] transition-colors">TEC FTU</span>
+            <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-white/10 dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500/20 to-pink-500/20 dark:from-[#ff385c]/20 dark:to-[#d44df0]/20 border border-gray-200 dark:border-white/5 text-gray-700 dark:text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm group-hover:shadow-[0_0_15px_rgba(255,56,92,0.4)] dark:group-hover:shadow-[0_0_15px_rgba(255,56,92,0.4)] transition-all">CLB</span>
+              <span className="font-semibold text-[15px] text-gray-700 dark:text-white group-hover:text-ftu-red-700 dark:group-hover:text-transparent dark:group-hover:bg-clip-text dark:group-hover:bg-gradient-to-r dark:group-hover:from-[#ff385c] dark:group-hover:to-[#d44df0] transition-colors">TEC FTU</span>
             </div>
           </div>
         </div>

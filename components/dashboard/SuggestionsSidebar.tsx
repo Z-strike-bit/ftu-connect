@@ -12,35 +12,35 @@ const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({ suggestions }) 
       <div className="sticky top-28 flex flex-col gap-8 pl-4">
         
         {/* Sự kiện nổi bật */}
-        <div className="relative bg-white dark:bg-[#151720] p-8 rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-gray-100 dark:border-[#2A2D3A] overflow-hidden group transition-colors">
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:hidden"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/5 to-transparent dark:from-white/10 rounded-full pointer-events-none"></div>
+        <div className="relative bg-white dark:bg-[#151720] p-8 rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.8),inset_0_0_40px_rgba(212,77,240,0.05)] border border-gray-100 dark:border-[#2A2D3A] overflow-hidden group transition-colors">
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#00e5ff] dark:via-[#d44df0] dark:to-[#ff385c]"></div>
+          <div className="absolute top-0 right-0 w-40 h-40 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/5 to-transparent dark:from-[#d44df0]/20 rounded-full pointer-events-none blur-xl"></div>
           <div className="flex justify-between items-center mb-8 relative z-10">
             <h3 className="font-extrabold text-[20px] tracking-tight text-gray-900 dark:text-white drop-shadow-sm">Sự kiện nổi bật</h3>
-            <Link href="/events" className="text-ftu-red-700 dark:text-white text-[13px] font-extrabold bg-ftu-red-50 dark:bg-white/10 hover:bg-ftu-red-100 dark:hover:bg-white/20 px-4 py-2 rounded-xl transition-all border border-ftu-red-100 dark:border-white/20 backdrop-blur-md shadow-sm hover:shadow-md uppercase">Tất cả</Link>
+            <Link href="/events" className="text-ftu-red-700 dark:text-white text-[13px] font-extrabold bg-ftu-red-50 dark:bg-white/10 hover:bg-ftu-red-100 dark:hover:bg-white/20 px-4 py-2 rounded-xl transition-all border border-ftu-red-100 dark:border-white/20 shadow-sm hover:shadow-md uppercase">Tất cả</Link>
           </div>
           <div className="space-y-4 relative z-10">
-            <div className="flex gap-4 items-start cursor-pointer hover:bg-gray-50/80 dark:hover:bg-white/15 p-4 -mx-4 rounded-2xl transition-all group/event border border-transparent hover:border-white/60 dark:hover:border-white/20 hover:shadow-sm">
-              <div className="flex flex-col items-center bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/10 w-16 h-18 overflow-hidden shrink-0 shadow-inner">
-                <span className="bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#00e5ff]/30 dark:to-[#0099ff]/30 text-white text-[11px] font-extrabold uppercase tracking-wider w-full text-center py-1.5 backdrop-blur-md">Th 10</span>
+            <div className="flex gap-4 items-start cursor-pointer hover:bg-gray-50/80 dark:hover:bg-white/5 p-4 -mx-4 rounded-2xl transition-all group/event border border-transparent hover:border-white/60 dark:hover:border-white/10 hover:shadow-sm dark:hover:shadow-[0_4px_20px_rgba(0,229,255,0.15)]">
+              <div className="flex flex-col items-center bg-gray-50 dark:bg-[#1A1D27] rounded-xl border border-gray-100 dark:border-[#00e5ff]/30 w-16 h-18 overflow-hidden shrink-0 shadow-inner dark:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+                <span className="bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#00e5ff] dark:to-[#0099ff] text-white text-[11px] font-extrabold uppercase tracking-wider w-full text-center py-1.5 shadow-sm">Th 10</span>
                 <span className="text-gray-900 dark:text-white font-extrabold text-[24px] leading-none my-2 drop-shadow-sm">24</span>
               </div>
               <div className="pt-0.5">
-                <h4 className="text-[15px] font-extrabold text-gray-900 dark:text-white leading-snug group-hover/event:text-transparent group-hover/event:bg-clip-text group-hover/event:bg-gradient-to-r group-hover/event:from-ftu-red-600 group-hover/event:to-ftu-red-400 dark:group-hover/event:from-white dark:group-hover/event:to-blue-200 transition-all">Ngày hội Định hướng Tân sinh viên FTU</h4>
-                <p className="text-[13px] text-gray-500 dark:text-white/80 mt-2 font-medium flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-[#00e676] rounded-full shadow-[0_0_5px_#00e676]"></span>1,2K người quan tâm</p>
+                <h4 className="text-[15px] font-extrabold text-gray-900 dark:text-white leading-snug group-hover/event:text-transparent group-hover/event:bg-clip-text group-hover/event:bg-gradient-to-r group-hover/event:from-ftu-red-600 group-hover/event:to-ftu-red-400 dark:group-hover/event:from-[#00e5ff] dark:group-hover/event:to-white transition-all">Ngày hội Định hướng Tân sinh viên FTU</h4>
+                <p className="text-[13px] text-gray-500 dark:text-[#a0a0b0] mt-2 font-medium flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-[#00e676] rounded-full shadow-[0_0_5px_#00e676]"></span>1,2K người quan tâm</p>
               </div>
             </div>
             
-            <div className="border-b border-gray-100 dark:border-white/10"></div>
+            <div className="border-b border-gray-100 dark:border-white/5"></div>
 
-            <div className="flex gap-4 items-start cursor-pointer hover:bg-gray-50/80 dark:hover:bg-white/15 p-4 -mx-4 rounded-2xl transition-all group/event border border-transparent hover:border-white/60 dark:hover:border-white/20 hover:shadow-sm">
-              <div className="flex flex-col items-center bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/10 w-16 h-18 overflow-hidden shrink-0 shadow-inner">
-                <span className="bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c]/30 dark:to-[#d44df0]/30 text-white text-[11px] font-extrabold uppercase tracking-wider w-full text-center py-1.5 backdrop-blur-md">Th 11</span>
+            <div className="flex gap-4 items-start cursor-pointer hover:bg-gray-50/80 dark:hover:bg-white/5 p-4 -mx-4 rounded-2xl transition-all group/event border border-transparent hover:border-white/60 dark:hover:border-white/10 hover:shadow-sm dark:hover:shadow-[0_4px_20px_rgba(255,56,92,0.15)]">
+              <div className="flex flex-col items-center bg-gray-50 dark:bg-[#1A1D27] rounded-xl border border-gray-100 dark:border-[#ff385c]/30 w-16 h-18 overflow-hidden shrink-0 shadow-inner dark:shadow-[0_0_15px_rgba(255,56,92,0.2)]">
+                <span className="bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:from-[#ff385c] dark:to-[#d44df0] text-white text-[11px] font-extrabold uppercase tracking-wider w-full text-center py-1.5 shadow-sm">Th 11</span>
                 <span className="text-gray-900 dark:text-white font-extrabold text-[24px] leading-none my-2 drop-shadow-sm">05</span>
               </div>
               <div className="pt-0.5">
-                <h4 className="text-[15px] font-extrabold text-gray-900 dark:text-white leading-snug group-hover/event:text-transparent group-hover/event:bg-clip-text group-hover/event:bg-gradient-to-r group-hover/event:from-ftu-red-600 group-hover/event:to-ftu-red-400 dark:group-hover/event:from-white dark:group-hover/event:to-pink-200 transition-all">Workshop: Lộ trình trở thành Global Citizen</h4>
-                <p className="text-[13px] text-gray-500 dark:text-white/80 mt-2 font-medium flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-ftu-red-500 dark:bg-[#ff385c] rounded-full shadow-[0_0_5px_#EF4444] dark:shadow-[0_0_5px_#ff385c]"></span>Trực tuyến</p>
+                <h4 className="text-[15px] font-extrabold text-gray-900 dark:text-white leading-snug group-hover/event:text-transparent group-hover/event:bg-clip-text group-hover/event:bg-gradient-to-r group-hover/event:from-ftu-red-600 group-hover/event:to-ftu-red-400 dark:group-hover/event:from-[#ff385c] dark:group-hover/event:to-white transition-all">Workshop: Lộ trình trở thành Global Citizen</h4>
+                <p className="text-[13px] text-gray-500 dark:text-[#a0a0b0] mt-2 font-medium flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-ftu-red-500 dark:bg-[#ff385c] rounded-full shadow-[0_0_5px_#EF4444] dark:shadow-[0_0_8px_#ff385c]"></span>Trực tuyến</p>
               </div>
             </div>
           </div>
