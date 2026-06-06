@@ -9,9 +9,9 @@ const playfair = Playfair_Display({ subsets: ['vietnamese'], weight: ['700', '90
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isCenterHovered, setIsCenterHovered] = useState(false);
   const requestRef = useRef<number | null>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     // Handle body overflow on menu toggle
@@ -22,9 +22,12 @@ export default function HomePage() {
     const handleMouseMove = (e: MouseEvent) => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       requestRef.current = requestAnimationFrame(() => {
-        const x = (e.clientX / window.innerWidth) * 2 - 1;
-        const y = (e.clientY / window.innerHeight) * 2 - 1;
-        setMousePos({ x, y });
+        if (heroRef.current) {
+          const x = (e.clientX / window.innerWidth) * 2 - 1;
+          const y = (e.clientY / window.innerHeight) * 2 - 1;
+          heroRef.current.style.setProperty('--mouse-x', x.toString());
+          heroRef.current.style.setProperty('--mouse-y', y.toString());
+        }
       });
     };
     window.addEventListener('mousemove', handleMouseMove);
@@ -192,7 +195,7 @@ export default function HomePage() {
         </nav>
 
         {/* HERO CARD */}
-        <section className="hero-card" style={{ '--mouse-x': mousePos.x, '--mouse-y': mousePos.y } as React.CSSProperties}>
+        <section ref={heroRef} className="hero-card">
           <div className="hero-grid"></div>
 
           {/* ICON PIPELINE */}
