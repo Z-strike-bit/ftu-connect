@@ -125,15 +125,15 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
 
   return (
     <div className="p-2 min-w-[240px] max-w-[300px]">
-      <h3 className="font-semibold text-[20px] text-gray-900 mb-1 leading-tight tracking-tight">{data.restaurantName}</h3>
-      <p className="text-[14px] text-gray-600 mb-4 flex items-start gap-1">
+      <h3 className="font-semibold text-[20px] text-gray-900 dark:text-white mb-1 leading-tight tracking-tight">{data.restaurantName}</h3>
+      <p className="text-[14px] text-gray-600 dark:text-gray-300 mb-4 flex items-start gap-1">
         <span className="shrink-0 mt-0.5">📍</span> {data.address}
       </p>
       
-      <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
-        <div className="flex items-center gap-1 text-[16px] font-bold text-gray-900">
+      <div className="border-t border-gray-200 dark:border-white/10 pt-4 flex items-center justify-between">
+        <div className="flex items-center gap-1 text-[16px] font-bold text-gray-900 dark:text-white">
           ⭐ {data.averageRating > 0 ? data.averageRating.toFixed(1) : 'Chưa có'} 
-          <span className="text-gray-500 font-normal ml-1 text-[14px]">({data.reviews.length})</span>
+          <span className="text-gray-500 dark:text-gray-400 font-normal ml-1 text-[14px]">({data.reviews.length})</span>
         </div>
         <button 
           onMouseDown={(e) => {
@@ -150,7 +150,7 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
             onReviewClick(data);
           }}
           type="button"
-          className="text-[14px] bg-black hover:bg-gray-800 text-white px-4 py-1.5 rounded-full transition-colors font-semibold z-50 relative cursor-pointer"
+          className="text-[14px] bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-black text-white px-4 py-1.5 rounded-full transition-colors font-semibold z-50 relative cursor-pointer"
         >
           Đánh giá
         </button>
@@ -166,7 +166,7 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
             }}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="w-full text-center text-[14px] text-gray-900 font-semibold py-2 hover:underline flex justify-center items-center gap-1 transition-colors"
+            className="w-full text-center text-[14px] text-gray-900 dark:text-white font-semibold py-2 hover:underline flex justify-center items-center gap-1 transition-colors"
           >
             {showReviews ? 'Ẩn bình luận' : 'Xem bình luận'}
             <svg className={`w-4 h-4 transition-transform ${showReviews ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
@@ -182,12 +182,12 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
               >
                 <div className="mt-2 space-y-3 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
                   {data.reviews.map((rev, idx) => (
-                    <div key={idx} className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <div key={idx} className="bg-gray-50 dark:bg-white/5 p-3 rounded-xl border border-gray-100 dark:border-white/10">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="font-semibold text-[14px] text-gray-900">{rev.user}</span>
+                        <span className="font-semibold text-[14px] text-gray-900 dark:text-white">{rev.user}</span>
                         <span className="text-[12px] text-amber-400 font-bold">★ {rev.rating}</span>
                       </div>
-                      <p className="text-[14px] text-gray-600 leading-snug">{rev.comment}</p>
+                      <p className="text-[14px] text-gray-600 dark:text-gray-300 leading-snug">{rev.comment}</p>
                     </div>
                   ))}
                 </div>
@@ -202,19 +202,19 @@ const FoodPopup = ({ data, onReviewClick }: { data: FoodMarker, onReviewClick: (
 
 const PassItemPopup = ({ data }: { data: PassItemMarker }) => (
   <div className="p-2 min-w-[220px]">
-    <h3 className="font-semibold text-[20px] text-gray-900 mb-1 leading-tight tracking-tight">{data.itemName}</h3>
-    <p className="text-[14px] text-gray-600 mb-5 whitespace-pre-wrap">{data.description}</p>
+    <h3 className="font-semibold text-[20px] text-gray-900 dark:text-white mb-1 leading-tight tracking-tight">{data.itemName}</h3>
+    <p className="text-[14px] text-gray-600 dark:text-gray-300 mb-5 whitespace-pre-wrap">{data.description}</p>
     
     <a 
       href={data.inboxLink.startsWith('http') ? data.inboxLink : `https://${data.inboxLink}`} 
       target="_blank" 
       rel="noreferrer"
-      className="block w-full text-center bg-black hover:bg-gray-800 text-white font-semibold py-[14px] rounded-lg transition-colors mb-4 text-[16px]"
+      className="block w-full text-center bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-black text-white font-semibold py-[14px] rounded-lg transition-colors mb-4 text-[16px]"
     >
       Nhắn tin ngay
     </a>
     
-    <div className="text-[13px] font-medium text-gray-500 text-center border-t border-gray-200 pt-3">
+    <div className="text-[13px] font-medium text-gray-500 dark:text-gray-400 text-center border-t border-gray-200 dark:border-white/10 pt-3">
       Tự hủy sau: {formatTimeLeft(data.expireAt)}
     </div>
   </div>
@@ -223,16 +223,16 @@ const PassItemPopup = ({ data }: { data: PassItemMarker }) => (
 const EventPopup = ({ data }: { data: EventMarker }) => (
   <div className="p-2 min-w-[240px]">
     <div className="flex items-center gap-1.5 mb-3">
-      <div className="bg-gray-100 text-gray-900 text-[11px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 border border-gray-200">
+      <div className="bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white text-[11px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 border border-gray-200 dark:border-white/10">
         <svg className="w-3 h-3 text-[#ff385c]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
         VERIFIED CLUB
       </div>
     </div>
-    <h3 className="font-semibold text-[22px] text-gray-900 mb-1 leading-tight tracking-tight">{data.eventName}</h3>
-    <p className="text-[16px] font-medium text-gray-600 mb-4">{data.clubName}</p>
+    <h3 className="font-semibold text-[22px] text-gray-900 dark:text-white mb-1 leading-tight tracking-tight">{data.eventName}</h3>
+    <p className="text-[16px] font-medium text-gray-600 dark:text-gray-300 mb-4">{data.clubName}</p>
     
-    <div className="bg-gray-50 border border-gray-200 p-3 rounded-xl mb-2">
-      <p className="text-[14px] text-gray-900 flex items-start gap-2 font-medium">
+    <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-3 rounded-xl mb-2">
+      <p className="text-[14px] text-gray-900 dark:text-white flex items-start gap-2 font-medium">
         <span className="shrink-0">📍</span> {data.locationDesc}
       </p>
     </div>
