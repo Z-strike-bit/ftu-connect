@@ -148,14 +148,14 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#090909] p-4 font-sans relative overflow-hidden selection:bg-[#fff0f2] selection:text-[#0099ff]">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-br from-[#6a4cf5] to-[#d44df0] rounded-[100%] blur-[120px] opacity-20 pointer-events-none"></div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#090909] p-4 font-sans relative overflow-hidden selection:bg-ftu-red-100 dark:selection:bg-[#fff0f2] selection:text-ftu-red-700 dark:selection:text-[#0099ff]">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-br from-ftu-red-400 dark:from-[#6a4cf5] to-ftu-red-500 dark:to-[#d44df0] rounded-[100%] blur-[120px] opacity-20 pointer-events-none"></div>
 
-      <div className={`w-full bg-[#141414] backdrop-blur-2xl rounded-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-10 text-center border border-[#1a1a1a] relative z-10 transition-all duration-500 ${step === 2 ? 'max-w-2xl' : 'max-w-md'}`}>
-        <Image src="/logo_ftu_don_gian.png" alt="FTU Connect" width={200} height={50} className="mx-auto mb-8 h-14 w-auto object-contain drop-shadow-md" style={{ filter: 'brightness(0) invert(1)' }} priority />
+      <div className={`w-full bg-white dark:bg-[#141414] backdrop-blur-2xl rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-10 text-center border border-gray-200 dark:border-[#1a1a1a] relative z-10 transition-all duration-500 ${step === 2 ? 'max-w-2xl' : 'max-w-md'}`}>
+        <Image src="/logo_ftu_don_gian.png" alt="FTU Connect" width={200} height={50} className="mx-auto mb-8 h-14 w-auto object-contain drop-shadow-md dark:brightness-0 dark:invert" priority />
         
-        <h1 className="text-3xl font-extrabold text-white mb-2 tracking-tight">Đăng ký</h1>
-        <p className="text-[#999999] font-medium mb-8 text-[15px]">
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">Đăng ký</h1>
+        <p className="text-gray-500 dark:text-[#999999] font-medium mb-8 text-[15px]">
           {step === 1 && 'Xác thực email sinh viên Ngoại Thương'}
           {step === 2 && 'Hoàn thiện hồ sơ để hệ thống ghép cặp phù hợp nhất'}
           {step === 3 && 'Hoàn tất bước cuối cùng'}
@@ -171,47 +171,47 @@ export default function Register() {
           <div className="flex flex-col gap-6 text-left">
             <form onSubmit={handleEmailRegister} className="flex flex-col gap-4">
               <div>
-                <label className="block text-white text-sm font-semibold mb-2">Email (@ftu.edu.vn)</label>
+                <label className="block text-gray-800 dark:text-white text-sm font-semibold mb-2">Email (@ftu.edu.vn)</label>
                 <input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
+                  className="w-full bg-white dark:bg-[#090909] border border-gray-300 dark:border-[#262626] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#6a4cf5] transition-colors"
                   placeholder="Nhập email trường của bạn"
                 />
               </div>
               <div>
-                <label className="block text-white text-sm font-semibold mb-2">Mật khẩu</label>
+                <label className="block text-gray-800 dark:text-white text-sm font-semibold mb-2">Mật khẩu</label>
                 <input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
+                  className="w-full bg-white dark:bg-[#090909] border border-gray-300 dark:border-[#262626] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#6a4cf5] transition-colors"
                   placeholder="Tạo mật khẩu (ít nhất 6 ký tự)"
                 />
               </div>
               <button
                 type="submit"
                 disabled={saving}
-                className="w-full bg-white text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 mt-2"
+                className="w-full bg-ftu-red-600 dark:bg-white text-white dark:text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-ftu-red-700 dark:hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 mt-2 shadow-sm dark:shadow-[0_4px_15px_rgba(255,255,255,0.15)]"
               >
                 {saving ? 'Đang xử lý...' : 'Tạo tài khoản'}
               </button>
             </form>
 
             <div className="flex items-center my-2">
-              <div className="flex-1 border-t border-white/10"></div>
-              <span className="px-3 text-[#6a6a6a] text-[13px] font-medium">Hoặc</span>
-              <div className="flex-1 border-t border-white/10"></div>
+              <div className="flex-1 border-t border-gray-200 dark:border-white/10"></div>
+              <span className="px-3 text-gray-500 dark:text-[#6a6a6a] text-[13px] font-medium">Hoặc</span>
+              <div className="flex-1 border-t border-gray-200 dark:border-white/10"></div>
             </div>
 
             <button
               type="button"
               onClick={handleGoogleLogin}
               disabled={saving}
-              className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] border border-[#262626] text-white font-semibold py-[14px] px-6 rounded-[100px] hover:bg-[#262626] transition-all duration-300 disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-[#1c1c1c] border border-gray-300 dark:border-[#262626] text-gray-900 dark:text-white font-semibold py-[14px] px-6 rounded-[100px] hover:bg-gray-50 dark:hover:bg-[#262626] transition-all duration-300 disabled:opacity-50 shadow-sm dark:shadow-none"
             >
               <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6 shrink-0" />
               <span className="text-[16px]">Đăng ký bằng Google</span>
@@ -223,12 +223,12 @@ export default function Register() {
           <form onSubmit={handleRegister} className="flex flex-col gap-6 text-left max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
             {/* Vai trò */}
             <div>
-              <label className="block text-white text-[15px] font-semibold mb-3">Bạn tham gia với vai trò gì? <span className="text-[#ff385c]">*</span></label>
+              <label className="block text-gray-800 dark:text-white text-[15px] font-semibold mb-3">Bạn tham gia với vai trò gì? <span className="text-[#ff385c]">*</span></label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button
                   type="button"
                   onClick={() => setFormData({...formData, role: 'mentor'})}
-                  className={`py-4 px-5 rounded-xl border transition-all duration-300 font-semibold text-left flex flex-col gap-1 ${formData.role === 'mentor' ? 'border-[#ff385c] bg-[#ff385c]/10 text-[#ff385c] shadow-[0_0_15px_rgba(255,56,92,0.2)]' : 'border-[#262626] bg-[#090909] text-white hover:border-[#404040]'}`}
+                  className={`py-4 px-5 rounded-xl border transition-all duration-300 font-semibold text-left flex flex-col gap-1 ${formData.role === 'mentor' ? 'border-[#ff385c] bg-[#ff385c]/10 text-[#ff385c] shadow-[0_0_15px_rgba(255,56,92,0.2)]' : 'border-gray-200 bg-white dark:border-[#262626] dark:bg-[#090909] text-gray-900 dark:text-white hover:border-gray-300 dark:hover:border-[#404040]'}`}
                 >
                   <span className="text-lg">Mentor</span>
                   <span className="text-xs font-medium opacity-70 mt-1">Người hướng dẫn (Năm 2,3,4)</span>
@@ -236,7 +236,7 @@ export default function Register() {
                 <button
                   type="button"
                   onClick={() => setFormData({...formData, role: 'mentee'})}
-                  className={`py-4 px-5 rounded-xl border transition-all duration-300 font-semibold text-left flex flex-col gap-1 ${formData.role === 'mentee' ? 'border-[#ff385c] bg-[#ff385c]/10 text-[#ff385c] shadow-[0_0_15px_rgba(255,56,92,0.2)]' : 'border-[#262626] bg-[#090909] text-white hover:border-[#404040]'}`}
+                  className={`py-4 px-5 rounded-xl border transition-all duration-300 font-semibold text-left flex flex-col gap-1 ${formData.role === 'mentee' ? 'border-[#ff385c] bg-[#ff385c]/10 text-[#ff385c] shadow-[0_0_15px_rgba(255,56,92,0.2)]' : 'border-gray-200 bg-white dark:border-[#262626] dark:bg-[#090909] text-gray-900 dark:text-white hover:border-gray-300 dark:hover:border-[#404040]'}`}
                 >
                   <span className="text-lg">Mentee</span>
                   <span className="text-xs font-medium opacity-70 mt-1">Người được hướng dẫn (Năm 1)</span>
@@ -247,13 +247,13 @@ export default function Register() {
             {/* Chuyên ngành & Liên hệ */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="block text-white text-[15px] font-semibold mb-3">Ngành học <span className="text-[#ff385c]">*</span></label>
+                <label className="block text-gray-800 dark:text-white text-[15px] font-semibold mb-3">Ngành học <span className="text-[#ff385c]">*</span></label>
                 <div className="flex flex-col gap-3">
                   <select
                     required
                     value={formData.major}
                     onChange={(e) => setFormData({...formData, major: e.target.value, specialization: ''})}
-                    className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors"
+                    className="w-full bg-white dark:bg-[#090909] border border-gray-300 dark:border-[#262626] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#6a4cf5] transition-colors"
                   >
                     <option value="">-- Chọn ngành --</option>
                     {FTU_MAJORS.map(m => <option key={m.id} value={m.majorName}>{m.majorName}</option>)}
@@ -264,7 +264,7 @@ export default function Register() {
                     value={formData.specialization}
                     onChange={(e) => setFormData({...formData, specialization: e.target.value})}
                     disabled={!formData.major}
-                    className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors disabled:opacity-50 disabled:bg-[#111]"
+                    className="w-full bg-white dark:bg-[#090909] border border-gray-300 dark:border-[#262626] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#6a4cf5] transition-colors disabled:opacity-50 disabled:bg-gray-100 dark:disabled:bg-[#111]"
                   >
                     <option value="">-- Chọn chuyên ngành --</option>
                     {formData.major && FTU_MAJORS.find(m => m.majorName === formData.major)?.specializations.map(spec => (
@@ -275,63 +275,63 @@ export default function Register() {
               </div>
               
               <div>
-                <label className="block text-white text-[15px] font-semibold mb-3">Link liên hệ (Mess/Zalo) <span className="text-[#ff385c]">*</span></label>
+                <label className="block text-gray-800 dark:text-white text-[15px] font-semibold mb-3">Link liên hệ (Mess/Zalo) <span className="text-[#ff385c]">*</span></label>
                 <input
                   type="url"
                   required
                   placeholder="https://m.me/your.username"
                   value={formData.contactLink}
                   onChange={(e) => setFormData({...formData, contactLink: e.target.value})}
-                  className="w-full bg-[#090909] border border-[#262626] rounded-xl px-4 py-3 text-white outline-none focus:border-[#6a4cf5] transition-colors placeholder-[#666]"
+                  className="w-full bg-white dark:bg-[#090909] border border-gray-300 dark:border-[#262626] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#6a4cf5] transition-colors placeholder:text-gray-400 dark:placeholder-[#666]"
                 />
-                <p className="text-[12px] text-[#6a6a6a] mt-2 font-medium">Bảo mật: Chỉ hiển thị khi kết nối thành công.</p>
+                <p className="text-[12px] text-gray-500 dark:text-[#6a6a6a] mt-2 font-medium">Bảo mật: Chỉ hiển thị khi kết nối thành công.</p>
               </div>
             </div>
 
             {/* Mentor Fields */}
             {formData.role === 'mentor' && (
-              <div className="bg-[#0f0f0f] border border-[#262626] rounded-2xl p-6 shadow-inner transition-all duration-300">
-                <h3 className="text-[16px] font-bold text-white mb-5 border-b border-[#262626] pb-3">Chi tiết Mentor</h3>
+              <div className="bg-gray-50 dark:bg-[#0f0f0f] border border-gray-200 dark:border-[#262626] rounded-2xl p-6 shadow-inner transition-all duration-300">
+                <h3 className="text-[16px] font-bold text-gray-900 dark:text-white mb-5 border-b border-gray-200 dark:border-[#262626] pb-3">Chi tiết Mentor</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                   <div>
-                    <label className="block text-[#ccc] text-sm font-semibold mb-2">GPA / Thành tích</label>
+                    <label className="block text-gray-600 dark:text-[#ccc] text-sm font-semibold mb-2">GPA / Thành tích</label>
                     <input
                       type="text"
                       placeholder="VD: 3.8/4.0"
                       value={formData.gpa}
                       onChange={(e) => setFormData({...formData, gpa: e.target.value})}
-                      className="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white outline-none focus:border-[#ff385c] transition-colors placeholder-[#555]"
+                      className="w-full bg-white dark:bg-[#1a1a1a] border border-gray-300 dark:border-[#333] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#ff385c] transition-colors placeholder:text-gray-400 dark:placeholder-[#555]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#ccc] text-sm font-semibold mb-2">Câu lạc bộ</label>
+                    <label className="block text-gray-600 dark:text-[#ccc] text-sm font-semibold mb-2">Câu lạc bộ</label>
                     <input
                       type="text"
                       placeholder="VD: TEC, YRC..."
                       value={formData.clubs}
                       onChange={(e) => setFormData({...formData, clubs: e.target.value})}
-                      className="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white outline-none focus:border-[#ff385c] transition-colors placeholder-[#555]"
+                      className="w-full bg-white dark:bg-[#1a1a1a] border border-gray-300 dark:border-[#333] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#ff385c] transition-colors placeholder:text-gray-400 dark:placeholder-[#555]"
                     />
                   </div>
                 </div>
                 <div className="mb-5">
-                  <label className="block text-[#ccc] text-sm font-semibold mb-2">Kỹ năng mạnh nhất</label>
+                  <label className="block text-gray-600 dark:text-[#ccc] text-sm font-semibold mb-2">Kỹ năng mạnh nhất</label>
                   <input
                     type="text"
                     placeholder="VD: IELTS 8.0, Thuyết trình..."
                     value={formData.skills}
                     onChange={(e) => setFormData({...formData, skills: e.target.value})}
-                    className="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white outline-none focus:border-[#ff385c] transition-colors placeholder-[#555]"
+                    className="w-full bg-white dark:bg-[#1a1a1a] border border-gray-300 dark:border-[#333] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#ff385c] transition-colors placeholder:text-gray-400 dark:placeholder-[#555]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[#ccc] text-sm font-semibold mb-2">Trải nghiệm nổi bật</label>
+                  <label className="block text-gray-600 dark:text-[#ccc] text-sm font-semibold mb-2">Trải nghiệm nổi bật</label>
                   <textarea
                     rows={2}
                     placeholder="Điều tự hào nhất..."
                     value={formData.achievements}
                     onChange={(e) => setFormData({...formData, achievements: e.target.value})}
-                    className="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white outline-none focus:border-[#ff385c] transition-colors resize-none placeholder-[#555]"
+                    className="w-full bg-white dark:bg-[#1a1a1a] border border-gray-300 dark:border-[#333] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#ff385c] transition-colors resize-none placeholder:text-gray-400 dark:placeholder-[#555]"
                   />
                 </div>
               </div>
@@ -339,32 +339,32 @@ export default function Register() {
 
             {/* Mentee Fields */}
             {formData.role === 'mentee' && (
-              <div className="bg-[#0f0f0f] border border-[#262626] rounded-2xl p-6 shadow-inner transition-all duration-300">
-                <h3 className="text-[16px] font-bold text-white mb-5 border-b border-[#262626] pb-3">Mục tiêu Mentee</h3>
+              <div className="bg-gray-50 dark:bg-[#0f0f0f] border border-gray-200 dark:border-[#262626] rounded-2xl p-6 shadow-inner transition-all duration-300">
+                <h3 className="text-[16px] font-bold text-gray-900 dark:text-white mb-5 border-b border-gray-200 dark:border-[#262626] pb-3">Mục tiêu Mentee</h3>
                 <div className="mb-5">
-                  <label className="block text-[#ccc] text-sm font-semibold mb-3">Bạn muốn đạt được điều gì?</label>
+                  <label className="block text-gray-600 dark:text-[#ccc] text-sm font-semibold mb-3">Bạn muốn đạt được điều gì?</label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {GOALS.map(goal => (
-                      <label key={goal} className={`flex items-center space-x-3 p-3 border rounded-xl cursor-pointer transition-all ${formData.goals.includes(goal) ? 'border-[#ff385c] bg-[#ff385c]/10 text-[#ff385c]' : 'border-[#333] bg-[#1a1a1a] hover:bg-[#222]'}`}>
+                      <label key={goal} className={`flex items-center space-x-3 p-3 border rounded-xl cursor-pointer transition-all ${formData.goals.includes(goal) ? 'border-[#ff385c] bg-[#ff385c]/10 text-[#ff385c]' : 'border-gray-200 bg-white hover:bg-gray-100 dark:border-[#333] dark:bg-[#1a1a1a] dark:hover:bg-[#222]'}`}>
                         <input
                           type="checkbox"
                           checked={formData.goals.includes(goal)}
                           onChange={() => handleGoalToggle(goal)}
-                          className="w-4 h-4 text-[#ff385c] rounded border-[#555] bg-transparent focus:ring-[#ff385c] focus:ring-offset-[#1a1a1a]"
+                          className="w-4 h-4 text-[#ff385c] rounded border-gray-300 dark:border-[#555] bg-transparent focus:ring-[#ff385c] focus:ring-offset-white dark:focus:ring-offset-[#1a1a1a]"
                         />
-                        <span className="text-[13px] font-semibold text-white">{goal}</span>
+                        <span className="text-[13px] font-semibold text-gray-800 dark:text-white">{goal}</span>
                       </label>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[#ccc] text-sm font-semibold mb-2">Sở thích cá nhân</label>
+                  <label className="block text-gray-600 dark:text-[#ccc] text-sm font-semibold mb-2">Sở thích cá nhân</label>
                   <input
                     type="text"
                     placeholder="VD: Đọc sách, Nghe Podcast..."
                     value={formData.interests}
                     onChange={(e) => setFormData({...formData, interests: e.target.value})}
-                    className="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white outline-none focus:border-[#ff385c] transition-colors placeholder-[#555]"
+                    className="w-full bg-white dark:bg-[#1a1a1a] border border-gray-300 dark:border-[#333] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-ftu-red-500 dark:focus:border-[#ff385c] transition-colors placeholder:text-gray-400 dark:placeholder-[#555]"
                   />
                 </div>
               </div>
@@ -373,7 +373,7 @@ export default function Register() {
             <button
               type="submit"
               disabled={saving || !formData.role || !formData.major || !formData.specialization || !formData.contactLink}
-              className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-transparent text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 disabled:opacity-50"
+              className="mt-4 w-full flex items-center justify-center gap-3 bg-ftu-red-600 dark:bg-white border border-transparent text-white dark:text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-ftu-red-700 dark:hover:bg-gray-200 transition-all duration-300 disabled:opacity-50"
             >
               {saving ? 'Đang lưu thông tin...' : 'Hoàn tất Đăng ký'}
             </button>
@@ -386,21 +386,21 @@ export default function Register() {
               <span className="text-4xl drop-shadow-md">✉️</span>
             </div>
             <div>
-              <h2 className="text-[22px] font-extrabold text-white mb-3">Kiểm tra hộp thư của bạn</h2>
-              <p className="text-[#999999] text-[15px] leading-relaxed">
-                Hệ thống đã gửi một email xác thực đến địa chỉ <strong className="text-white">{email}</strong>.
+              <h2 className="text-[22px] font-extrabold text-gray-900 dark:text-white mb-3">Kiểm tra hộp thư của bạn</h2>
+              <p className="text-gray-500 dark:text-[#999999] text-[15px] leading-relaxed">
+                Hệ thống đã gửi một email xác thực đến địa chỉ <strong className="text-gray-900 dark:text-white">{email}</strong>.
                 <br /><br />
                 Vui lòng kiểm tra hộp thư (bao gồm cả mục <span className="text-[#ff385c] font-bold">Spam/Thư rác</span>) và click vào link đính kèm để kích hoạt tài khoản. Sau đó hãy quay lại trang Đăng nhập nhé!
               </p>
             </div>
-            <Link href="/login" className="w-full bg-white text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-gray-200 transition-all duration-300 mt-2 shadow-[0_4px_15px_rgba(255,255,255,0.2)]">
+            <Link href="/login" className="w-full bg-ftu-red-600 dark:bg-white text-white dark:text-black font-bold py-[14px] px-6 rounded-[100px] hover:bg-ftu-red-700 dark:hover:bg-gray-200 transition-all duration-300 mt-2 shadow-[0_4px_15px_rgba(255,56,92,0.2)] dark:shadow-[0_4px_15px_rgba(255,255,255,0.2)]">
               Đến trang Đăng nhập
             </Link>
           </div>
         )}
         
-        <p className="mt-8 text-[14px] text-[#999999] font-medium px-4">
-          Đã có tài khoản? <Link href="/login" className="text-white hover:underline">Đăng nhập</Link>
+        <p className="mt-8 text-[14px] text-gray-500 dark:text-[#999999] font-medium px-4">
+          Đã có tài khoản? <Link href="/login" className="text-ftu-red-600 dark:text-white font-bold hover:underline">Đăng nhập</Link>
         </p>
       </div>
     </div>
