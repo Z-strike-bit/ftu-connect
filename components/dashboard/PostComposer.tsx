@@ -138,6 +138,11 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions,
         const formData = new FormData();
         formData.append('file', imageFile);
         const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        if (!res.ok) {
+          alert('Tải ảnh lên thất bại. Vui lòng thử ảnh nhẹ hơn (< 4MB).');
+          setIsPosting(false);
+          return;
+        }
         const data = await res.json();
         if (data.secure_url) {
           uploadedImageUrl = data.secure_url;
@@ -148,6 +153,11 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions,
         const formData = new FormData();
         formData.append('file', attachedFile);
         const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        if (!res.ok) {
+          alert('Tải tệp lên thất bại. Vui lòng thử tệp nhẹ hơn (< 4MB).');
+          setIsPosting(false);
+          return;
+        }
         const data = await res.json();
         if (data.secure_url) {
           uploadedFileUrl = data.secure_url;
