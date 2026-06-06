@@ -235,9 +235,11 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-[#05050a] text-gray-900 dark:text-white font-sans pb-16 selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden">
-      {/* Decorative Background Elements (Optimized: No CSS blur to prevent lag) */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,56,92,0.15),transparent_70%)] pointer-events-none rounded-full z-0"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(212,77,240,0.1),transparent_70%)] pointer-events-none rounded-full z-0"></div>
+      {/* Creative Background: Tech Grid + Soft Ambient Orbs (Zero lag) */}
+      <div className="absolute inset-0 z-0 opacity-[0.04] dark:opacity-[0.03] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(255,56,92,0.12)_0%,transparent_60%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(255,56,92,0.06)_0%,transparent_60%)] pointer-events-none rounded-full z-0"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(212,77,240,0.12)_0%,transparent_60%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(212,77,240,0.06)_0%,transparent_60%)] pointer-events-none rounded-full z-0"></div>
+      <div className="absolute top-[40%] right-[20%] w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(0,229,255,0.08)_0%,transparent_60%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(0,229,255,0.03)_0%,transparent_60%)] pointer-events-none rounded-full z-0"></div>
 
       <div className="relative z-10">
         <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
