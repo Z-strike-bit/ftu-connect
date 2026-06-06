@@ -189,8 +189,11 @@ const PostComposer: React.FC<PostComposerProps> = ({ user, profile, suggestions 
 
   return (
     <div className="bg-white dark:bg-[#0c0c14] sm:rounded-[24px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-gray-100 dark:border-white/10 p-6 mb-8 relative z-20 group/postbox">
-      <div className="absolute top-0 left-0 w-full h-[3px] overflow-hidden rounded-t-[24px]">
-        <div className="w-full h-full bg-gradient-to-r from-ftu-red-600 via-ftu-red-700 to-ftu-red-600 dark:bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-60 dark:opacity-80 animate-led-run shadow-none dark:shadow-[0_0_10px_rgba(212,77,240,0.5)] group-focus-within/postbox:animate-led-run-fast dark:group-focus-within/postbox:shadow-[0_0_20px_rgba(212,77,240,0.8)] group-focus-within/postbox:opacity-100 transition-all duration-300"></div>
+      {/* Decorative LED Strip */}
+      <div className="absolute inset-0 sm:rounded-[24px] overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-[3px]">
+          <div className="w-full h-full bg-gradient-to-r from-ftu-red-600 via-ftu-red-700 to-ftu-red-600 dark:bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-60 dark:opacity-80 animate-led-run shadow-none dark:shadow-[0_0_10px_rgba(212,77,240,0.5)] group-focus-within/postbox:animate-led-run-fast dark:group-focus-within/postbox:shadow-[0_0_20px_rgba(212,77,240,0.8)] group-focus-within/postbox:opacity-100 transition-all duration-300"></div>
+        </div>
       </div>
       <div className="flex gap-3 sm:gap-4 border-b border-gray-200 dark:border-white/10 pb-5">
         <Link href={user ? `/profile/${user.uid}` : "#"}>
