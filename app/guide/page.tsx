@@ -219,11 +219,11 @@ export default function GuidePage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-[#141414] flex items-center justify-center"><p className="text-[#999999] font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
+    return <div className="min-h-screen bg-gray-50 dark:bg-[#141414] flex items-center justify-center"><p className="text-gray-500 dark:text-[#999999] font-bold animate-pulse">Đang tải Cẩm nang...</p></div>;
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#05050a] text-white font-sans pb-16 selection:bg-[#ff385c]/30 selection:text-white relative overflow-hidden">
+    <div className="min-h-screen w-full bg-gray-50 dark:bg-[#05050a] text-gray-900 dark:text-white font-sans pb-16 selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden">
       {/* Ambient Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-600/20 blur-[150px] pointer-events-none z-0"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#ff385c]/15 blur-[120px] pointer-events-none z-0"></div>
@@ -237,10 +237,10 @@ export default function GuidePage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-10 border-b border-white/10 pb-8"
+            className="mb-10 border-b border-gray-200 dark:border-white/10 pb-8"
           >
-            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#c8a0e0] tracking-tight uppercase">Cẩm nang <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff385c] to-[#d44df0]">Tân sinh viên</span></h1>
-            <p className="text-[#a0a0b0] mt-2 text-lg font-medium">Bí kíp sinh tồn và chinh phục 4 năm rực rỡ tại Ngoại Thương.</p>
+            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-[#c8a0e0] tracking-tight uppercase">Cẩm nang <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff385c] to-[#d44df0]">Tân sinh viên</span></h1>
+            <p className="text-gray-600 dark:text-[#a0a0b0] mt-2 text-lg font-medium">Bí kíp sinh tồn và chinh phục 4 năm rực rỡ tại Ngoại Thương.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -252,83 +252,83 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="lg:col-span-4"
             >
-              <div className="bg-white/[0.03] backdrop-blur-3xl rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/10 overflow-hidden sticky top-28">
+              <div className="bg-white dark:bg-white/[0.03] backdrop-blur-3xl rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 overflow-hidden sticky top-28">
                 
-                <div className="p-6 border-b border-white/5 bg-white/[0.02]">
-                  <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
+                <div className="p-6 border-b border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
+                  <h2 className="text-xl font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                     <div className="bg-gradient-to-br from-[#ff385c] to-[#d44df0] p-2 rounded-xl text-white shadow-lg">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                     </div>
                     GPA Tracker
                   </h2>
-                  <p className="text-[13px] text-[#a0a0b0] font-medium mt-2 leading-relaxed">
+                  <p className="text-[13px] text-gray-600 dark:text-[#a0a0b0] font-medium mt-2 leading-relaxed">
                     Công cụ phân tích điểm rơi chiến thuật dành riêng cho FTU-er.
                   </p>
                 </div>
 
                 <div className="p-6 space-y-6">
                   <div>
-                    <label className="block text-sm font-bold text-white mb-1.5">Tổng tín chỉ tối thiểu để ra trường</label>
+                    <label className="block text-sm font-bold text-gray-900 dark:text-white mb-1.5">Tổng tín chỉ tối thiểu để ra trường</label>
                     <input 
                       type="number" 
                       placeholder="VD: 130"
                       value={totalCredits}
                       onChange={(e) => handleTotalChange(e.target.value)}
-                      className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-[#ff385c] bg-[#ff385c]/10 focus:ring-[#ff385c]/40' : 'border-white/10 bg-black/40 focus:border-[#b04090] focus:ring-[#b04090]/30'} outline-none focus:ring-2 transition-all text-[15px] font-bold text-white`}
+                      className={`w-full px-4 py-3 rounded-xl border ${totalError ? 'border-[#ff385c] bg-[#ff385c]/10 focus:ring-[#ff385c]/40' : 'border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-black/40 focus:border-[#b04090] focus:ring-[#b04090]/30'} outline-none focus:ring-2 transition-all text-[15px] font-bold text-gray-900 dark:text-white`}
                     />
                     {totalError && <p className="text-[#ff385c] text-xs font-bold mt-1.5">{totalError}</p>}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-white mb-2">Nhập điểm thành phần (Tín chỉ)</label>
+                    <label className="block text-sm font-bold text-gray-900 dark:text-white mb-2">Nhập điểm thành phần (Tín chỉ)</label>
                     <div className="grid grid-cols-5 gap-2">
                       <div className="flex flex-col items-center">
-                        <span className="text-xs font-extrabold text-[#c8a0e0] mb-1 uppercase">Điểm A</span>
-                        <input type="number" value={creditsA} onChange={(e) => setCreditsA(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-black/40 border border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-white transition-all" />
+                        <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm A</span>
+                        <input type="number" value={creditsA} onChange={(e) => setCreditsA(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
-                        <span className="text-xs font-extrabold text-[#c8a0e0] mb-1 uppercase">Điểm B</span>
-                        <input type="number" value={creditsB} onChange={(e) => setCreditsB(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-black/40 border border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-white transition-all" />
+                        <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm B</span>
+                        <input type="number" value={creditsB} onChange={(e) => setCreditsB(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
-                        <span className="text-xs font-extrabold text-[#c8a0e0] mb-1 uppercase">Điểm C</span>
-                        <input type="number" value={creditsC} onChange={(e) => setCreditsC(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-black/40 border border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-white transition-all" />
+                        <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm C</span>
+                        <input type="number" value={creditsC} onChange={(e) => setCreditsC(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
-                        <span className="text-xs font-extrabold text-[#c8a0e0] mb-1 uppercase">Điểm D</span>
-                        <input type="number" value={creditsD} onChange={(e) => setCreditsD(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-black/40 border border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-white transition-all" />
+                        <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm D</span>
+                        <input type="number" value={creditsD} onChange={(e) => setCreditsD(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div className="flex flex-col items-center">
-                        <span className="text-xs font-extrabold text-[#c8a0e0] mb-1 uppercase">Điểm F</span>
-                        <input type="number" value={creditsF} onChange={(e) => setCreditsF(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-black/40 border border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-white transition-all" />
+                        <span className="text-xs font-extrabold text-gray-600 dark:text-[#c8a0e0] mb-1 uppercase">Điểm F</span>
+                        <input type="number" value={creditsF} onChange={(e) => setCreditsF(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))} className="w-full text-center py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 outline-none font-bold text-sm text-gray-900 dark:text-white transition-all" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-black/30 p-4 rounded-xl border border-white/5 shadow-inner">
-                    <h3 className="text-xs font-bold text-[#a0a0b0] uppercase tracking-widest mb-3">Thống kê hiện tại</h3>
+                  <div className="bg-gray-100 dark:bg-black/30 p-4 rounded-xl border border-gray-200 dark:border-white/5 shadow-inner">
+                    <h3 className="text-xs font-bold text-gray-600 dark:text-[#a0a0b0] uppercase tracking-widest mb-3">Thống kê hiện tại</h3>
                     <div className="space-y-2 text-[14px]">
                       <div className="flex justify-between items-center">
-                        <span className="font-medium text-white/80">Tổng tín đã tích lũy:</span>
-                        <span className="font-extrabold text-white">{sumCredits}</span>
+                        <span className="font-medium text-gray-600 dark:text-white/80">Tổng tín đã tích lũy:</span>
+                        <span className="font-extrabold text-gray-900 dark:text-white">{sumCredits}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="font-medium text-white/80">GPA Hiện tại:</span>
+                        <span className="font-medium text-gray-600 dark:text-white/80">GPA Hiện tại:</span>
                         <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#ff385c] to-[#d44df0] text-base">{animatedGPA.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="font-medium text-white/80">Xếp loại:</span>
-                        <span className="font-extrabold text-white bg-white/10 px-2 py-0.5 rounded shadow-sm">{rank}</span>
+                        <span className="font-medium text-gray-600 dark:text-white/80">Xếp loại:</span>
+                        <span className="font-extrabold text-gray-900 dark:text-white bg-gray-200 dark:bg-white/10 px-2 py-0.5 rounded shadow-sm">{rank}</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-white mb-1.5">Mục tiêu mong muốn</label>
+                    <label className="block text-sm font-bold text-gray-900 dark:text-white mb-1.5">Mục tiêu mong muốn</label>
                     <select 
                       value={targetGPA}
                       onChange={(e) => setTargetGPA(Number(e.target.value))}
-                      className="w-full px-4 py-3 rounded-xl border border-white/10 outline-none focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 transition-all text-[15px] font-bold bg-black/40 appearance-none cursor-pointer text-white"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-white/10 outline-none focus:border-[#b04090] focus:ring-2 focus:ring-[#b04090]/30 transition-all text-[15px] font-bold bg-gray-50 dark:bg-black/40 appearance-none cursor-pointer text-gray-900 dark:text-white"
                     >
                       <option value={2.5}>Bằng Khá (2.5)</option>
                       <option value={3.2}>Bằng Giỏi (3.2)</option>
@@ -337,7 +337,7 @@ export default function GuidePage() {
                   </div>
                 </div>
 
-                <div className="p-6 bg-white/[0.02] border-t border-white/5 min-h-[160px] overflow-hidden relative">
+                <div className="p-6 bg-gray-50/50 dark:bg-white/[0.02] border-t border-gray-200 dark:border-white/5 min-h-[160px] overflow-hidden relative">
                   <AnimatePresence mode="wait">
                     {sumCredits > total ? (
                       <motion.div key="error" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="text-center p-5 bg-[#ff385c]/10 rounded-xl border border-[#ff385c]/30 shadow-[0_0_20px_rgba(255,56,92,0.1)] w-full backdrop-blur-md">
@@ -390,15 +390,15 @@ export default function GuidePage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="lg:col-span-8"
             >
-              <div className="bg-white/[0.03] backdrop-blur-3xl rounded-[2rem] shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/10 p-8">
+              <div className="bg-white dark:bg-white/[0.03] backdrop-blur-3xl rounded-[2rem] shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-gray-200 dark:border-white/10 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                   <div>
-                    <h2 className="text-2xl font-extrabold text-white">Thư viện Wiki</h2>
-                    <p className="text-sm font-medium text-[#a0a0b0] mt-1">Review chân thực và kho tài liệu khổng lồ.</p>
+                    <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">Thư viện Wiki</h2>
+                    <p className="text-sm font-medium text-gray-600 dark:text-[#a0a0b0] mt-1">Review chân thực và kho tài liệu khổng lồ.</p>
                   </div>
                   <div className="relative">
-                    <input type="text" placeholder="Tìm kiếm môn học..." className="w-full sm:w-72 pl-12 pr-4 py-3 bg-black/40 border border-white/10 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] text-white font-bold transition-all placeholder-[#6a6a6a]"/>
-                    <svg className="w-5 h-5 text-[#a0a0b0] absolute left-4 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Tìm kiếm môn học..." className="w-full sm:w-72 pl-12 pr-4 py-3 bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#b04090]/40 focus:border-[#b04090] text-gray-900 dark:text-white font-bold transition-all placeholder-gray-400 dark:placeholder-[#6a6a6a]"/>
+                    <svg className="w-5 h-5 text-gray-400 dark:text-[#a0a0b0] absolute left-4 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                   </div>
                 </div>
 
@@ -408,13 +408,13 @@ export default function GuidePage() {
                       key={course.id}
                       onMouseMove={handleMouseMove}
                       onMouseLeave={handleMouseLeave}
-                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/50 animate-pulse-glow shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-white/10'} rounded-[1.5rem] p-6 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-white/[0.02] backdrop-blur-md flex flex-col h-full relative overflow-hidden`}
+                      className={`holo-card group border ${course.difficulty === 'Khó nhằn' ? 'border-[#ff385c]/50 animate-pulse-glow shadow-[0_0_15px_rgba(255,56,92,0.15)]' : 'border-gray-200 dark:border-white/10'} rounded-[1.5rem] p-6 hover:shadow-[0_0_30px_rgba(212,77,240,0.2)] bg-gray-50 dark:bg-white/[0.02] backdrop-blur-md flex flex-col h-full relative overflow-hidden`}
                     >
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#ff385c] to-[#d44df0] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       
                       <div className="flex justify-between items-start mb-4 relative z-20 pointer-events-none">
-                        <h3 className="font-extrabold text-lg text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#ff385c] group-hover:to-[#d44df0] transition-all">{course.name}</h3>
-                        <span className={`px-3 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-widest shrink-0 shadow-sm ${course.difficulty === 'Dễ thở' ? 'bg-white/10 text-white' : 'bg-[#ff385c]/20 text-[#ff385c] border border-[#ff385c]/30'}`}>
+                        <h3 className="font-extrabold text-lg text-gray-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#ff385c] group-hover:to-[#d44df0] transition-all">{course.name}</h3>
+                        <span className={`px-3 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-widest shrink-0 shadow-sm ${course.difficulty === 'Dễ thở' ? 'bg-white/10 text-gray-600 dark:text-white' : 'bg-[#ff385c]/20 text-[#ff385c] border border-[#ff385c]/30'}`}>
                           {course.difficulty}
                         </span>
                       </div>
@@ -422,12 +422,12 @@ export default function GuidePage() {
                       <div className="flex items-center gap-4 mb-5 relative z-20 pointer-events-none">
                         <div className="flex items-center gap-1.5">
                           <span className="text-yellow-400 text-lg drop-shadow-sm">⭐</span>
-                          <span className="font-extrabold text-white">{course.rating}</span>
+                          <span className="font-extrabold text-gray-900 dark:text-white">{course.rating}</span>
                         </div>
-                        <span className="text-xs font-bold text-[#c8a0e0] border-l border-white/10 pl-4 uppercase tracking-wider">{course.reviews} đánh giá</span>
+                        <span className="text-xs font-bold text-gray-600 dark:text-[#c8a0e0] border-l border-gray-300 dark:border-white/10 pl-4 uppercase tracking-wider">{course.reviews} đánh giá</span>
                       </div>
                       
-                      <p className="text-sm text-[#e0e0e0] font-medium leading-relaxed mb-8 flex-1 relative z-20 pointer-events-none">
+                      <p className="text-sm text-gray-700 dark:text-[#e0e0e0] font-medium leading-relaxed mb-8 flex-1 relative z-20 pointer-events-none">
                         {course.description}
                       </p>
 
@@ -436,12 +436,12 @@ export default function GuidePage() {
                           href={course.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-white to-gray-200 hover:from-gray-100 hover:to-gray-300 text-black rounded-xl text-sm font-bold transition-all shadow-[0_4px_10px_rgba(255,255,255,0.2)] hover:shadow-[0_6px_15px_rgba(255,255,255,0.3)] hover:-translate-y-0.5"
+                          className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-ftu-red-600 to-purple-600 hover:opacity-90 dark:from-white dark:to-gray-200 dark:hover:from-gray-100 dark:hover:to-gray-300 text-white dark:text-black rounded-xl text-sm font-bold transition-all shadow-[0_4px_10px_rgba(255,255,255,0.2)] hover:shadow-[0_6px_15px_rgba(255,255,255,0.3)] hover:-translate-y-0.5"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                           Tài liệu
                         </a>
-                        <button className="flex items-center justify-center px-6 border-2 border-white/20 hover:border-white/50 bg-black/20 hover:bg-white/10 text-white rounded-xl text-sm font-bold transition-all hover:-translate-y-0.5">
+                        <button className="flex items-center justify-center px-6 border-2 border-gray-300 dark:border-white/20 hover:border-gray-400 dark:hover:border-white/50 bg-gray-100 dark:bg-black/20 hover:bg-gray-200 dark:hover:bg-white/10 text-gray-900 dark:text-white rounded-xl text-sm font-bold transition-all hover:-translate-y-0.5">
                           Review
                         </button>
                       </div>
@@ -450,11 +450,11 @@ export default function GuidePage() {
                   ))}
                 </div>
                 
-                <div className="mt-10 text-center p-8 bg-black/20 rounded-[1.5rem] relative overflow-hidden marching-ants-box cursor-pointer transition-all border border-transparent backdrop-blur-sm">
+                <div className="mt-10 text-center p-8 bg-gray-50 dark:bg-black/20 rounded-[1.5rem] relative overflow-hidden marching-ants-box cursor-pointer transition-all border border-transparent backdrop-blur-sm">
                   <svg className="absolute inset-0 w-full h-full pointer-events-none marching-ants-svg">
-                    <rect width="100%" height="100%" rx="24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2" />
+                    <rect width="100%" height="100%" rx="24" fill="none" stroke="currentColor" className="text-gray-300 dark:text-white/20" strokeWidth="2" />
                   </svg>
-                  <p className="text-[#a0a0b0] font-bold text-sm relative z-10 transition-colors group-hover:text-white">Chưa tìm thấy môn học bạn cần?</p>
+                  <p className="text-gray-600 dark:text-[#a0a0b0] font-bold text-sm relative z-10 transition-colors group-hover:text-gray-900 dark:group-hover:text-white">Chưa tìm thấy môn học bạn cần?</p>
                   <button className="mt-3 text-[#d44df0] font-extrabold text-sm uppercase tracking-widest relative z-10 transition-colors group-hover:text-[#ff385c]">Đóng góp môn học mới</button>
                 </div>
 
