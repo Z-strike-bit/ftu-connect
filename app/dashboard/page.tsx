@@ -138,6 +138,7 @@ export default function Dashboard() {
   }
 
   return (
+    <>
     <div className="min-h-screen w-full bg-[#F4F6F8] dark:bg-[#0B0C10] text-gray-900 dark:text-white font-sans selection:bg-ftu-red-700/20 dark:selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-clip pb-28 lg:pb-16">
       {/* Background Elements (Creative, lag-free) */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-0 dark:opacity-100 transition-opacity duration-700">
@@ -197,6 +198,7 @@ export default function Dashboard() {
           targetUser={selectedUserToConnect}
         />
       )}
+    </div>
 
       {/* Floating Action Button (FAB) for Creating Post */}
       <div className="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[90]">
@@ -244,6 +246,6 @@ export default function Dashboard() {
           </div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
