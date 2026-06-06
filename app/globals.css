@@ -7,7 +7,21 @@
   --color-canvas: #ffffff;
   --color-surface-soft: #f7f7f7;
   --color-surface-border: #ebebeb;
+  
+  --color-ftu-red-50: #FEF2F2;
+  --color-ftu-red-100: #FEE2E2;
+  --color-ftu-red-200: #FECACA;
+  --color-ftu-red-300: #FCA5A5;
+  --color-ftu-red-400: #F87171;
+  --color-ftu-red-500: #EF4444;
+  --color-ftu-red-600: #DC2626;
+  --color-ftu-red-700: #B91C1C;
+  --color-ftu-red-800: #991B1B;
+  --color-ftu-red-900: #7F1D1D;
+  --color-ftu-gold: #D97706;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --bg: #FAFBFC;
