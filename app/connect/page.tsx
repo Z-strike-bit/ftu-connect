@@ -238,23 +238,23 @@ export default function ConnectPage() {
                   </span>
                 )}
               </div>
-              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'requests' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Lời mời kết bạn</span>
+              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'requests' ? 'text-gray-900 dark:text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Lời mời kết bạn</span>
             </button>
 
             <button 
               onClick={() => setActiveTab('suggestions')}
-              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'suggestions' ? 'bg-[#00e5ff]/10 border-[#00e5ff]/30 text-[#00e5ff] translate-x-1 shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/5 dark:hover:text-white hover:translate-x-1'}`}
+              className={`relative w-full rounded-2xl p-3.5 flex items-center gap-4 transition-all duration-300 group overflow-hidden border ${activeTab === 'suggestions' ? 'bg-ftu-red-50 border-ftu-red-200 text-ftu-red-700 dark:bg-[#00e5ff]/10 dark:border-[#00e5ff]/30 dark:text-[#00e5ff] translate-x-1 shadow-[0_0_20px_rgba(185,28,28,0.15)] dark:shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'bg-transparent border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-[#8888a0] dark:hover:bg-white/5 dark:hover:text-white hover:translate-x-1'}`}
             >
-              {activeTab === 'suggestions' && <div className="absolute inset-0 bg-gradient-to-r from-[#00e5ff]/20 to-transparent opacity-50"></div>}
-              {activeTab === 'suggestions' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#00e5ff] rounded-r-full shadow-[0_0_10px_#00e5ff]"></div>}
+              {activeTab === 'suggestions' && <div className="absolute inset-0 bg-gradient-to-r from-ftu-red-600/10 dark:from-[#00e5ff]/20 to-transparent opacity-50"></div>}
+              {activeTab === 'suggestions' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-ftu-red-600 dark:bg-[#00e5ff] rounded-r-full shadow-[0_0_10px_rgba(185,28,28,0.5)] dark:shadow-[0_0_10px_#00e5ff]"></div>}
               
-              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'suggestions' ? 'bg-[#00e5ff] text-black shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'bg-black/40 text-[#8888a0] group-hover:bg-white/10 group-hover:text-white border border-white/5'}`}>
+              <div className={`p-2.5 rounded-xl transition-all duration-300 relative z-10 ${activeTab === 'suggestions' ? 'bg-ftu-red-600 text-white shadow-[0_0_15px_rgba(185,28,28,0.4)] dark:bg-[#00e5ff] dark:text-black dark:shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'bg-gray-100 dark:bg-black/40 text-gray-500 dark:text-[#8888a0] group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:text-gray-900 dark:group-hover:text-white border-gray-200 dark:border-white/5'}`}>
                 {isScanning && activeTab === 'suggestions' && (
                   <span className="absolute inset-0 border border-black rounded-xl animate-ping"></span>
                 )}
                 <svg className="w-5 h-5 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
               </div>
-              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'suggestions' ? 'text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Radar Gợi ý</span>
+              <span className={`text-[15px] tracking-wide relative z-10 transition-colors ${activeTab === 'suggestions' ? 'text-ftu-red-700 dark:text-white font-extrabold uppercase' : 'font-semibold uppercase'}`}>Radar Gợi ý</span>
             </button>
 
             <button 
@@ -289,7 +289,7 @@ export default function ConnectPage() {
         <div className="lg:hidden flex overflow-x-auto hide-scrollbar gap-2 px-4 pt-4 pb-2 shrink-0 border-b border-gray-200 dark:border-[#1f1f33] sticky top-0 z-20 bg-white/90 dark:bg-[#050508]/90 backdrop-blur-md">
           <button 
             onClick={() => setActiveTab('suggestions')}
-            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'suggestions' ? 'bg-[#0099ff] text-white shadow-[0_0_15px_rgba(0,153,255,0.4)]' : 'bg-gray-100 dark:bg-[#1f1f33] text-gray-500 dark:text-[#8888a0]'}`}
+            className={`flex-shrink-0 font-bold rounded-full px-4 py-2 flex items-center gap-2 transition-all ${activeTab === 'suggestions' ? 'bg-ftu-red-600 dark:bg-[#0099ff] text-white shadow-[0_0_15px_rgba(185,28,28,0.4)] dark:shadow-[0_0_15px_rgba(0,153,255,0.4)]' : 'bg-gray-100 dark:bg-[#1f1f33] text-gray-500 dark:text-[#8888a0]'}`}
           >
             Radar Gợi ý
           </button>
@@ -351,7 +351,7 @@ export default function ConnectPage() {
                 {activeTab === 'suggestions' && suggestions.map((suggestion) => (
                   <div key={suggestion.id} className="relative bg-white dark:bg-[#0a0a14]/60 backdrop-blur-sm dark:backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-xl overflow-hidden flex flex-col border border-gray-200 dark:border-[#1f1f33] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,153,255,0.3)] hover:border-[#0099ff]/60 transition-all duration-300 group">
                     <div className="absolute top-3 right-3 z-20">
-                      <div className="bg-white/90 dark:bg-[#050508]/90 border border-[#00ff88]/40 text-[#00ff88] text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-full shadow-[0_0_12px_rgba(0,255,136,0.25)]">
+                      <div className="bg-green-50 dark:bg-[#050508]/90 border border-green-200 dark:border-[#00ff88]/40 text-green-700 dark:text-[#00ff88] text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-full shadow-[0_0_12px_rgba(21,128,61,0.15)] dark:shadow-[0_0_12px_rgba(0,255,136,0.25)]">
                         Match: {Math.min(95 + (suggestion.score || 0), 99)}%
                       </div>
                     </div>
@@ -369,7 +369,7 @@ export default function ConnectPage() {
                       <h4 className="font-bold text-[19px] text-gray-900 dark:text-white line-clamp-1 font-sans mb-1 drop-shadow-md">{suggestion.name}</h4>
                       
                       <div className="flex items-center gap-2 mb-3">
-                        <span className={`text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded shadow-[0_0_8px_currentColor] ${suggestion.role === 'mentor' ? 'bg-[#ff0055]/20 text-[#ff0055] border border-[#ff0055]/50' : 'bg-[#0099ff]/20 text-[#0099ff] border border-[#0099ff]/50'}`}>
+                        <span className={`text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded shadow-[0_0_8px_currentColor] ${suggestion.role === 'mentor' ? 'bg-ftu-red-100 text-ftu-red-700 border-ftu-red-200 dark:bg-[#ff0055]/20 dark:text-[#ff0055] dark:border-[#ff0055]/50' : 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-[#0099ff]/20 dark:text-[#0099ff] dark:border-[#0099ff]/50'}`}>
                           {suggestion.role === 'mentor' ? 'Mentor' : 'Mentee'}
                         </span>
                         <p className="text-[13px] text-gray-500 dark:text-[#8888a0] line-clamp-1 font-medium">{suggestion.major}</p>
@@ -384,10 +384,10 @@ export default function ConnectPage() {
                         <button 
                           onClick={() => handleSendRequest(suggestion.id)}
                           disabled={sendingId === suggestion.id}
-                          className="relative w-full py-3 bg-[#0a0a14] text-gray-900 dark:text-white font-bold rounded-xl text-[13px] uppercase tracking-wider overflow-hidden group/btn border border-[#0099ff]/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="relative w-full py-3 bg-ftu-red-600 dark:bg-[#0a0a14] text-white font-bold rounded-xl text-[13px] uppercase tracking-wider overflow-hidden group/btn border border-ftu-red-700 dark:border-[#0099ff]/50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#0099ff] to-[#d44df0] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                          <span className="relative z-10 drop-shadow-md group-hover/btn:text-gray-900 dark:text-white transition-colors">
+                          <div className="absolute inset-0 bg-gradient-to-r from-ftu-red-700 to-ftu-red-500 dark:from-[#0099ff] dark:to-[#d44df0] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10 drop-shadow-md text-white transition-colors">
                             {sendingId === suggestion.id ? 'Đang gửi...' : 'Kết nối ngay'}
                           </span>
                         </button>
@@ -427,7 +427,7 @@ export default function ConnectPage() {
                       <div className="mt-auto flex gap-2">
                         <button 
                           onClick={() => handleAcceptRequest(reqUser.id)}
-                          className="flex-1 py-2.5 bg-[#ff0055] text-gray-900 dark:text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-[#ff3377] transition-colors shadow-[0_0_15px_rgba(255,0,85,0.3)]"
+                          className="flex-1 py-2.5 bg-green-600 dark:bg-[#ff0055] text-white font-bold rounded-xl text-[12px] uppercase tracking-wider hover:bg-green-700 dark:hover:bg-[#ff3377] transition-colors shadow-[0_0_15px_rgba(22,163,74,0.3)] dark:shadow-[0_0_15px_rgba(255,0,85,0.3)]"
                         >
                           Accept
                         </button>
