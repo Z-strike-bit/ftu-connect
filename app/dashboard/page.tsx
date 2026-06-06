@@ -344,10 +344,10 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen w-full bg-[#F4F6F8] dark:bg-[#05050a] text-gray-900 dark:text-white font-sans selection:bg-ftu-red-700/20 dark:selection:bg-[#ff385c]/30 selection:text-gray-900 dark:selection:text-white relative overflow-hidden pb-28 lg:pb-16">
-      {/* Ambient Orbs */}
-      <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-ftu-red-500/10 dark:bg-purple-600/15 blur-[150px] pointer-events-none z-0"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-ftu-gold/10 dark:bg-[#ff385c]/10 blur-[120px] pointer-events-none z-0"></div>
-      <div className="fixed top-[40%] left-[40%] w-[30vw] h-[30vw] rounded-full bg-ftu-red-300/10 dark:bg-blue-500/10 blur-[100px] pointer-events-none z-0"></div>
+      {/* Ambient Orbs (Optimized) */}
+      <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/10 to-transparent dark:from-purple-600/10 pointer-events-none z-0"></div>
+      <div className="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-gold/10 to-transparent dark:from-[#ff385c]/10 pointer-events-none z-0"></div>
+      <div className="fixed top-[40%] left-[40%] w-[30vw] h-[30vw] rounded-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-300/10 to-transparent dark:from-blue-500/10 pointer-events-none z-0"></div>
 
       <div className="relative z-10">
         <Navbar profileName={profile?.name} profileId={user?.uid} profilePhoto={profile?.photoURL} onSignOut={handleSignOut} />
@@ -409,7 +409,7 @@ export default function Dashboard() {
             <div className="col-span-1 lg:col-span-6 xl:col-span-6 space-y-6 max-w-[680px] mx-auto w-full px-0 sm:px-4 lg:px-8">
               
               {/* Ô Tạo bài viết */}
-              <div className="bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/60 dark:border-white/10 p-6 mb-8 relative z-20 group/postbox dark:animate-breathing-glow">
+              <div className="bg-white/90 dark:bg-black/40 backdrop-blur-md sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-x-0 sm:border border-white/60 dark:border-white/10 p-6 mb-8 relative z-20 group/postbox">
                 <div className="absolute top-0 left-0 w-full h-[3px] overflow-hidden rounded-t-[24px]">
                   <div className="w-full h-full bg-gradient-to-r from-ftu-red-600 via-ftu-red-700 to-ftu-red-600 dark:bg-[linear-gradient(90deg,#00e5ff,#d44df0,#ff385c,#d44df0,#00e5ff)] opacity-60 dark:opacity-80 animate-led-run shadow-none dark:shadow-[0_0_10px_rgba(212,77,240,0.5)] group-focus-within/postbox:animate-led-run-fast dark:group-focus-within/postbox:shadow-[0_0_20px_rgba(212,77,240,0.8)] group-focus-within/postbox:opacity-100 transition-all duration-300"></div>
                 </div>
@@ -620,7 +620,7 @@ export default function Dashboard() {
                         layout
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white/80 dark:bg-white/[0.02] backdrop-blur-2xl sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] border-x-0 sm:border border-white/60 dark:border-white/10 overflow-hidden group"
+                        className="bg-white/95 dark:bg-black/40 backdrop-blur-sm sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] border-x-0 sm:border border-white/60 dark:border-white/10 overflow-hidden group"
                       >
                         {/* Post Header */}
                         <div className="p-6 flex items-start justify-between">
@@ -792,7 +792,7 @@ export default function Dashboard() {
                 </AnimatePresence>
                 
                 {posts.length === 0 && (
-                  <div className="text-center py-20 bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl sm:rounded-[24px] border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                  <div className="text-center py-20 bg-white/90 dark:bg-black/40 backdrop-blur-md sm:rounded-[24px] border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                     <div className="text-6xl mb-6 drop-shadow-none dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] animate-pulse">📝</div>
                     <p className="text-gray-400 dark:text-[#a0a0b0] font-extrabold text-[20px] max-w-sm mx-auto">Chưa có bài đăng nào. Hãy là người đầu tiên lên tiếng!</p>
                   </div>
@@ -805,9 +805,9 @@ export default function Dashboard() {
               <div className="sticky top-28 flex flex-col gap-8 pl-4">
                 
                 {/* Sự kiện nổi bật */}
-                <div className="relative bg-white/80 dark:bg-gradient-to-br dark:from-[#6a4cf5]/80 dark:to-[#d44df0]/80 backdrop-blur-2xl p-8 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(106,76,245,0.3)] border border-white/60 dark:border-white/20 overflow-hidden group">
+                <div className="relative bg-white/90 dark:bg-gradient-to-br dark:from-[#6a4cf5]/60 dark:to-[#d44df0]/60 backdrop-blur-md p-8 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(106,76,245,0.3)] border border-white/60 dark:border-white/20 overflow-hidden group">
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-ftu-red-600 to-ftu-red-500 dark:hidden"></div>
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-ftu-red-500/5 dark:bg-white/10 blur-[50px] rounded-full pointer-events-none"></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ftu-red-500/5 to-transparent dark:from-white/10 rounded-full pointer-events-none"></div>
                   <div className="flex justify-between items-center mb-8 relative z-10">
                     <h3 className="font-extrabold text-[20px] tracking-tight text-gray-900 dark:text-white drop-shadow-sm">Sự kiện nổi bật</h3>
                     <Link href="/events" className="text-ftu-red-700 dark:text-white text-[13px] font-extrabold bg-ftu-red-50 dark:bg-white/10 hover:bg-ftu-red-100 dark:hover:bg-white/20 px-4 py-2 rounded-xl transition-all border border-ftu-red-100 dark:border-white/20 backdrop-blur-md shadow-sm hover:shadow-md uppercase">Tất cả</Link>
@@ -840,7 +840,7 @@ export default function Dashboard() {
                 </div>
   
                 {/* Gợi ý kết nối / Người liên hệ */}
-                <div className="bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl rounded-[24px] p-6 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                <div className="bg-white/90 dark:bg-black/40 backdrop-blur-md rounded-[24px] p-6 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="font-extrabold text-[18px] text-gray-900 dark:text-white">Gợi ý kết nối</h3>
                     <div className="flex gap-1">
