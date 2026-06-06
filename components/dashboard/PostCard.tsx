@@ -9,11 +9,13 @@ interface PostCardProps {
   profile: any;
   onLike: (postId: string, likedBy: string[], likes: number) => void;
   onComment: (postId: string, commentContent: string) => void;
+  onDelete?: (postId: string) => void;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, user, profile, onLike, onComment }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, user, profile, onLike, onComment, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [commentInput, setCommentInput] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const hasLiked = post.likedBy && post.likedBy.includes(user?.uid || '');
 
@@ -60,9 +62,45 @@ const PostCard: React.FC<PostCardProps> = ({ post, user, profile, onLike, onComm
             </div>
           </div>
         </div>
-        <button className="w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 flex items-center justify-center transition-colors">
-          <svg className="w-5 h-5 text-gray-400 dark:text-white/70" fill="currentColor" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        </button>
+        <div className="relative">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 flex items-center justify-center transition-colors">
+            <svg className="w-5 h-5 text-gray-400 dark:text-white/70" fill="currentColor" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+          </button>
+          
+          <AnimatePresence>
+            {isMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsMenuOpen(false)}></div>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  className="absolute right-0 top-12 w-48 bg-white dark:bg-[#1a1c23] rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 z-50 overflow-hidden"
+                >
+                  {user?.uid === post.uid ? (
+                    <button 
+                      onClick={() => {
+                        if (confirm('Bạn có chắc chắn muốn xoá bài viết này không?')) {
+                          onDelete?.(post.id);
+                        }
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-[14px] font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                      Xoá bài viết
+                    </button>
+                  ) : (
+                    <button className="w-full text-left px-4 py-3 text-[14px] font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors flex items-center gap-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
+                      Báo cáo bài viết
+                    </button>
+                  )}
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
       
       {/* Feeling */}

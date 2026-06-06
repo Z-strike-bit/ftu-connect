@@ -7,7 +7,7 @@ import ConnectModal from '@/components/ConnectModal';
 import Navbar from '@/components/Navbar';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { collection, query, getDocs, doc, getDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { collection, query, getDocs, doc, getDoc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
 
 import SidebarShortcuts from '@/components/dashboard/SidebarShortcuts';
 import SuggestionsSidebar from '@/components/dashboard/SuggestionsSidebar';
@@ -129,6 +129,12 @@ export default function Dashboard() {
     });
   }, [user, profile, posts]);
 
+  const handleDeletePost = useCallback(async (postId: string) => {
+    if (!user) return;
+    const postRef = doc(db, 'posts', postId);
+    await deleteDoc(postRef);
+  }, [user]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAFBFC] dark:bg-[#05050a] font-sans flex items-center justify-center">
@@ -172,6 +178,7 @@ export default function Dashboard() {
                       profile={profile} 
                       onLike={handleLike} 
                       onComment={handleComment} 
+                      onDelete={handleDeletePost}
                     />
                   ))}
                 </AnimatePresence>
