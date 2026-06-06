@@ -462,19 +462,19 @@ export default function SurvivalMap({ activeFilter = 'all' }: { activeFilter?: s
       {/* Modal Form Thêm Địa Điểm */}
       <AnimatePresence>
         {tempPos && (
-              <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-gray-50 backdrop-blur-sm p-4">
+          <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/40 dark:bg-black/60 p-4 transition-colors">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-[480px]"
+              className="bg-white dark:bg-[#111118] p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-[480px] border dark:border-white/10"
             >
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-[22px] font-semibold text-gray-900 tracking-tight">
+                <h2 className="text-[22px] font-semibold text-gray-900 dark:text-white tracking-tight">
                   Thêm ghim mới
                 </h2>
-                <button onClick={handleCloseModal} className="w-8 h-8 hover:bg-gray-100 rounded-full flex items-center justify-center transition-colors">
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onClick={handleCloseModal} className="w-8 h-8 hover:bg-gray-100 dark:hover:bg-white/10 rounded-full flex items-center justify-center transition-colors">
+                  <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               
