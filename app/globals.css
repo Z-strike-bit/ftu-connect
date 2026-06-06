@@ -444,6 +444,14 @@ body {
   0%, 100% { box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 15px rgba(212, 77, 240, 0.1); }
   50% { box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(212, 77, 240, 0.4); }
 }
-.animate-breathing-glow {
+@keyframes breathing-glow-light {
+  0%, 100% { box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 0 8px rgba(185, 28, 28, 0.05); }
+  50% { box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 0 20px rgba(185, 28, 28, 0.12); }
+}
+
+:root .animate-breathing-glow {
+  animation: breathing-glow-light 4s ease-in-out infinite;
+}
+.dark .animate-breathing-glow {
   animation: breathing-glow 4s ease-in-out infinite;
 }
