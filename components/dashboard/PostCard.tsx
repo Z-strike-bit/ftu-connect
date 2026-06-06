@@ -28,7 +28,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, user, profile, onLike, onComm
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/95 dark:bg-[#12121A] sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] border-x-0 sm:border border-white/60 dark:border-white/5 overflow-hidden group transition-colors"
+      className="bg-white/95 dark:bg-[#151720] sm:rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)] border-x-0 sm:border border-white/60 dark:border-[#2A2D3A] overflow-hidden group transition-colors"
     >
       {/* Post Header */}
       <div className="p-6 flex items-start justify-between">
