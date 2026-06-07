@@ -49,7 +49,7 @@ export default function Chatbot() {
   }, [input, isLoading]);
 
   return (
-    <motion.div drag dragMomentum={false} className="fixed bottom-6 left-6 z-[1001] flex flex-col items-start cursor-move">
+    <motion.div drag dragMomentum={false} className="fixed bottom-[100px] lg:bottom-6 left-4 lg:left-6 z-[1001] flex flex-col items-start cursor-move">
       <AnimatePresence>
         {isOpen && (
           <motion.div

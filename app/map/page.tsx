@@ -75,7 +75,7 @@ export default function MapPage() {
         </div>
 
         {/* Radar Filter (Bottom Right) */}
-        <motion.div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-[1000] flex flex-col items-end gap-3">
+        <motion.div className="absolute bottom-[100px] right-4 lg:bottom-8 lg:right-8 z-[1000] flex flex-col items-end gap-3">
           <AnimatePresence>
             {isRadarOpen && (
               <motion.div

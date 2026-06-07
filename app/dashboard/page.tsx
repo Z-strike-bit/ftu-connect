@@ -225,7 +225,7 @@ export default function Dashboard() {
     </div>
 
       {/* Floating Action Button (FAB) for Creating Post */}
-      <div className="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[90]">
+      <div className="fixed bottom-[100px] lg:bottom-10 right-4 lg:right-10 z-[90]">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-ftu-red-500 to-ftu-red-600 dark:from-[#00e5ff] dark:to-[#d44df0] rounded-full blur-md opacity-60 group-hover:opacity-100 group-hover:blur-lg animate-pulse transition-all duration-500"></div>
           <button 
