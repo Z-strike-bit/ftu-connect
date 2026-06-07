@@ -200,7 +200,7 @@ export default function FindMentorPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {mentors.map(mentor => (
+            {React.useMemo(() => mentors.map(mentor => (
               <div key={mentor.id} className="bg-[#0a0a14] rounded-[24px] border border-white/10 overflow-hidden relative group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,229,255,0.15)] flex flex-col">
                 {/* Match Badge */}
                 <div className="absolute top-4 right-4 z-20">
@@ -263,7 +263,7 @@ export default function FindMentorPage() {
                   </button>
                 </div>
               </div>
-            ))}
+            )), [mentors])}
           </div>
         )}
 
@@ -275,13 +275,15 @@ export default function FindMentorPage() {
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
                 exit={{ opacity: 0 }} 
-                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                transition={{ duration: 0.15 }}
+                className="absolute inset-0 bg-black/80"
                 onClick={() => setSelectedMentor(null)}
               />
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ duration: 0.15 }}
                 className="bg-[#0f0f1a] border border-white/10 p-6 sm:p-8 rounded-[32px] w-full max-w-md relative z-10 shadow-2xl"
               >
                 <button onClick={() => setSelectedMentor(null)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
