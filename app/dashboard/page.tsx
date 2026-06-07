@@ -239,37 +239,27 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Post Composer Modal */}
-      <AnimatePresence>
-        {isPostModalOpen && (
-          <div className="fixed inset-0 z-[9999] overflow-y-auto custom-scrollbar">
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }} 
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
-              onClick={() => setIsPostModalOpen(false)}
-            />
-            <div className="min-h-full flex items-center justify-center p-4 sm:p-6 relative z-10">
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-[680px]"
-              >
-                <div className="absolute -top-12 right-0">
-                  <button onClick={() => setIsPostModalOpen(false)} className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors backdrop-blur-md border border-white/10">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                  </button>
-                </div>
-                <div className="flex-1 overflow-y-auto custom-scrollbar bg-transparent rounded-[24px]">
-                <PostComposer user={user} profile={profile} suggestions={suggestions} onPostCreated={handlePostCreated} />
-              </div>
-              </motion.div>
+      {/* Post Composer Modal (Always Mounted for 0 Lag) */}
+      <div className={`fixed inset-0 z-[9999] overflow-y-auto custom-scrollbar transition-opacity duration-200 ${isPostModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div 
+          className="fixed inset-0 bg-black/80"
+          onClick={() => setIsPostModalOpen(false)}
+        />
+        <div className="min-h-full flex items-center justify-center p-4 sm:p-6 relative z-10">
+          <div 
+            className={`relative w-full max-w-[680px] transition-all duration-200 ${isPostModalOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-10'}`}
+          >
+            <div className="absolute -top-12 right-0">
+              <button onClick={() => setIsPostModalOpen(false)} className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors border border-white/10">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto custom-scrollbar bg-transparent rounded-[24px]">
+              <PostComposer user={user} profile={profile} suggestions={suggestions} onPostCreated={handlePostCreated} />
             </div>
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      </div>
     </>
   );
 }
