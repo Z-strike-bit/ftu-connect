@@ -154,6 +154,71 @@ export default function FindMentorPage() {
     }
   };
 
+  const renderedMentors = React.useMemo(() => mentors.map(mentor => (
+    <div key={mentor.id} className="bg-[#0a0a14] rounded-[24px] border border-white/10 overflow-hidden relative group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,229,255,0.15)] flex flex-col">
+      {/* Match Badge */}
+      <div className="absolute top-4 right-4 z-20">
+        <div className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-1.5 backdrop-blur-md border ${mentor.matchScore >= 75 ? 'bg-[#ff385c]/20 text-[#ff385c] border-[#ff385c]/50' : 'bg-[#00e5ff]/20 text-[#00e5ff] border-[#00e5ff]/50'}`}>
+          {mentor.matchScore >= 75 ? '🔥 Tuyệt Phối' : '✨ Phù hợp'} 
+          <span className="bg-white/20 px-1.5 py-0.5 rounded-md ml-1">{mentor.matchScore}%</span>
+        </div>
+      </div>
+
+      {/* Avatar Cover */}
+      <div className="h-32 bg-gradient-to-br from-[#1a1a2e] to-[#0a0a14] relative overflow-hidden shrink-0">
+        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
+        {mentor.matchScore >= 75 && (
+          <div className="absolute inset-0 bg-gradient-to-b from-[#ff385c]/20 to-transparent"></div>
+        )}
+      </div>
+
+      <div className="px-6 pb-6 pt-0 flex-1 flex flex-col relative">
+        {/* Avatar */}
+        <img 
+          src={mentor.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${mentor.name}`} 
+          className="w-20 h-20 rounded-full border-4 border-[#0a0a14] object-cover -mt-10 relative z-10 bg-[#1a1a2e]"
+          alt={mentor.name}
+        />
+        
+        <div className="mt-4 flex-1">
+          <h3 className="text-xl font-extrabold text-white truncate">{mentor.name}</h3>
+          <p className="text-[#00e5ff] font-bold text-sm truncate mt-1">{mentor.major} {mentor.specialization ? `- ${mentor.specialization}` : ''}</p>
+          
+          <div className="mt-4 space-y-3">
+            {mentor.gpa && (
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-gray-500 shrink-0 mt-0.5">🎓</span>
+                <span className="text-gray-300 line-clamp-1"><strong className="text-white">GPA/Thành tích:</strong> {mentor.gpa}</span>
+              </div>
+            )}
+            {mentor.clubs && (
+              <div className="flex items-start gap-2 text-sm">
+                <span className="text-gray-500 shrink-0 mt-0.5">🎪</span>
+                <span className="text-gray-300 line-clamp-1"><strong className="text-white">CLB:</strong> {mentor.clubs}</span>
+              </div>
+            )}
+            {mentor.skills && (
+              <div className="flex gap-2 flex-wrap mt-3">
+                {mentor.skills.split(',').slice(0, 3).map((skill: string, idx: number) => (
+                  <span key={idx} className="bg-white/5 border border-white/10 text-[#a0a0b0] text-xs px-2.5 py-1 rounded-lg truncate max-w-[120px]">
+                    {skill.trim()}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <button 
+          onClick={() => setSelectedMentor(mentor)}
+          className="w-full mt-6 py-3 rounded-xl font-bold bg-white/5 hover:bg-[#00e5ff] text-white hover:text-black border border-white/10 hover:border-[#00e5ff] transition-all"
+        >
+          Nhận Mentor
+        </button>
+      </div>
+    </div>
+  )), [mentors]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#050508] flex items-center justify-center">
@@ -200,70 +265,7 @@ export default function FindMentorPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {React.useMemo(() => mentors.map(mentor => (
-              <div key={mentor.id} className="bg-[#0a0a14] rounded-[24px] border border-white/10 overflow-hidden relative group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,229,255,0.15)] flex flex-col">
-                {/* Match Badge */}
-                <div className="absolute top-4 right-4 z-20">
-                  <div className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-1.5 backdrop-blur-md border ${mentor.matchScore >= 75 ? 'bg-[#ff385c]/20 text-[#ff385c] border-[#ff385c]/50' : 'bg-[#00e5ff]/20 text-[#00e5ff] border-[#00e5ff]/50'}`}>
-                    {mentor.matchScore >= 75 ? '🔥 Tuyệt Phối' : '✨ Phù hợp'} 
-                    <span className="bg-white/20 px-1.5 py-0.5 rounded-md ml-1">{mentor.matchScore}%</span>
-                  </div>
-                </div>
-
-                {/* Avatar Cover */}
-                <div className="h-32 bg-gradient-to-br from-[#1a1a2e] to-[#0a0a14] relative overflow-hidden shrink-0">
-                  <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
-                  {mentor.matchScore >= 75 && (
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#ff385c]/20 to-transparent"></div>
-                  )}
-                </div>
-
-                <div className="px-6 pb-6 pt-0 flex-1 flex flex-col relative">
-                  {/* Avatar */}
-                  <img 
-                    src={mentor.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${mentor.name}`} 
-                    className="w-20 h-20 rounded-full border-4 border-[#0a0a14] object-cover -mt-10 relative z-10 bg-[#1a1a2e]"
-                    alt={mentor.name}
-                  />
-                  
-                  <div className="mt-4 flex-1">
-                    <h3 className="text-xl font-extrabold text-white truncate">{mentor.name}</h3>
-                    <p className="text-[#00e5ff] font-bold text-sm truncate mt-1">{mentor.major} {mentor.specialization ? `- ${mentor.specialization}` : ''}</p>
-                    
-                    <div className="mt-4 space-y-3">
-                      {mentor.gpa && (
-                        <div className="flex items-start gap-2 text-sm">
-                          <span className="text-gray-500 shrink-0 mt-0.5">🎓</span>
-                          <span className="text-gray-300 line-clamp-1"><strong className="text-white">GPA/Thành tích:</strong> {mentor.gpa}</span>
-                        </div>
-                      )}
-                      {mentor.clubs && (
-                        <div className="flex items-start gap-2 text-sm">
-                          <span className="text-gray-500 shrink-0 mt-0.5">🎪</span>
-                          <span className="text-gray-300 line-clamp-1"><strong className="text-white">CLB:</strong> {mentor.clubs}</span>
-                        </div>
-                      )}
-                      {mentor.skills && (
-                        <div className="flex gap-2 flex-wrap mt-3">
-                          {mentor.skills.split(',').slice(0, 3).map((skill: string, idx: number) => (
-                            <span key={idx} className="bg-white/5 border border-white/10 text-[#a0a0b0] text-xs px-2.5 py-1 rounded-lg truncate max-w-[120px]">
-                              {skill.trim()}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <button 
-                    onClick={() => setSelectedMentor(mentor)}
-                    className="w-full mt-6 py-3 rounded-xl font-bold bg-white/5 hover:bg-[#00e5ff] text-white hover:text-black border border-white/10 hover:border-[#00e5ff] transition-all"
-                  >
-                    Nhận Mentor
-                  </button>
-                </div>
-              </div>
-            )), [mentors])}
+            {renderedMentors}
           </div>
         )}
 
