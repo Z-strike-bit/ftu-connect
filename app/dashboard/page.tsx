@@ -192,7 +192,13 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <SuggestionsSidebar suggestions={suggestions} />
+            <SuggestionsSidebar 
+              suggestions={suggestions} 
+              onConnectClick={(user) => {
+                setSelectedUserToConnect(user);
+                setIsConnectModalOpen(true);
+              }}
+            />
             
           </div>
         </div>
