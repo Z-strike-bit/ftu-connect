@@ -227,10 +227,10 @@ export default function Dashboard() {
       {/* Floating Action Button (FAB) for Creating Post */}
       <div className="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[90]">
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00e5ff] to-[#d44df0] rounded-full blur-md opacity-60 group-hover:opacity-100 group-hover:blur-lg animate-pulse transition-all duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-ftu-red-500 to-ftu-red-600 dark:from-[#00e5ff] dark:to-[#d44df0] rounded-full blur-md opacity-60 group-hover:opacity-100 group-hover:blur-lg animate-pulse transition-all duration-500"></div>
           <button 
             onClick={() => setIsPostModalOpen(true)}
-            className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#00e5ff] to-[#d44df0] text-black shadow-[0_8px_20px_rgba(0,229,255,0.3)] flex items-center justify-center hover:scale-110 transition-transform duration-300 z-10 border border-white/20"
+            className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-ftu-red-500 to-ftu-red-600 dark:from-[#00e5ff] dark:to-[#d44df0] text-white dark:text-black shadow-[0_8px_20px_rgba(255,56,92,0.3)] dark:shadow-[0_8px_20px_rgba(0,229,255,0.3)] flex items-center justify-center hover:scale-110 transition-transform duration-300 z-10 border border-white/20"
           >
             <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />

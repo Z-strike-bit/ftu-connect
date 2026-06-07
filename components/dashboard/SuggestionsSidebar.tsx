@@ -86,9 +86,9 @@ const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({ suggestions, on
                     e.preventDefault();
                     if (onConnectClick) onConnectClick(suggestion);
                   }}
-                  className="absolute right-3 w-9 h-9 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-[#00e5ff] group-hover:to-[#d44df0] group-hover:scale-110 hover:!scale-125 transition-all duration-300 shadow-inner group-hover:shadow-[0_0_15px_rgba(212,77,240,0.5)] z-10"
+                  className="absolute right-3 w-9 h-9 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-ftu-red-500 group-hover:to-ftu-red-700 dark:group-hover:from-[#00e5ff] dark:group-hover:to-[#d44df0] group-hover:scale-110 hover:!scale-125 transition-all duration-300 shadow-inner group-hover:shadow-[0_0_15px_rgba(153,27,27,0.4)] dark:group-hover:shadow-[0_0_15px_rgba(212,77,240,0.5)] z-10"
                 >
-                  <svg className="w-5 h-5 text-gray-500 group-hover:text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4"></path></svg>
+                  <svg className="w-5 h-5 text-gray-500 group-hover:text-white dark:text-white dark:group-hover:text-black transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4"></path></svg>
                 </button>
               </Link>
             ))}
