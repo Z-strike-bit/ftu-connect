@@ -129,12 +129,33 @@ export default function Dashboard() {
     });
   }, [user, profile, posts]);
 
+  const handleConnectClick = useCallback((targetUser: any) => {
+    setSelectedUserToConnect(targetUser);
+    setIsConnectModalOpen(true);
+  }, []);
+
+  const handlePostCreated = useCallback(() => {
+    setIsPostModalOpen(false);
+  }, []);
+
   const handleDeletePost = useCallback(async (postId: string) => {
     if (!user) return;
     const postRef = doc(db, 'posts', postId);
     await deleteDoc(postRef);
   }, [user]);
-
+  const renderedPosts = React.useMemo(() => {
+    return posts.map(post => (
+      <PostCard 
+        key={post.id} 
+        post={post} 
+        user={user} 
+        profile={profile} 
+        onLike={handleLike} 
+        onComment={handleComment} 
+        onDelete={handleDeletePost}
+      />
+    ));
+  }, [posts, user, profile, handleLike, handleComment, handleDeletePost]);
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAFBFC] dark:bg-[#05050a] font-sans flex items-center justify-center">
@@ -170,17 +191,7 @@ export default function Dashboard() {
   
               <div className="space-y-8">
                 <AnimatePresence mode="popLayout">
-                  {posts.map((post) => (
-                    <PostCard 
-                      key={post.id} 
-                      post={post} 
-                      user={user} 
-                      profile={profile} 
-                      onLike={handleLike} 
-                      onComment={handleComment} 
-                      onDelete={handleDeletePost}
-                    />
-                  ))}
+                  {renderedPosts}
                 </AnimatePresence>
                 
                 {posts.length === 0 && (
@@ -251,9 +262,9 @@ export default function Dashboard() {
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
                 </div>
-                <div onClick={(e) => e.stopPropagation()} className="w-full">
-                  <PostComposer user={user} profile={profile} suggestions={suggestions} onPostCreated={() => setIsPostModalOpen(false)} />
-                </div>
+                <div className="flex-1 overflow-y-auto custom-scrollbar bg-transparent rounded-[24px]">
+                <PostComposer user={user} profile={profile} suggestions={suggestions} onPostCreated={handlePostCreated} />
+              </div>
               </motion.div>
             </div>
           </div>
