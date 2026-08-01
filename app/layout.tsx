@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import PostHogProvider from "@/lib/posthog";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,11 +22,13 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning>
       <body className={`${inter.className} bg-[#FAFBFC] dark:bg-[#090909] text-gray-900 dark:text-white selection:bg-ftu-red-200 dark:selection:bg-[#0099ff] selection:text-ftu-red-900 dark:selection:text-white transition-colors duration-300`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          {children}
-          <GlobalChat />
-          <Chatbot />
-        </ThemeProvider>
+        <PostHogProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+            {children}
+            <GlobalChat />
+            <Chatbot />
+          </ThemeProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
