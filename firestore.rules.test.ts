@@ -1,8 +1,8 @@
-const { initializeTestEnvironment, assertFails, assertSucceeds } = require('@firebase/rules-unit-testing');
-const fs = require('fs');
+import { initializeTestEnvironment, assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
+import fs from 'fs';
 
 const PROJECT_ID = 'ftu-connect-test';
-let testEnv;
+let testEnv: any;
 
 before(async () => {
   testEnv = await initializeTestEnvironment({
@@ -43,5 +43,18 @@ describe('firestore rules basic', () => {
     const admin = testEnv.authenticatedContext('admin', { admin: true });
     const db = admin.firestore();
     await assertSucceeds(db.collection('moderation_queue').doc('m1').set({ id: 'm1', type: 'thread', content: 'x' }));
+  });
+
+  it('regular user cannot change tier/verifiedCompany on another user profile', async () => {
+    const alice = testEnv.authenticatedContext('alice');
+    const bob = testEnv.authenticatedContext('bob');
+
+    // Seed users/alice as alice
+    const dbAlice = alice.firestore();
+    await assertSucceeds(dbAlice.collection('users').doc('alice').set({ uid: 'alice', email: 'a@example.com', tier: 1 }));
+
+    // Bob attempts to update alice's tier -> should fail
+    const dbBob = bob.firestore();
+    await assertFails(dbBob.collection('users').doc('alice').update({ tier: 2 }));
   });
 });

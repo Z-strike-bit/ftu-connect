@@ -18,8 +18,14 @@ service cloud.firestore {
       // Create only by the user themself
       allow create: if isSignedIn() && request.auth.uid == userId;
 
-      // Update: user themselves or admin. Restrict certain fields in client code.
-      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      // Update: user themselves or admin. Users cannot modify protected fields (tier, verifiedCompany) — only admin can.
+      allow update: if isSignedIn() && (
+        isAdmin() || (
+          request.auth.uid == userId
+          && request.resource.data.tier == resource.data.tier
+          && request.resource.data.verifiedCompany == resource.data.verifiedCompany
+        )
+      );
 
       allow delete: if isAdmin();
     }
