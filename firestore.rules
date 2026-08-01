@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Users / members
+    match /users/{userId} {
+      // Public profile read allowed
+      allow get, list: if true;
+
+      // Create only by the user themself
+      allow create: if isSignedIn() && request.auth.uid == userId;
+
+      // Update: user themselves or admin. Restrict certain fields in client code.
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+
+      allow delete: if isAdmin();
+    }
+
+    // Threads
+    match /threads/{threadId} {
+      allow create: if isSignedIn();
+
+      allow get, list: if resource.data.status == 'published' || (request.auth != null && request.auth.uid == resource.data.authorUid);
+
+      // Only author can update their thread (or admin)
+      allow update: if isSignedIn() && (request.auth.uid == resource.data.authorUid || isAdmin());
+
+      allow delete: if isSignedIn() && (request.auth.uid == resource.data.authorUid || isAdmin());
+    }
+
+    // Comments
+    match /comments/{commentId} {
+      allow create: if isSignedIn();
+
+      allow get, list: if resource.data.status == 'published' || (request.auth != null && request.auth.uid == resource.data.authorUid);
+
+      allow update: if isSignedIn() && (request.auth.uid == resource.data.authorUid || isAdmin());
+
+      allow delete: if isSignedIn() && (request.auth.uid == resource.data.authorUid || isAdmin());
+    }
+
+    // Moderation queue - admin only
+    match /moderation_queue/{doc} {
+      allow read, write: if isAdmin();
+    }
+
+    // Moderation appeals
+    match /moderation_appeals/{doc} {
+      allow create: if isSignedIn();
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Votes
+    match /votes/{doc} {
+      allow create: if isSignedIn();
+      allow get, list: if true;
+      allow delete: if isAdmin();
+    }
+  }
+}
