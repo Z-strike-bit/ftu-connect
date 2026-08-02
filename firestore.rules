@@ -18,9 +18,12 @@ service cloud.firestore {
       // Create only by the user themself
       allow create: if isSignedIn() && request.auth.uid == userId;
 
-      // Update: user themselves or admin. Users cannot modify protected fields (tier, verifiedCompany) — only admin can.
+      // Update: user themselves or admin. Users cannot modify protected fields (tier, verifiedCompany) — only admin (or Cloud Functions/service accounts with admin claim) can.
       allow update: if isSignedIn() && (
-        isAdmin() || (
+        // admin can change freely
+        isAdmin()
+        // or the user can update as long as protected fields are unchanged
+        || (
           request.auth.uid == userId
           && request.resource.data.tier == resource.data.tier
           && request.resource.data.verifiedCompany == resource.data.verifiedCompany

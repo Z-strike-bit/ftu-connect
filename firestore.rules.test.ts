@@ -57,4 +57,15 @@ describe('firestore rules basic', () => {
     const dbBob = bob.firestore();
     await assertFails(dbBob.collection('users').doc('alice').update({ tier: 2 }));
   });
+
+  it('admin can update tier/verifiedCompany on user profile', async () => {
+    const admin = testEnv.authenticatedContext('admin', { admin: true });
+    const dbAdmin = admin.firestore();
+
+    // Seed user
+    await assertSucceeds(dbAdmin.collection('users').doc('carol').set({ uid: 'carol', email: 'c@example.com', tier: 1 }));
+
+    // Admin updates tier -> should succeed
+    await assertSucceeds(dbAdmin.collection('users').doc('carol').update({ tier: 2, verifiedCompany: 'ACME' }));
+  });
 });
