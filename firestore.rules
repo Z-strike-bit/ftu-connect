@@ -37,7 +37,8 @@ service cloud.firestore {
     match /threads/{threadId} {
       allow create: if isSignedIn();
 
-      allow get, list: if resource.data.status == 'published' || (request.auth != null && request.auth.uid == resource.data.authorUid);
+      // Read only published threads or the author themselves or admin
+      allow get, list: if resource.data.status == 'published' || (request.auth != null && request.auth.uid == resource.data.authorUid) || isAdmin();
 
       // Only author can update their thread (or admin)
       allow update: if isSignedIn() && (request.auth.uid == resource.data.authorUid || isAdmin());

@@ -11,6 +11,8 @@ import { collection, query, getDocs, doc, getDoc, updateDoc, onSnapshot, deleteD
 
 import SidebarShortcuts from '@/components/dashboard/SidebarShortcuts';
 import SuggestionsSidebar from '@/components/dashboard/SuggestionsSidebar';
+import ThreadComposer from '@/components/thread/ThreadComposer';
+import ThreadCard from '@/components/thread/ThreadCard';
 import PostComposer from '@/components/dashboard/PostComposer';
 import PostCard from '@/components/dashboard/PostCard';
 
@@ -82,14 +84,14 @@ export default function Dashboard() {
   }, [user]);
 
   useEffect(() => {
-    const q = query(collection(db, 'posts'));
+    const q = query(collection(db, 'threads'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedPosts = snapshot.docs.map(doc => ({
+      const fetched = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as any[];
-      fetchedPosts.sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
-      setPosts(fetchedPosts);
+      fetched.sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
+      setPosts(fetched);
     });
     return () => unsubscribe();
   }, []);
@@ -144,17 +146,25 @@ export default function Dashboard() {
     await deleteDoc(postRef);
   }, [user]);
   const renderedPosts = React.useMemo(() => {
-    return posts.map(post => (
-      <PostCard 
-        key={post.id} 
-        post={post} 
-        user={user} 
-        profile={profile} 
-        onLike={handleLike} 
-        onComment={handleComment} 
-        onDelete={handleDeletePost}
-      />
-    ));
+    return posts.map(post => {
+      // If the doc looks like a Thread (has title), render ThreadCard; else fallback to legacy PostCard
+      if (post.title) {
+        return (
+          <ThreadCard key={post.id} thread={post} />
+        );
+      }
+      return (
+        <PostCard 
+          key={post.id} 
+          post={post} 
+          user={user} 
+          profile={profile} 
+          onLike={handleLike} 
+          onComment={handleComment} 
+          onDelete={handleDeletePost}
+        />
+      );
+    });
   }, [posts, user, profile, handleLike, handleComment, handleDeletePost]);
   if (loading) {
     return (

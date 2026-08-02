@@ -1,5 +1,9 @@
 // Firestore TypeScript interfaces for PIVOT v2
 
+// NOTE: Thread is the new primary content model for Pivot v2. The legacy `posts` collection
+// used by earlier UI remains for compatibility; code should prefer `threads` when present.
+// When migrating, map: posts -> threads: title (derived) = first line of content or placeholder.
+
 export type Timestamp = any; // use firebase.firestore.Timestamp at runtime
 
 export interface Member {
