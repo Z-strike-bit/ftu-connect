@@ -30,14 +30,14 @@ export default function ThreadComposer({ user, profile, onPostCreated }: Props) 
     if (title.length > 200) return alert('Title max 200 characters');
     setIsPosting(true);
     try {
-      const doc = await addDoc(collection(db, 'threads'), {
+      await addDoc(collection(db, 'threads'), {
         title: title.trim(),
         content: content.trim(),
         tags,
         company: company || null,
         authorUid: user.uid,
-        authorName: profile?.name || 'Unknown',
-        authorPhotoURL: profile?.photoURL || user.photoURL || null,
+        authorName: anonymous ? null : profile?.name || 'Unknown',
+        authorPhotoURL: anonymous ? null : profile?.photoURL || user.photoURL || null,
         authorTier: profile?.tier || 1,
         anonymous,
         upvotes: 0,
@@ -54,7 +54,7 @@ export default function ThreadComposer({ user, profile, onPostCreated }: Props) 
       });
 
       // PostHog event
-      try { posthog.capture('thread_create', { author_tier: profile?.tier || 1, anonymous, tags, company: company || null }); } catch (e) {}
+      posthog.capture('thread_create', { author_tier: profile?.tier || 1, anonymous, tags, company: company || null });
 
       setTitle(''); setContent(''); setTags([]); setCompany(''); setAnonymous(profile?.tier === 1);
       if (onPostCreated) onPostCreated();

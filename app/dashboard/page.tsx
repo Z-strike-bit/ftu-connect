@@ -7,13 +7,12 @@ import ConnectModal from '@/components/ConnectModal';
 import Navbar from '@/components/Navbar';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { collection, query, getDocs, doc, getDoc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, getDoc, updateDoc, onSnapshot, deleteDoc, where } from 'firebase/firestore';
 
 import SidebarShortcuts from '@/components/dashboard/SidebarShortcuts';
 import SuggestionsSidebar from '@/components/dashboard/SuggestionsSidebar';
 import ThreadComposer from '@/components/thread/ThreadComposer';
 import ThreadCard from '@/components/thread/ThreadCard';
-import PostComposer from '@/components/dashboard/PostComposer';
 import PostCard from '@/components/dashboard/PostCard';
 
 interface User {
@@ -84,7 +83,7 @@ export default function Dashboard() {
   }, [user]);
 
   useEffect(() => {
-    const q = query(collection(db, 'threads'));
+    const q = query(collection(db, 'threads'), where('status', '==', 'published'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetched = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -197,7 +196,7 @@ export default function Dashboard() {
             <SidebarShortcuts user={user} profile={profile} />
 
             <div className="col-span-1 lg:col-span-6 xl:col-span-6 space-y-6 max-w-[680px] mx-auto w-full px-0 sm:px-4 lg:px-8">
-              <PostComposer user={user} profile={profile} suggestions={suggestions} />
+              <ThreadComposer user={user} profile={profile} />
   
               <div className="space-y-8">
                 <AnimatePresence mode="popLayout">
@@ -265,7 +264,7 @@ export default function Dashboard() {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar bg-transparent rounded-[24px]">
-              <PostComposer user={user} profile={profile} suggestions={suggestions} onPostCreated={handlePostCreated} />
+              <ThreadComposer user={user} profile={profile} onPostCreated={handlePostCreated} />
             </div>
           </div>
         </div>

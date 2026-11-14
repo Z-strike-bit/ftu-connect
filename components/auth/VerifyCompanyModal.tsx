@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { auth } from '@/lib/firebase';
+
+type VerifyCompanyEmailOTPResponse = {
+  success: boolean;
+  error?: string;
+  company?: string;
+};
 
 export default function VerifyCompanyModal() {
   const [email, setEmail] = useState('');
@@ -14,13 +19,16 @@ export default function VerifyCompanyModal() {
     setMsg('');
     try {
       const fns = getFunctions();
-      const fn = httpsCallable(fns, 'verifyCompanyEmailOTP');
+      const fn = httpsCallable<
+        { action: 'send'; email: string },
+        VerifyCompanyEmailOTPResponse
+      >(fns, 'verifyCompanyEmailOTP');
       const res = await fn({ action: 'send', email });
-      if ((res.data && res.data.success)) {
+      if (res.data.success) {
         setStage('otp');
         setMsg('OTP sent. Check your email.');
       } else {
-        setMsg('Error: ' + (res.data?.error || 'unknown'));
+        setMsg('Error: ' + (res.data.error || 'unknown'));
       }
     } catch (e: any) {
       setMsg(e.message || String(e));
@@ -31,14 +39,16 @@ export default function VerifyCompanyModal() {
     setMsg('');
     try {
       const fns = getFunctions();
-      const fn = httpsCallable(fns, 'verifyCompanyEmailOTP');
-      const uid = auth.currentUser?.uid;
-      const res = await fn({ action: 'verify', email, code, uid });
-      if ((res.data && res.data.success)) {
+      const fn = httpsCallable<
+        { action: 'verify'; email: string; code: string },
+        VerifyCompanyEmailOTPResponse
+      >(fns, 'verifyCompanyEmailOTP');
+      const res = await fn({ action: 'verify', email, code });
+      if (res.data.success) {
         setStage('done');
         setMsg('Verified. Company: ' + res.data.company);
       } else {
-        setMsg('Error: ' + (res.data?.error || 'unknown'));
+        setMsg('Error: ' + (res.data.error || 'unknown'));
       }
     } catch (e: any) {
       setMsg(e.message || String(e));

@@ -46,9 +46,10 @@ export default function ThreadCard({ thread }: Props) {
         await updateDoc(ref, {
           upvotes: increment(1),
           upvotedBy: arrayUnion(userUid),
-          // remove downvote if existed
-          downvotes: downvoted ? increment(-1) : undefined,
-          downvotedBy: downvoted ? arrayRemove(userUid) : undefined
+          ...(downvoted ? {
+            downvotes: increment(-1),
+            downvotedBy: arrayRemove(userUid)
+          } : {})
         });
       }
     } catch (e) {
@@ -95,8 +96,10 @@ export default function ThreadCard({ thread }: Props) {
         await updateDoc(ref, {
           downvotes: increment(1),
           downvotedBy: arrayUnion(userUid),
-          upvotes: upvoted ? increment(-1) : undefined,
-          upvotedBy: upvoted ? arrayRemove(userUid) : undefined
+          ...(upvoted ? {
+            upvotes: increment(-1),
+            upvotedBy: arrayRemove(userUid)
+          } : {})
         });
       }
     } catch (e) {
@@ -122,7 +125,9 @@ export default function ThreadCard({ thread }: Props) {
       <header className="flex items-center justify-between">
         <div>
           <h3 className="font-bold text-lg">{thread.title}</h3>
-          <div className="text-sm text-gray-500">{thread.authorName || (thread.anonymous ? `Anonymous · Tier ${thread.authorTier}` : '')}</div>
+          <div className="text-sm text-gray-500">
+            {thread.anonymous ? `Anonymous · Tier ${thread.authorTier || 1}` : thread.authorName || 'Unknown'}
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {thread.authorTier && <TierBadge tier={thread.authorTier} />}

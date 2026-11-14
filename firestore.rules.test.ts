@@ -30,6 +30,12 @@ describe('firestore rules basic', () => {
     await assertSucceeds(db.collection('threads').doc('t-alice').set({ authorUid: 'alice', title: 'hello', content: 'body', status: 'published' }));
   });
 
+  it('authenticated user cannot create a thread for another user', async () => {
+    const alice = testEnv.authenticatedContext('alice');
+    const db = alice.firestore();
+    await assertFails(db.collection('threads').doc('t-bob').set({ authorUid: 'bob', title: 'hello', content: 'body', status: 'published' }));
+  });
+
   it('user cannot update other user thread', async () => {
     const alice = testEnv.authenticatedContext('alice');
     const bob = testEnv.authenticatedContext('bob');

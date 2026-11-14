@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { randomInt } from 'crypto';
 import { onCall } from 'firebase-functions/v2/https';
 import nodemailer from 'nodemailer';
 
@@ -26,7 +27,7 @@ function extractCompanyName(domain: string) {
 }
 
 function generateOtp() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return randomInt(100000, 1000000).toString();
 }
 
 // Configure transporter from env
@@ -45,8 +46,9 @@ export const verifyCompanyEmailOTP = onCall(async (req) => {
   const data = req.data || {};
   const action = data.action;
   const email: string = (data.email || '').trim().toLowerCase();
-  const uid: string = (data.uid || req.auth?.uid) || null;
+  const uid = req.auth?.uid;
 
+  if (!uid) return { success: false, error: 'unauthenticated' };
   if (!email) return { success: false, error: 'missing_email' };
 
   const domain = extractDomain(email);
@@ -55,15 +57,13 @@ export const verifyCompanyEmailOTP = onCall(async (req) => {
   if (action === 'send') {
     if (BLOCKLIST.has(domain)) return { success: false, error: 'domain_blocked' };
 
+    const transporter = createTransporter();
+    if (!transporter) return { success: false, error: 'smtp_not_configured' };
+
     const code = generateOtp();
     const expiresAt = admin.firestore.Timestamp.fromDate(new Date(Date.now() + 10 * 60 * 1000));
 
-    // store OTP
     await db.collection('otp_codes').add({ email, code, expiresAt, used: false });
-
-    // send email
-    const transporter = createTransporter();
-    if (!transporter) return { success: false, error: 'smtp_not_configured' };
 
     const mailHtml = `<p>Your FTU Connect verification code: <strong>${code}</strong></p><p>Expires in 10 minutes.</p>`;
     await transporter.sendMail({ from: process.env.GMAIL_USER, to: email, subject: 'FTU Connect verification code', html: mailHtml });
@@ -88,7 +88,6 @@ export const verifyCompanyEmailOTP = onCall(async (req) => {
     await doc.ref.update({ used: true });
 
     // upgrade user tier via Admin SDK (bypass rules)
-    if (!uid) return { success: false, error: 'missing_uid' };
     const company = extractCompanyName(domain);
     await db.collection('users').doc(uid).update({ tier: 2, verifiedCompany: company, verifiedStatus: 'approved' });
 
